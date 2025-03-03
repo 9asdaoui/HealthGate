@@ -1,4 +1,4 @@
-<p align="center"><img src="https://i.imgur.com/6PmYZrM.png" width="300" alt="HealthGate Logo"></p>
+<p align="center"><img src="https://static.tildacdn.one/tild3166-6532-4436-b563-633632333663/svg.svg" width="300" alt="HealthGate Logo"></p>
 
 <p align="center">
 <a href="#"><img src="https://img.shields.io/badge/status-in%20development-yellow" alt="Status"></a>
