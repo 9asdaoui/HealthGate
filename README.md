@@ -63,8 +63,7 @@ php artisan serve
 
 HealthGate is built using modern technologies:
 
-- **Laravel** - PHP framework for robust backend development
-- **Vue.js/React** - Frontend framework for responsive user interfaces
+- **Laravel** - PHP framework
 - **MySQL/PostgreSQL** - Database management
 - **Docker** - Containerization for consistent deployment
 - **AWS/Azure** - Cloud infrastructure for scalability
@@ -98,5 +97,5 @@ HealthGate is proprietary software. All rights reserved.
 For more information about HealthGate, please contact:
 
 - Website: [healthgate.com](https://healthgate.com)
-- Email: info@healthgate.com
-- GitHub: [github.com/youcode/healthgate](https://github.com/youcode/healthgate)
+- Email: oussamaqasdaoui@healthgate.com
+- GitHub: [github.com/9asdaoui/HealthGate](https://github.com/9asdaoui/HealthGate)

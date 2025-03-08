@@ -1,0 +1,40 @@
+/resources
+    /views
+        /auth
+            login.blade.php
+            register.blade.php
+        
+        /patient
+            dashboard.blade.php
+            profile.blade.php
+            appointments.blade.php
+            medical-records.blade.php
+            prescriptions.blade.php
+        
+        /doctor
+            dashboard.blade.php
+            profile.blade.php
+            schedule.blade.php
+            patients.blade.php
+            appointments.blade.php
+        
+        /admin
+            dashboard.blade.php
+            doctors.blade.php
+            patients.blade.php
+            reports.blade.php
+            settings.blade.php
+        
+        /visitor
+            home.blade.php
+            about.blade.php
+            services.blade.php
+            doctors.blade.php
+            contact.blade.php
+            faq.blade.php
+        
+        /layouts
+            app.blade.php
+            auth.blade.php
+            admin.blade.php
+            visitor.blade.php
