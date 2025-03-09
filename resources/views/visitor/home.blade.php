@@ -50,8 +50,8 @@
                     </div>
                 </div>
                 <div class="hidden md:flex md:items-center md:space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-accent px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                    <a href="#" class="bg-accent hover:bg-darkOrange text-white px-4 py-2 rounded-md text-sm font-medium">Register</a>
+                    <a href="{{ route('login')}}" class="text-gray-400 hover:text-accent px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                    <a href="{{ route('register')}}" class="bg-accent hover:bg-darkOrange text-white px-4 py-2 rounded-md text-sm font-medium">Register</a>
                 </div>
                 <div class="-mr-2 flex items-center md:hidden">
                     <button type="button" class="bg-primary inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false">
@@ -367,7 +367,7 @@
             </h2>
             <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                 <div class="inline-flex rounded-md shadow">
-                    <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-charcoal bg-accent hover:bg-darkOrange hover:text-white">
+                    <a href="{{ route('register')}}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-charcoal bg-accent hover:bg-darkOrange hover:text-white">
                         Register Now
                     </a>
                 </div>
