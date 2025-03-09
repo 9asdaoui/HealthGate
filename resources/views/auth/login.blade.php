@@ -35,6 +35,14 @@
         .side-image-overlay {
             background: linear-gradient(to bottom, rgba(18, 18, 18, 0.7), rgba(30, 30, 30, 0.8));
         }
+        .form-appear {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col">
@@ -104,10 +112,10 @@
                     @endif
 
                     <!-- Login Form -->
-                    <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('login') }}" method="POST" class="space-y-6 form-appear" >
                         @csrf
                         
-                        <div>
+                        <div class="space-y-6 form-appear">
                             <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
                             <div class="mt-1 relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-accent">
@@ -122,7 +130,7 @@
                             @enderror
                         </div>
 
-                        <div>
+                        <div >
                             <div class="flex items-center justify-between">
                                 <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
                                 <a href="#" class="text-xs text-accent hover:text-darkOrange">
@@ -154,7 +162,7 @@
                         </div>
                     </form>
 
-                    <div class="mt-6 text-center text-sm">
+                    <div class="mt-6 text-center text-s form-appear" >
                         <p class="text-gray-400">
                             Don't have an account?
                             <a href="{{ route('register') }}" class="font-medium text-accent hover:text-darkOrange">
@@ -171,7 +179,7 @@
     <footer class="bg-primary py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-center text-gray-400 text-sm">
-                © 2023 HealthGate. All rights reserved.
+                © 2025 HealthGate. All rights reserved.
             </p>
         </div>
     </footer>

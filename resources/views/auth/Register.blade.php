@@ -315,7 +315,7 @@
     <footer class="bg-primary py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-center text-gray-400 text-sm">
-                © 2023 HealthGate. All rights reserved.
+                © 2025 HealthGate. All rights reserved.
             </p>
         </div>
     </footer>

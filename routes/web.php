@@ -21,3 +21,14 @@ Route::prefix('patient')->group(function(){
     Route::get('/profile',[PatientController::class,'profile'])->name('patient.profile');
 }
 );
+
+Route::prefix('admin')->group(function(){
+    Route::get('/dashboard',[PatientController::class,'dashboard'])->name('admin.dashboard');
+}
+);
+
+Route::prefix('doctor')->group(function(){
+    Route::get('/dashboard',[PatientController::class,'dashboard'])->name('doctor.dashboard');
+    Route::get('/profile',[PatientController::class,'profile'])->name('doctor.profile');
+}
+);
