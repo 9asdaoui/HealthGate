@@ -29,6 +29,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
+            
+            $request->session()->put('user_id', $user->id);
+            $request->session()->put('user_name', $user->first_name . ' ' . $user->last_name);
+            $request->session()->put('user_role', $user->role);
 
             switch($user->role) {
                 case 'admin':

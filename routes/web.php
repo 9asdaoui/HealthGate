@@ -6,7 +6,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {return view('visitor.home');});
+Route::get('/', function () {return view('visitor.index');});
 
 Route::get('/about', function () {return view('about');});
 
