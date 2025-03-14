@@ -11,11 +11,11 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#121212', // Almost black
-                        secondary: '#1E1E1E', // Dark gray
-                        accent: '#FF5722', // Orange
-                        darkOrange: '#BF360C', // Dark Orange
-                        charcoal: '#2D2D2D' // Charcoal Gray
+                        primary: '#F8F8F8', // White/Off-white
+                        secondary: '#FFFFFF', // White
+                        accent: '#00928C', // Teal
+                        darkTeal: '#007A75', // Dark Teal
+                        lightGray: '#F0F0F0' // Light Gray
                     }
                 }
             }
@@ -23,17 +23,17 @@
     </script>
     <style>
         .form-input {
-            @apply mt-1 block w-full rounded-md bg-gray-800 border-gray-700 shadow-sm text-white px-4 py-3 transition duration-300 ease-in-out;
+            @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm text-gray-800 px-4 py-3 transition duration-300 ease-in-out;
         }
         .form-input:focus {
             @apply border-accent ring ring-accent ring-opacity-30 outline-none;
-            box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
+            box-shadow: 0 0 0 2px rgba(0, 146, 140, 0.2);
         }
         .input-error {
             @apply border-red-500 ring ring-red-500 ring-opacity-50;
         }
         .side-image-overlay {
-            background: linear-gradient(to bottom, rgba(18, 18, 18, 0.7), rgba(30, 30, 30, 0.8));
+            background: linear-gradient(to bottom, rgba(0, 146, 140, 0.7), rgba(0, 122, 117, 0.8));
         }
         .form-appear {
             animation: fadeIn 0.5s ease-in-out;
@@ -45,18 +45,18 @@
         
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col">
+<body class="bg-primary text-gray-800 min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="bg-primary shadow-lg">
+    <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="/" class="flex-shrink-0 flex items-center">
-                        <span class="text-gray-200 text-2xl font-bold">Health<span class="text-accent">Gate</span></span>
+                        <span class="text-gray-800 text-2xl font-bold">Health<span class="text-accent">Gate</span></span>
                     </a>
                 </div>
                 <div class="flex items-center">
-                    <a href="{{ route('register') }}" class="text-gray-400 hover:text-accent px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="{{ route('register') }}" class="text-gray-600 hover:text-accent px-3 py-2 rounded-md text-sm font-medium">
                         Don't have an account? Sign up
                     </a>
                 </div>
@@ -79,19 +79,19 @@
                         </div>
                         <div class="space-y-6">
                             <div class="flex items-center">
-                                <div class="bg-accent bg-opacity-20 rounded-full p-2 mr-4">
+                                <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
                                     <i class="fas fa-user-md text-white"></i>
                                 </div>
                                 <p class="text-white">Connect with healthcare professionals</p>
                             </div>
                             <div class="flex items-center">
-                                <div class="bg-accent bg-opacity-20 rounded-full p-2 mr-4">
+                                <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
                                     <i class="fas fa-clipboard-list text-white"></i>
                                 </div>
                                 <p class="text-white">View your medical history</p>
                             </div>
                             <div class="flex items-center">
-                                <div class="bg-accent bg-opacity-20 rounded-full p-2 mr-4">
+                                <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
                                     <i class="fas fa-heartbeat text-white"></i>
                                 </div>
                                 <p class="text-white">Track your health metrics</p>
@@ -101,13 +101,13 @@
                 </div>
                 <div class="w-full md:w-1/2 p-6 md:p-8">
                     <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-white">Log In to Your Account</h2>
-                        <p class="text-gray-400 mt-2">Enter your credentials to access your account</p>
+                        <h2 class="text-2xl font-bold text-gray-800">Log In to Your Account</h2>
+                        <p class="text-gray-600 mt-2">Enter your credentials to access your account</p>
                     </div>
 
                     @if (session('status'))
-                        <div class="mb-4 p-4 bg-green-800/30 rounded-lg border border-green-700">
-                            <p class="text-green-400 text-sm">{{ session('status') }}</p>
+                        <div class="mb-4 p-4 bg-green-100 rounded-lg border border-green-200">
+                            <p class="text-green-700 text-sm">{{ session('status') }}</p>
                         </div>
                     @endif
 
@@ -116,13 +116,13 @@
                         @csrf
                         
                         <div class="space-y-6 form-appear">
-                            <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
                             <div class="mt-1 relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-accent">
                                     <i class="fas fa-envelope text-sm"></i>
                                 </span>
                                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
-                                    class="w-full py-2.5 pl-10 pr-3 bg-gray-800/50 rounded-lg border border-gray-700 focus:border-accent focus:ring focus:ring-accent/20 text-white shadow-sm transition-all duration-200 @error('email') border-red-500 @enderror"
+                                    class="w-full py-2.5 pl-10 pr-3 bg-white rounded-lg border border-gray-300 focus:border-accent focus:ring focus:ring-accent/20 text-gray-800 shadow-sm transition-all duration-200 @error('email') border-red-500 @enderror"
                                     placeholder="your.email@example.com">
                             </div>
                             @error('email')
@@ -132,8 +132,8 @@
 
                         <div >
                             <div class="flex items-center justify-between">
-                                <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-                                <a href="#" class="text-xs text-accent hover:text-darkOrange">
+                                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                <a href="#" class="text-xs text-accent hover:text-darkTeal">
                                     Forgot password?
                                 </a>
                             </div>
@@ -142,30 +142,30 @@
                                     <i class="fas fa-lock text-sm"></i>
                                 </span>
                                 <input type="password" id="password" name="password" required
-                                    class="w-full py-2.5 pl-10 pr-3 bg-gray-800/50 rounded-lg border border-gray-700 focus:border-accent focus:ring focus:ring-accent/20 text-white shadow-sm transition-all duration-200"
+                                    class="w-full py-2.5 pl-10 pr-3 bg-white rounded-lg border border-gray-300 focus:border-accent focus:ring focus:ring-accent/20 text-gray-800 shadow-sm transition-all duration-200"
                                     placeholder="Enter your password">
                             </div>
                         </div>
 
                         <div class="flex items-center">
-                            <input id="remember_me" name="remember" type="checkbox" class="h-4 w-4 text-accent focus:ring-accent border-gray-600 rounded bg-gray-700">
-                            <label for="remember_me" class="ml-2 block text-sm text-gray-400">
+                            <input id="remember_me" name="remember" type="checkbox" class="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded">
+                            <label for="remember_me" class="ml-2 block text-sm text-gray-600">
                                 Remember me
                             </label>
                         </div>
 
                         <div>
                             <button type="submit" 
-                                class="w-full bg-gradient-to-r from-accent to-darkOrange text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-accent/50 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:-translate-y-0.5">
+                                class="w-full bg-gradient-to-r from-accent to-darkTeal text-white font-medium py-3 px-4 rounded-lg shadow-lg hover:shadow-accent/50 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-primary transition-all duration-300 transform hover:-translate-y-0.5">
                                 Sign In <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </form>
 
                     <div class="mt-6 text-center text-s form-appear" >
-                        <p class="text-gray-400">
+                        <p class="text-gray-600">
                             Don't have an account?
-                            <a href="{{ route('register') }}" class="font-medium text-accent hover:text-darkOrange">
+                            <a href="{{ route('register') }}" class="font-medium text-accent hover:text-darkTeal">
                                 Create account
                             </a>
                         </p>
@@ -176,10 +176,10 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-primary py-4">
+    <footer class="bg-white py-4 shadow-inner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-gray-400 text-sm">
-                © 2025 HealthGate. All rights reserved.
+            <p class="text-center text-gray-600 text-sm">
+                © 2023 HealthGate. All rights reserved.
             </p>
         </div>
     </footer>

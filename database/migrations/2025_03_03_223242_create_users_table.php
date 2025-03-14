@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('image')->default('https://img.freepik.com/premium-vector/social-media-logo_1305298-29989.jpg');
-            $table->enum('role', ['admin', 'doctor', 'patient']);
             $table->enum('gender', ['male', 'female']);
             $table->timestamps();
         });

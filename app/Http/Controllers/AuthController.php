@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,21 +54,21 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'gender' => 'required|in:male,female',
-            'height' => 'required_if:role,patient|numeric|nullable',
-            'weight' => 'required_if:role,patient|numeric|nullable',
-            'date_of_birth' => 'required_if:role,patient|date|nullable',
-            'role' => 'in:admin,doctor,patient',
+            'height' => 'required|numeric|nullable',
+            'weight' => 'required|numeric|nullable',
+            'date_of_birth' => 'required|date|nullable',
+            'role_id' => 'integer|exists:roles,id',
         ]);
 
-        $role = $validated['role'] ?? 'patient';
-
+        $roleId = Role::where('name', 'patient')->first()->id;
+        // dd($roleId);
         $user = User::create([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'gender' => $validated['gender'],
-            'role' => $role,
+            'role_id' => $roleId,
         ]);
         $user->patient()->create([
             'height' => $validated['height'],
