@@ -134,7 +134,7 @@ Contact
 </div>
 <div class="hidden md:flex md:items-center md:space-x-4">
               @auth
-              <a href="" class="text-gray-600 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-all duration-300">Dashboard</a>
+              <a href="{{ route('patient.dashboard')}}" class="text-gray-600 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-all duration-300">Dashboard</a>
               @else
 <a href="{{ route('login')}}" class="text-gray-600 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-all duration-300">Login</a>
 <a href="{{ route('register')}}" class="bg-accent hover:bg-darkTeal text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 btn-hover-effect">Register</a>

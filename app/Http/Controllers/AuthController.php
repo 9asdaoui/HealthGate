@@ -85,7 +85,7 @@ class AuthController extends Controller
         return redirect()->route('patient.dashboard');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         Auth::logout();
 

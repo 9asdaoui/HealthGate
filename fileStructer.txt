@@ -27,11 +27,6 @@
         
         /visitor
             home.blade.php
-            about.blade.php
-            services.blade.php
-            doctors.blade.php
-            contact.blade.php
-            faq.blade.php
         
         /layouts
             app.blade.php
