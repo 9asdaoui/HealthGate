@@ -9,101 +9,95 @@
 <!-- AOS CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 <script>
-tailwind.config = {
-theme: {
-extend: {
-colors: {
-primary: '#F8F8F8', // White/Off-white
-secondary: '#FFFFFF', // White
-accent: '#00928C', // Teal
-darkTeal: '#007A75', // Dark Teal
-lightGray: '#F0F0F0' // Light Gray
-}
-}
-}
-}
+              tailwind.config = {
+              theme: {
+              extend: {
+              colors: {
+              primary: '#F8F8F8', // White/Off-white
+              secondary: '#FFFFFF', // White
+              accent: '#00928C', // Teal
+              darkTeal: '#007A75', // Dark Teal
+              lightGray: '#F0F0F0' // Light Gray
+              }
+              }
+              }
+              }
 </script>
 <style>
-/* Smooth scrolling for the entire page */
-html {
-scroll-behavior: smooth;
-}
+              html {
+              scroll-behavior: smooth;
+              }
 
-/* Custom animations */
-.animate-fade-in {
-animation: fadeIn 0.8s ease-in-out;
-}
+              .animate-fade-in {
+              animation: fadeIn 0.8s ease-in-out;
+              }
 
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
-}
+              @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+              }
 
-/* Custom hover effects */
-.hover-lift {
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+              .hover-lift {
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+              }
 
-.hover-lift:hover {
-transform: translateY(-5px);
-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
+              .hover-lift:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+              }
 
-/* Mobile menu animations */
-.mobile-menu {
-transition: transform 0.4s ease, opacity 0.4s ease;
-transform: translateY(-100%);
-opacity: 0;
-}
+              .mobile-menu {
+              transition: transform 0.4s ease, opacity 0.4s ease;
+              transform: translateY(-100%);
+              opacity: 0;
+              }
 
-.mobile-menu.active {
-transform: translateY(0);
-opacity: 1;
-}
+              .mobile-menu.active {
+              transform: translateY(0);
+              opacity: 1;
+              }
 
-/* Parallax effect */
-.parallax {
-background-attachment: fixed;
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-}
+              .parallax {
+              background-attachment: fixed;
+              background-position: center;
+              background-repeat: no-repeat;
+              background-size: cover;
+              }
 
-/* Button hover effect */
-.btn-hover-effect {
-position: relative;
-overflow: hidden;
-transition: all 0.3s ease;
-}
+              .btn-hover-effect {
+              position: relative;
+              overflow: hidden;
+              transition: all 0.3s ease;
+              }
 
-.btn-hover-effect:after {
-content: '';
-position: absolute;
-top: 0;
-left: -100%;
-width: 100%;
-height: 100%;
-background: rgba(255, 255, 255, 0.2);
-transition: all 0.4s ease;
-}
+              .btn-hover-effect:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: rgba(255, 255, 255, 0.2);
+              transition: all 0.4s ease;
+              }
 
-.btn-hover-effect:hover:after {
-left: 100%;
-}
+              .btn-hover-effect:hover:after {
+              left: 100%;
+              }
 
-/* Adjust for users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-*, ::before, ::after {
-animation-duration: 0.01ms !important;
-animation-iteration-count: 1 !important;
-transition-duration: 0.01ms !important;
-scroll-behavior: auto !important;
-}
-.parallax {
-background-attachment: scroll;
-}
-}
+              @media (prefers-reduced-motion: reduce) {
+              *, ::before, ::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+              scroll-behavior: auto !important;
+              }
+              .parallax {
+              background-attachment: scroll;
+              }
+              }
 </style>
+
 </head>
 <body class="bg-primary text-gray-800">
 <!-- Navigation -->

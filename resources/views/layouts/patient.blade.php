@@ -171,12 +171,16 @@
                                           <!-- User Info -->
                                           <div class="mx-4 p-4 mb-6 rounded-xl bg-gradient-to-r from-gray-100 to-white shadow-md">
                                                         <div class="flex items-center space-x-3">
-                                                                      <div class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center p-1 ring-2 ring-accent">
-                                                                                    <i class="fas fa-user text-accent"></i>
-                                                                      </div>
+                                                                        <div class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center p-1 ring-2 ring-accent overflow-hidden">
+                                                                                    @if($user->image)
+                                                                                                  <img src="{{ $user->image }}" alt="{{ $user->first_name }}'s photo" class="h-full w-full object-cover rounded-full">
+                                                                                    @else
+                                                                                                  <i class="fas fa-user text-accent"></i>
+                                                                                    @endif
+                                                                        </div>
                                                                       <div>
-                                                                                    <h3 class="text-sm font-semibold text-gray-800">{{ Auth::user()->name ?? 'Guest User' }}</h3>
-                                                                                    <p class="text-xs text-gray-500">ID: #{{ Auth::user()->id ?? '000' }}</p>
+                                                                                    <h3 class="text-sm font-semibold text-gray-800">{{ $user->first_name }} {{ $user->last_name }}</h3>
+                                                                                    <p class="text-xs text-gray-500">ID: #{{ $user->id ?? '000' }}</p>
                                                                       </div>
                                                         </div>
                                                         <div class="mt-3 pt-3 border-t border-gray-200 text-xs">
@@ -285,10 +289,10 @@
                                                                                     <div class="relative">
                                                                                                   <button id="user-menu-btn" class="flex items-center space-x-2 focus:outline-none">
                                                                                                                 <div class="h-10 w-10 rounded-full bg-accent text-white flex items-center justify-center">
-                                                                                                                              <span class="font-medium">{{ substr(Auth::user()->name ?? 'G', 0, 1) }}</span>
+                                                                                                                              <span class="font-medium">{{ substr($user->first_name, 0, 1) }}</span>
                                                                                                                 </div>
                                                                                                                 <div class="hidden md:block text-left">
-                                                                                                                              <span class="block text-sm font-medium">{{ Auth::user()->name ?? 'Guest User' }}</span>
+                                                                                                                              <span class="block text-sm font-medium">{{$user->first_name ?? 'Guest User' }}</span>
                                                                                                                               <span class="block text-xs text-gray-500">User</span>
                                                                                                                 </div>
                                                                                                                 <i class="fas fa-chevron-down text-xs text-gray-500 hidden md:block"></i>
@@ -296,7 +300,7 @@
                                                                                                   
                                                                                                   <!-- Dropdown menu (hidden by default) -->
                                                                                                   <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-20 hidden">
-                                                                                                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                                                                                                                <a href=" {{route('patient.profile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                                                                                                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account Settings</a>
                                                                                                                 <div class="border-t border-gray-100 my-1"></div>
                                                                                                                 
@@ -321,6 +325,35 @@
                                                                       <span>@yield('breadcrumb', 'Dashboard')</span>
                                                         </div>
                                           </div>
+
+                                          {{-- Add this to your layouts/patient.blade.php file or any other layout you're using --}}
+                                          @if(session('success'))
+                                          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                          <span class="block sm:inline">{{ session('success') }}</span>
+                                          <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                          <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                          <title>Close</title>
+                                          <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                                          </svg>
+                                          </span>
+                                          </div>
+                                          @endif
+
+                                          @if($errors->any())
+                                          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                          <ul>
+                                          @foreach($errors->all() as $error)
+                                          <li>{{ $error }}</li>
+                                          @endforeach
+                                          </ul>
+                                          <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                          <title>Close</title>
+                                          <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                                          </svg>
+                                          </span>
+                                          </div>
+                                          @endif
                                           
                                           <!-- Main Content -->
                                           <div class="p-6">
