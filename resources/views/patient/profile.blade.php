@@ -15,10 +15,10 @@
               <div class="bg-gradient-to-r from-accent to-darkTeal p-6 text-center">
                             <div class="relative inline-block">
                                           <img id="profile-image" src="{{ $user->image }}" alt="Profile" class="h-24 w-24 rounded-full border-4 border-white object-cover mx-auto">
-                                          <label for="image-upload" class="absolute bottom-0 right-0 bg-accent hover:bg-accentHover text-white rounded-full p-2 cursor-pointer shadow-lg">
-                                                        <i class="fas fa-camera"></i>
-                                          </label>
-                                          <input type="file" id="image-upload" class="hidden">
+                                          {{-- <label for="image-upload" class="absolute bottom-0 right-0 bg-accent hover:bg-accentHover text-white rounded-full p-2 cursor-pointer shadow-lg"> --}}
+                                                        {{-- <i class="fas fa-camera"></i> --}}
+                                          {{-- </label> --}}
+                                          {{-- <input type="file" id="image-upload" class="hidden"> --}}
                             </div>
                                           <h2 class="text-white text-xl font-semibold mt-4">{{ $user->first_name }} {{ $user->last_name }}</h2>
                             <p class="text-white/80 text-sm">Patient ID: #{{ $user->id }}</p>

@@ -171,9 +171,13 @@
                                           <!-- User Info -->
                                           <div class="mx-4 p-4 mb-6 rounded-xl bg-gradient-to-r from-gray-100 to-white shadow-md">
                                                         <div class="flex items-center space-x-3">
-                                                                      <div class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center p-1 ring-2 ring-accent">
-                                                                                    <i class="fas fa-user text-accent"></i>
-                                                                      </div>
+                                                                        <div class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center p-1 ring-2 ring-accent overflow-hidden">
+                                                                                    @if($user->image)
+                                                                                                  <img src="{{ $user->image }}" alt="{{ $user->first_name }}'s photo" class="h-full w-full object-cover rounded-full">
+                                                                                    @else
+                                                                                                  <i class="fas fa-user text-accent"></i>
+                                                                                    @endif
+                                                                        </div>
                                                                       <div>
                                                                                     <h3 class="text-sm font-semibold text-gray-800">{{ $user->first_name }} {{ $user->last_name }}</h3>
                                                                                     <p class="text-xs text-gray-500">ID: #{{ $user->id ?? '000' }}</p>
@@ -285,10 +289,10 @@
                                                                                     <div class="relative">
                                                                                                   <button id="user-menu-btn" class="flex items-center space-x-2 focus:outline-none">
                                                                                                                 <div class="h-10 w-10 rounded-full bg-accent text-white flex items-center justify-center">
-                                                                                                                              <span class="font-medium">{{ substr($user->name ?? 'G', 0, 1) }}</span>
+                                                                                                                              <span class="font-medium">{{ substr($user->first_name, 0, 1) }}</span>
                                                                                                                 </div>
                                                                                                                 <div class="hidden md:block text-left">
-                                                                                                                              <span class="block text-sm font-medium">{{ $user()->name ?? 'Guest User' }}</span>
+                                                                                                                              <span class="block text-sm font-medium">{{$user->first_name ?? 'Guest User' }}</span>
                                                                                                                               <span class="block text-xs text-gray-500">User</span>
                                                                                                                 </div>
                                                                                                                 <i class="fas fa-chevron-down text-xs text-gray-500 hidden md:block"></i>
@@ -296,7 +300,7 @@
                                                                                                   
                                                                                                   <!-- Dropdown menu (hidden by default) -->
                                                                                                   <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-20 hidden">
-                                                                                                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                                                                                                                <a href=" {{route('patient.profile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                                                                                                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account Settings</a>
                                                                                                                 <div class="border-t border-gray-100 my-1"></div>
                                                                                                                 
