@@ -175,8 +175,8 @@
                                                                                     <i class="fas fa-user text-accent"></i>
                                                                       </div>
                                                                       <div>
-                                                                                    <h3 class="text-sm font-semibold text-gray-800">{{ Auth::user()->name ?? 'Guest User' }}</h3>
-                                                                                    <p class="text-xs text-gray-500">ID: #{{ Auth::user()->id ?? '000' }}</p>
+                                                                                    <h3 class="text-sm font-semibold text-gray-800">{{ $user->first_name }} {{ $user->last_name }}</h3>
+                                                                                    <p class="text-xs text-gray-500">ID: #{{ $user->id ?? '000' }}</p>
                                                                       </div>
                                                         </div>
                                                         <div class="mt-3 pt-3 border-t border-gray-200 text-xs">
@@ -285,10 +285,10 @@
                                                                                     <div class="relative">
                                                                                                   <button id="user-menu-btn" class="flex items-center space-x-2 focus:outline-none">
                                                                                                                 <div class="h-10 w-10 rounded-full bg-accent text-white flex items-center justify-center">
-                                                                                                                              <span class="font-medium">{{ substr(Auth::user()->name ?? 'G', 0, 1) }}</span>
+                                                                                                                              <span class="font-medium">{{ substr($user->name ?? 'G', 0, 1) }}</span>
                                                                                                                 </div>
                                                                                                                 <div class="hidden md:block text-left">
-                                                                                                                              <span class="block text-sm font-medium">{{ Auth::user()->name ?? 'Guest User' }}</span>
+                                                                                                                              <span class="block text-sm font-medium">{{ $user()->name ?? 'Guest User' }}</span>
                                                                                                                               <span class="block text-xs text-gray-500">User</span>
                                                                                                                 </div>
                                                                                                                 <i class="fas fa-chevron-down text-xs text-gray-500 hidden md:block"></i>
