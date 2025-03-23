@@ -21,9 +21,6 @@ class PatientController extends Controller
     {
         $user = User::find(auth()->id());
         $patient = $user->patient;
-        // dd($patient);
-        // dd($user);
-
         return view('patient.profile', compact('user', 'patient'));
     }
 
@@ -48,7 +45,6 @@ class PatientController extends Controller
                 
                 $imagePath = $request->file('image')->store('profiles', 'public');
                 $user->image = '/storage/' . $imagePath;
-                // dd($user->image);
             }
             
         $patient = $user->patient;
