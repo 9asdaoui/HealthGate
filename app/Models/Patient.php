@@ -26,4 +26,19 @@ class Patient extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function bloodPressures()
+    {
+        return $this->hasMany(BloodPressure::class);
+    }
+
+    public function bloodSugars()
+    {
+        return $this->hasMany(BloodSugar::class);
+    }
 }
