@@ -44,7 +44,7 @@ class Doctor extends Model
         return $this->belongsToMany(Patient::class);
     }
 
-    public function heartRates()
+    public function hearthRates()
     {
         return $this->hasMany(HearthRate::class);
     }
@@ -55,6 +55,9 @@ class Doctor extends Model
             ->withPivot('duration');
     }
 
+    public function medicals()
+    {
+        return $this->hasMany(Medical::class);
+    }
 
-    
 }
