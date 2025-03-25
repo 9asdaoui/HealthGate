@@ -11,6 +11,11 @@ class Disease extends Model
 
     protected $fillable = [
         'name',
+        'description',
+        'symptoms',
+        'prevention',
+        'treatment',
+        'image',
     ];
 
     public function doctors()

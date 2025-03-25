@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Models\User;
 
 class AppointmentController extends Controller
 {
@@ -13,7 +14,9 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::find(auth()->id());
+        $appointments = $user->appointments;
+        return view('patient.appointments',compact('appointments','user'));
     }
 
     /**

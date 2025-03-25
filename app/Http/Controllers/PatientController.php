@@ -35,6 +35,9 @@ class PatientController extends Controller
             'image' => 'nullable|max:2048',
         ]);
         
+        /**
+         * @var App\Models\User $user
+         */
         $user = auth()->user();
         $user->first_name = $validated['first_name'];
         $user->last_name = $validated['last_name'];

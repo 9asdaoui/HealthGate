@@ -17,7 +17,13 @@ class DiseaseFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->word . ' Disease',
+            'category' => $this->faker->randomElement(['viral', 'bacterial', 'fungal', 'parasitic']),
+            'description' => $this->faker->paragraph(3),
+            'symptoms' => $this->faker->sentence(5),
+            'prevention' => $this->faker->sentence(4),
+            'treatment' => $this->faker->sentence(4),
+            'image' => $this->faker->imageUrl(640, 480, 'health', true),
         ];
     }
 }

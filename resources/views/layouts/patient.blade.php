@@ -199,7 +199,7 @@
                                                                       <span>Dashboard</span>
                                                         </a>
                                                         
-                                                        <a href="" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.appointments*') ? 'active' : '' }}">
+                                                        <a href="{{ route('patient.appointments') }}" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.appointments*') ? 'active' : '' }}">
                                                                       <i class="fas fa-calendar-check w-5 text-center"></i>
                                                                       <span>Appointments</span>
                                                         </a>

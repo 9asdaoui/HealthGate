@@ -14,10 +14,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'doctor']);
         Role::create(['name' => 'patient']);
+        
+        \App\Models\User::factory(10)->create();
+        \App\Models\Department::factory(10)->create();
+        \App\Models\Doctor::factory(10)->create();
+        \App\Models\Patient::factory(10)->create();
+        \App\Models\Medical::factory(10)->create();
+        \App\Models\HearthRate::factory(10)->create();
+        \App\Models\Appointment::factory(10)->create();
+        \App\Models\BloodPressure::factory(10)->create();
+        \App\Models\BloodSugar::factory(10)->create();
+        \App\Models\Disease::factory(10)->create();
+
+
+
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

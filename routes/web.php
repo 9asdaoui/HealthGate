@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
@@ -23,6 +24,8 @@ Route::prefix('patient')->group(function(){
     Route::get('/dashboard',[PatientController::class,'dashboard'])->name('patient.dashboard')->middleware('auth');
     Route::get('/profile',[PatientController::class,'profile'])->name('patient.profile')->middleware('auth');
     Route::put('/profile',[PatientController::class,'updateProfile'])->name('patient.updateProfile')->middleware('auth');
+    Route::get('/appointments',[AppointmentController::class,'index'])->name('patient.appointments')->middleware('auth');
+
 }
 );
 
