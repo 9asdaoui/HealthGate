@@ -26,4 +26,36 @@ class Patient extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function bloodPressures()
+    {
+        return $this->hasMany(BloodPressure::class);
+    }
+
+    public function bloodSugars()
+    {
+        return $this->hasMany(BloodSugar::class);
+    }
+
+    public function diseases()
+    {
+        return $this->belongsToMany(Disease::class, 'patient_doctor_disease')
+            ->withPivot('duration');
+    }
+
+    public function hearthRates()
+    {
+        return $this->hasMany(HearthRate::class);
+    }
+
+    public function medicals()
+    {
+        return $this->hasMany(Medical::class);
+    }
+
 }
