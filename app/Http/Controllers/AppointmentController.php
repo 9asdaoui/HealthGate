@@ -15,7 +15,9 @@ class AppointmentController extends Controller
     public function index()
     {
         $user = User::find(auth()->id());
-        $appointments = $user->appointments;
+        $patient = $user->patient;
+        $appointments = $patient->appointments;
+
         return view('patient.appointments',compact('appointments','user'));
     }
 

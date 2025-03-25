@@ -1,0 +1,77 @@
+HealthGate
+Présentation Générale
+Description succincte du projet: L'application web hospitalière est conçue pour améliorer la
+gestion des opérations hospitalières en facilitant la réservation des rendez-vous, la gestion des
+données des patients, et en offrant des outils de visualisation pour une meilleure prise de
+décision médicale. Elle s'adresse aux patients, médecins, infirmiers et administrateurs.
+Objectifs principaux:
+1. Simplifier la gestion des rendez-vous: Faciliter la prise de rendez-vous pour les patients
+en offrant une interface conviviale et efficace, permettant une planification rapide et
+sans erreurs
+2. Assurer un suivi précis et centralisé des données des patients : Garantir une gestion
+fluide et sécurisée des informations des patients, permettant un accès centralisé pour
+les médecins et le personnel médical,
+3. Fournir des tableaux de bord interactifs pour l’analyse des données : Offrir des outils de
+visualisation et d'analyse avancés, permettant aux médecins et administrateurs de
+suivre les indicateurs clés de santé des patients et de prendre des décisions éclairées
+basées sur des données actualisées et faciles à interpréter.
+4. Optimiser la communication et la coordination entre les différents acteurs hospitaliers :
+Améliorer l'échange d'informations et la collaboration entre les médecins, infirmiers et
+administrateurs en intégrant des systèmes de gestion des tâches, afin de garantir une
+prise en charge cohérente et sans rupture pour chaque patient.
+Objectifs fonctionnels:
+Objectifs Détaillés
+● Permettre aux patients de réserver des rendez-vous en ligne.
+● Donner aux infirmiers la capacité de valider les réservations et de saisir les données
+quotidiennes des patients.
+● Offrir aux médecins un tableau de bord interactif pour consulter les données des
+patients de manière simplifiée.
+● Assurer un système de gestion des rôles (patients, médecins, infirmiers,
+administrateurs).
+Objectifs techniques:
+● Langages : HTML, CSS, JavaScript, PHP.
+● Frameworks : Laravel ,
+● Base de données : MySQL. NOSQL,
+● Performances : temps de chargement rapide, résistance à une charge importante
+d’utilisateurs.
+Fonctionnalités Clés
+1. Réservation de rendez-vous
+● Interface utilisateur intuitive pour les patients.
+● Gestion des disponibilités des médecins.
+2. Gestion des données des patients
+● Infirmiers peuvent saisir les informations quotidiennes (battements cardiaques,
+observations...ex)
+3. Tableaux de bord médicaux
+● Visualisation claire des données des patients.
+● Statistiques et tendances pour faciliter la prise de décisions.
+4. Système de rôles et permissions
+● Patients : réservation.
+● Infirmiers : validation des rendez-vous, saisie des données.
+● Médecins : consultation et analyse des données.
+● Administrateurs : gestion globale, rapports.
+5. Sécurité des données
+● Authentification et autorisation personnalisées.
+● Chiffrement des données sensibles.
+Techniques
+● Langages : HTML, CSS, JavaScript, PHP.
+● Framework : Laravel.
+● Base de données : MySQL.
+● Outils de conception : Figma (maquettage et prototypage).
+● Environnement de développement : Visual Studio Code, GitHub pour le versioning.
+Livrables Attendues
+1. Code source : organisé, commenté et déployable.
+2. Planification : roadmap sur Jira.
+3. Documentation :
+○ Cahier des charges (ce document).
+○ Diagrammes UML .
+○ Maquettes et prototypes (desktop et mobile ).
+4. Dépôt GitHub : contenant tout le projet.
+5. Présentation : diaporama expliquant le projet et démonstration.
+Critères de Validation
+1. Le site est accessible et responsive sur tous les appareils (desktop, tablette, mobile).
+2. Les rôles et permissions fonctionnent correctement.
+3. Les médecins peuvent consulter un tableau de bord clair et interactif.
+4. Les infirmiers peuvent ajouter des données quotidiennes sans erreurs.
+5. Les rendez-vous sont gérés efficacement.
+6. La sécurité des données est assurée selon les normes actuelles.
+7. Tous les livrables sont présents et conformes aux attentes.

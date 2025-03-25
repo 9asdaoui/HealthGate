@@ -15,7 +15,7 @@
                                                                       <div class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center">
                                                                                     <i class="fas fa-user-md text-accent"></i>
                                                                       </div>
-                                                                      <div class="ml-4">
+                                                               <div class="ml-4">
                                                                                     <h1 class="text-2xl font-bold text-gray-800">Welcome back, {{ Auth::user()->name ?? 'User' }}!</h1>
                                                                                     <p class="text-gray-600">Last login: {{ now()->format('M d, Y | h:i A') }}</p>
                                                                       </div>
