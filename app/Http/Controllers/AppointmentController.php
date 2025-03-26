@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Models\Department;
+use App\Models\Doctor;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
@@ -14,8 +17,10 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $user = User::find(auth()->id());
+        $user = auth()->user();
+        // dd($user->id);
         $patient = $user->patient;
+        // dd($patient);
         $appointments = $patient->appointments;
 
         return view('patient.appointments',compact('appointments','user'));
@@ -26,7 +31,28 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::find(auth()->id());
+        $doctors = Doctor::paginate(9);
+        $departments = Department::all();
+        return view('patient.create-appointment',compact('doctors','departments','user'));
+    }
+
+    public function getAvailableTimeSlots(Request $request)
+    {
+        $request->validate([
+            'doctor_id' => 'required',
+            'date' => 'required'
+        ]);
+
+        $doctor = Doctor::find($request->doctor_id);
+        $date = $request->date;
+        $appointment = Appointment::where('doctor_id',$doctor->id)->where('date',$date)->first();
+        $timeSlots = [];
+        if($appointment){
+            $timeSlots = $appointment->time_slots;
+        }
+        return response()->json($timeSlots);
+        
     }
 
     /**

@@ -31,17 +31,15 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
             
-            $request->session()->put('user_id', $user->id);
-            $request->session()->put('user_name', $user->first_name . ' ' . $user->last_name);
-            $request->session()->put('user_role', $user->role);
-
-            switch($user->role) {
+            switch($user->role->name){
                 case 'admin':
                     return redirect()->route('admin.dashboard');
+                case 'doctor':
+                    return redirect()->route('doctor.dashboard');
                 case 'patient':
                     return redirect()->route('patient.dashboard');
                 default:
-                    return redirect()->route('doctor.dashboard');
+                    return redirect()->route('login');
             }
         }
 

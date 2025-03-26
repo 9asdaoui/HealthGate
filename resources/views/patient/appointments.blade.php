@@ -2,6 +2,9 @@
 
 @section('title', 'My Appointments')
 
+@section('page-title', 'Patient Appointments')
+
+@section('breadcrumb', 'Appointments')
 
 
 
@@ -12,8 +15,7 @@
                                           <h2 class="text-2xl font-semibold text-gray-800">My Appointments</h2>
                                           <p class="text-gray-500 mt-1">View and manage your scheduled appointments</p>
                             </div>
-                            {{-- {{ route('patient.appointments.create') }} --}}
-                            <a href="" class="mt-4 md:mt-0 bg-accent hover:bg-accentHover text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center">
+                            <a href="{{ route('patient.appointments.create') }}" class="mt-4 md:mt-0 bg-accent hover:bg-accentHover text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center">
                                           <i class="fas fa-plus-circle mr-2"></i> New Appointment
                             </a>
               </div>
@@ -36,7 +38,7 @@
                                                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                                                                   <div class="flex items-center">
                                                                                                                 <div class="flex-shrink-0 h-10 w-10">
-                                                                                                                              <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('images/default-avatar.jpg') }}" alt="">
+                                                                                                                              <img class="h-10 w-10 rounded-full object-cover" src="{{ $appointment->doctor->user->image }}" alt="">
                                                                                                                 </div>
                                                                                                                 <div class="ml-4">
                                                                                                                               <div class="text-sm font-medium text-gray-900">Dr. {{ $appointment->doctor->user->first_name ?? 'Unknown' }} {{ $appointment->doctor->user->last_name ?? '' }}</div>

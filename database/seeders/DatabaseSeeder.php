@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\BloodPressure::factory(10)->create();
         \App\Models\BloodSugar::factory(10)->create();
         \App\Models\Disease::factory(10)->create();
+        \App\Models\DoctorSchedules::factory(10)->create();
 
 
 

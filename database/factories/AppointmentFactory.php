@@ -19,7 +19,18 @@ class AppointmentFactory extends Factory
         return [
             'patient_id' => \App\Models\Patient::factory(),
             'doctor_id' => \App\Models\Doctor::factory(),
-            'appointment_date' => $this->faker->dateTimeBetween('now', '+30 days'),
+            'appointment_date' => $this->faker->date(),
+            'appointment_time' => function (array $attributes) {
+                $timeSlots = [
+                    '09:00 AM - 10:00 AM', 
+                    '10:00 AM - 11:00 AM', 
+                    '11:00 AM - 12:00 PM', 
+                    '02:00 PM - 03:00 PM', 
+                    '03:00 PM - 04:00 PM', 
+                    '04:00 PM - 05:00 PM'
+                ];
+                return $this->faker->randomElement($timeSlots);
+            },
             'status' => $this->faker->randomElement(['pending', 'completed', 'cancelled']),
         ];
     }

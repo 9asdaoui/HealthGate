@@ -25,7 +25,7 @@ Route::prefix('patient')->group(function(){
     Route::get('/profile',[PatientController::class,'profile'])->name('patient.profile')->middleware('auth');
     Route::put('/profile',[PatientController::class,'updateProfile'])->name('patient.updateProfile')->middleware('auth');
     Route::get('/appointments',[AppointmentController::class,'index'])->name('patient.appointments')->middleware('auth');
-
+    Route::get('/appointments/create',[AppointmentController::class,'create'])->name('patient.appointments.create')->middleware('auth');
 }
 );
 
