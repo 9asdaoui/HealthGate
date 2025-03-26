@@ -40,18 +40,38 @@ class AppointmentController extends Controller
     public function getAvailableTimeSlots(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required',
-            'date' => 'required'
+            'doctor_id' => 'required|exists:doctors,id',
+            'date' => 'required|date'
         ]);
 
-        $doctor = Doctor::find($request->doctor_id);
+        $doctor = Doctor::findOrFail($request->doctor_id);
         $date = $request->date;
-        $appointment = Appointment::where('doctor_id',$doctor->id)->where('date',$date)->first();
-        $timeSlots = [];
-        if($appointment){
-            $timeSlots = $appointment->time_slots;
-        }
-        return response()->json($timeSlots);
+        
+        // Define all possible time slots
+        $allTimeSlots = [
+            '09:00 AM - 10:00 AM', 
+            '10:00 AM - 11:00 AM', 
+            '11:00 AM - 12:00 PM', 
+            '02:00 PM - 03:00 PM', 
+            '03:00 PM - 04:00 PM', 
+            '04:00 PM - 05:00 PM'
+        ];
+        
+        // Get booked appointments for the doctor on the specified date
+        $bookedAppointments = Appointment::where('doctor_id', $doctor->id)
+            ->where('appointment_date', $date)
+            ->where('status', '!=', 'cancelled')
+            ->pluck('appointment_time')
+            ->toArray();
+        
+        // Filter out booked slots to get available time slots
+        $availableTimeSlots = array_values(array_diff($allTimeSlots, $bookedAppointments));
+        
+        return response()->json([
+            'available_slots' => $availableTimeSlots,
+            'doctor_name' => $doctor->user->name,
+            'date' => $date
+        ]);
         
     }
 
