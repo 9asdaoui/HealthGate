@@ -47,7 +47,6 @@ class AppointmentController extends Controller
         $doctor = Doctor::findOrFail($request->doctor_id);
         $date = $request->date;
         
-        // Define all possible time slots
         $allTimeSlots = [
             '09:00 AM - 10:00 AM', 
             '10:00 AM - 11:00 AM', 
@@ -57,8 +56,7 @@ class AppointmentController extends Controller
             '04:00 PM - 05:00 PM'
         ];
         
-        // Get booked appointments for the doctor on the specified date
-        $bookedAppointments = Appointment::where('doctor_id', $doctor->id)
+        $bookedAppointments = $doctor->appointments()
             ->where('appointment_date', $date)
             ->where('status', '!=', 'cancelled')
             ->pluck('appointment_time')

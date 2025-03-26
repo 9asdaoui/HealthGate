@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
             $table->date('appointment_date');
             $table->string('appointment_time')->comment('Format: HH:MM AM/PM');
+            $table->text('reason');
             $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });

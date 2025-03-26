@@ -32,6 +32,7 @@ class AppointmentFactory extends Factory
                 return $this->faker->randomElement($timeSlots);
             },
             'status' => $this->faker->randomElement(['pending', 'completed', 'cancelled']),
+            'reason' => $this->faker->sentence(),
         ];
     }
 }

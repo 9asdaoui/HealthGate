@@ -161,24 +161,32 @@
                             document.body.classList.remove('overflow-hidden');
               }
               
-              // Handle date selection to fetch available time slots
               document.getElementById('appointment_date').addEventListener('change', async function() {
                             const date = this.value;
                             const doctorId = document.getElementById('doctor_id').value;
                             const timeSlotsContainer = document.getElementById('timeSlots');
                             // loading
                             timeSlotsContainer.innerHTML = '<p class="col-span-3 text-center py-4">Loading available slots...</p>';
-                            
-                            response = await fetch(`/`);
-                            // In a real application, you would fetch available slots from the server
-                            // For now, we'll simulate it with a timeout and dummy data
-                            setTimeout(() => {
-                                          // Sample time slots (in a real app, these would come from the server)
-                                          const timeSlots = [
-                                                        '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
-                                                        '11:00 AM', '11:30 AM', '01:00 PM', '01:30 PM',
-                                                        '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM'
-                                          ];
+                            try {
+                                          response = await fetch(`/api/getSlots`,
+                                          {
+                                                        method: 'POST',
+                                                        headers: {
+                                                                      'Content-Type': 'application/json',
+                                                                      'Accept': 'application/json',
+                                                        },
+                                                        body: JSON.stringify({
+                                                                      date: date,
+                                                                      doctor_id: doctorId
+                                                        })
+                                          }
+                                          );
+                                          if (!response.ok) {
+                                                        throw new Error('Network response was not ok');
+                                          }
+                                          const data = await response.json();
+                                          console.log(data);
+                                          const timeSlots = data['available_slots'];
                                           
                                           let html = '';
                                           if (timeSlots.length > 0) {
@@ -186,7 +194,7 @@
                                                                       html += `
                                                                                     <label class="border rounded-md p-2 text-center cursor-pointer hover:bg-gray-50">
                                                                                                   <input type="radio" name="time_slot" value="${slot}" class="sr-only" required>
-                                                                                                  <span class="text-sm">${slot}</span>
+                                                                                                   <span class="text-sm">${slot}</span>
                                                                                     </label>
                                                                       `;
                                                         });
@@ -204,7 +212,17 @@
                                                                       this.classList.add('bg-accent', 'text-white');
                                                         });
                                           });
-                            }, 500);
+
+
+                            }
+                            catch (error) {
+                                          console.log(error);
+                            }
+
+              
+                                          
+                                          
+                                         
               });
               
               // Close modal when clicking outside
