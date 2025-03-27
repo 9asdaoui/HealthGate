@@ -2,179 +2,319 @@
 
 @section('title', 'Dashboard')
 
+@section('page-title', 'Doctor Dashboard')
+
 @section('styles')
 <style>
-              .stats-card {
+              .stat-card {
                             transition: all 0.3s ease;
               }
-              .stats-card:hover {
+              .stat-card:hover {
                             transform: translateY(-5px);
-                            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+              }
+              .appointment-card {
+                            transition: all 0.2s ease;
+              }
+              .appointment-card:hover {
+                            background-color: rgba(249, 250, 251, 1);
               }
               .chart-container {
-                            height: 300px;
-                            position: relative;
-              }
-              .calendar-container {
-                            min-height: 320px;
+                            height: 240px;
               }
 </style>
 @endsection
 
 @section('content')
-<div class="p-6 space-y-6">
-              <!-- Welcome Banner -->
-              <div class="bg-gradient-to-r from-secondary to-primary rounded-xl shadow-lg p-6 text-white flex justify-between items-center">
-                            <div>
-                                          <h1 class="text-2xl font-bold">Welcome Back, Dr. {{ Auth::user()->name }}!</h1>
-                                          <p class="mt-1 opacity-90">{{ now()->format('l, F j, Y') }}</p>
-                            </div>
-                            <div class="hidden md:block">
-                                          <img src="{{ asset('images/doctor-illustration.svg') }}" alt="Doctor" class="h-24">
-                            </div>
+<div class="p-6">
+              <!-- Welcome Section -->
+              <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800">Welcome back, Dr. {{ $user->first_name }} {{ $user->last_name }}!</h2>
+                            <p class="text-gray-600">Here's what's happening with your patients today</p>
               </div>
 
               <!-- Stats Overview -->
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white rounded-xl shadow p-6 stats-card flex items-center">
-                                          <div class="p-3 rounded-full bg-blue-100 text-blue-500 mr-4">
-                                                        <i class="fas fa-calendar-check text-xl"></i>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <!-- Appointments Today -->
+                            <div class="bg-white rounded-xl shadow-md p-6 stat-card border-l-4 border-blue-500">
+                                          <div class="flex justify-between items-start">
+                                                        <div>
+                                                                      <p class="text-sm font-medium text-gray-600">Today's Appointments</p>
+                                                                      <h3 class="text-2xl font-bold text-gray-800 mt-1">
+                                                                                    {{ \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('appointment_date', today())
+                                                                                                  ->count() }}
+                                                                      </h3>
+                                                        </div>
+                                                        <div class="p-3 bg-blue-100 rounded-full">
+                                                                      <i class="fas fa-calendar-day text-blue-500"></i>
+                                                        </div>
                                           </div>
-                                          <div>
-                                                        <p class="text-sm text-gray-500">Today's Appointments</p>
-                                                        <h3 class="text-2xl font-bold">{{ $todayAppointments ?? 0 }}</h3>
-                                          </div>
-                            </div>
-                            
-                            <div class="bg-white rounded-xl shadow p-6 stats-card flex items-center">
-                                          <div class="p-3 rounded-full bg-green-100 text-green-500 mr-4">
-                                                        <i class="fas fa-user-plus text-xl"></i>
-                                          </div>
-                                          <div>
-                                                        <p class="text-sm text-gray-500">Total Patients</p>
-                                                        <h3 class="text-2xl font-bold">{{ $totalPatients ?? 0 }}</h3>
-                                          </div>
-                            </div>
-                            
-                            <div class="bg-white rounded-xl shadow p-6 stats-card flex items-center">
-                                          <div class="p-3 rounded-full bg-purple-100 text-purple-500 mr-4">
-                                                        <i class="fas fa-pills text-xl"></i>
-                                          </div>
-                                          <div>
-                                                        <p class="text-sm text-gray-500">Prescriptions</p>
-                                                        <h3 class="text-2xl font-bold">{{ $totalPrescriptions ?? 0 }}</h3>
+                                          <div class="mt-4">
+                                                        <a href="{{ route('doctor.appointments') }}" class="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                                                                      View all appointments <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                                        </a>
                                           </div>
                             </div>
-                            
-                            <div class="bg-white rounded-xl shadow p-6 stats-card flex items-center">
-                                          <div class="p-3 rounded-full bg-yellow-100 text-yellow-500 mr-4">
-                                                        <i class="fas fa-notes-medical text-xl"></i>
+
+                            <!-- Total Patients -->
+                            <div class="bg-white rounded-xl shadow-md p-6 stat-card border-l-4 border-green-500">
+                                          <div class="flex justify-between items-start">
+                                                        <div>
+                                                                      <p class="text-sm font-medium text-gray-600">Total Patients</p>
+                                                                      <h3 class="text-2xl font-bold text-gray-800 mt-1">
+                                                                                    {{ \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->distinct('patient_id')
+                                                                                                  ->count('patient_id') }}
+                                                                      </h3>
+                                                        </div>
+                                                        <div class="p-3 bg-green-100 rounded-full">
+                                                                      <i class="fas fa-users text-green-500"></i>
+                                                        </div>
                                           </div>
-                                          <div>
-                                                        <p class="text-sm text-gray-500">Medical Records</p>
-                                                        <h3 class="text-2xl font-bold">{{ $totalMedicalRecords ?? 0 }}</h3>
+                                          <div class="mt-4">
+                                                        <a href="{{ route('doctor.patients') }}" class="text-sm text-green-600 hover:text-green-800 flex items-center">
+                                                                      Manage patients <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                                        </a>
+                                          </div>
+                            </div>
+
+                            <!-- Pending Appointments -->
+                            <div class="bg-white rounded-xl shadow-md p-6 stat-card border-l-4 border-amber-500">
+                                          <div class="flex justify-between items-start">
+                                                        <div>
+                                                                      <p class="text-sm font-medium text-gray-600">Pending Appointments</p>
+                                                                      <h3 class="text-2xl font-bold text-gray-800 mt-1">
+                                                                                    {{ \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->where('status', 'pending')
+                                                                                                  ->count() }}
+                                                                      </h3>
+                                                        </div>
+                                                        <div class="p-3 bg-amber-100 rounded-full">
+                                                                      <i class="fas fa-hourglass-half text-amber-500"></i>
+                                                        </div>
+                                          </div>
+                                          <div class="mt-4">
+                                                        <a href="{{ route('doctor.appointments') }}?status=pending" class="text-sm text-amber-600 hover:text-amber-800 flex items-center">
+                                                                      Review pending <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                                        </a>
+                                          </div>
+                            </div>
+
+                            <!-- Prescriptions -->
+                            <div class="bg-white rounded-xl shadow-md p-6 stat-card border-l-4 border-purple-500">
+                                          <div class="flex justify-between items-start">
+                                                        <div>
+                                                                      <p class="text-sm font-medium text-gray-600">Active Prescriptions</p>
+                                                                      <h3 class="text-2xl font-bold text-gray-800 mt-1">
+                                                                                    {{ \App\Models\Medical::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('end_date', '>=', now())
+                                                                                                  ->count() }}
+                                                                      </h3>
+                                                        </div>
+                                                        <div class="p-3 bg-purple-100 rounded-full">
+                                                                      <i class="fas fa-prescription text-purple-500"></i>
+                                                        </div>
+                                          </div>
+                                          <div class="mt-4">
+                                                        <a href="{{ route('doctor.prescriptions') }}" class="text-sm text-purple-600 hover:text-purple-800 flex items-center">
+                                                                      Manage prescriptions <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                                        </a>
                                           </div>
                             </div>
               </div>
 
-              <!-- Appointments and Analytics Section -->
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Today's Appointments -->
-                            <div class="bg-white rounded-xl shadow">
-                                          <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                                                        <h2 class="font-semibold text-lg text-gray-700">Today's Appointments</h2>
-                                                        <a href="" class="text-sm text-primary hover:underline">View All</a>
-                                          </div>
-                                          <div class="p-4 overflow-auto max-h-80">
-                                                        @if(isset($appointments) && count($appointments) > 0)
-                                                                      <div class="space-y-4">
-                                                                                    @foreach($appointments as $appointment)
-                                                                                                  <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                                                                                                <div class="flex items-center">
-                                                                                                                              <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
-                                                                                                                                            <span class="font-medium">{{ substr($appointment->patient->user->name ?? 'P', 0, 1) }}</span>
-                                                                                                                              </div>
-                                                                                                                              <div>
-                                                                                                                                            <p class="font-medium">{{ $appointment->patient->user->name ?? 'Patient' }}</p>
-                                                                                                                                            <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
-                                                                                                                              </div>
-                                                                                                                </div>
-                                                                                                                <div class="text-right">
-                                                                                                                              <span class="px-2 py-1 rounded text-xs 
-                                                                                                                                            @if($appointment->status == 'scheduled') bg-blue-100 text-blue-700
-                                                                                                                                            @elseif($appointment->status == 'completed') bg-green-100 text-green-700
-                                                                                                                                            @elseif($appointment->status == 'cancelled') bg-red-100 text-red-700
-                                                                                                                                            @else bg-gray-100 text-gray-700 @endif">
-                                                                                                                                            {{ ucfirst($appointment->status) }}
-                                                                                                                              </span>
-                                                                                                                </div>
+              <!-- Main Content Area: Two Columns -->
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Left Column -->
+                            <div class="lg:col-span-2 space-y-6">
+                                          <!-- Today's Appointments -->
+                                          <div class="bg-white rounded-xl shadow-md p-6">
+                                                        <div class="flex justify-between items-center mb-6">
+                                                                      <h3 class="text-lg font-bold text-gray-800">Today's Appointments</h3>
+                                                                      <a href="{{ route('doctor.appointments') }}" class="text-sm text-blue-600 hover:underline">View all</a>
+                                                        </div>
+                                                        
+                                                        <div class="space-y-4">
+                                                                      @php
+                                                                                    $todayAppointments = \App\Models\Appointment::with('patient.user')
+                                                                                                  ->where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('appointment_date', today())
+                                                                                                  ->orderBy('appointment_time')
+                                                                                                  ->take(5)
+                                                                                                  ->get();
+                                                                      @endphp
+
+                                                                      @forelse($todayAppointments as $appointment)
+                                                                                    <div class="flex items-center p-4 border border-gray-100 rounded-lg appointment-card hover:shadow-sm">
+                                                                                                  <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center mr-4 overflow-hidden">
+                                                                                                                @if($appointment->patient->user->image)
+                                                                                                                              <img src="{{ $appointment->patient->user->image }}" alt="Patient" class="h-full w-full object-cover">
+                                                                                                                @else
+                                                                                                                              <i class="fas fa-user text-gray-400"></i>
+                                                                                                                @endif
                                                                                                   </div>
-                                                                                    @endforeach
-                                                                      </div>
-                                                        @else
-                                                                      <div class="text-center py-6">
-                                                                                    <div class="text-gray-400 mb-2"><i class="far fa-calendar-times text-3xl"></i></div>
-                                                                                    <p class="text-gray-500">No appointments scheduled for today</p>
-                                                                      </div>
-                                                        @endif
-                                          </div>
-                            </div>
-
-                            <!-- Patient Demographics -->
-                            <div class="bg-white rounded-xl shadow">
-                                          <div class="p-4 border-b border-gray-100">
-                                                        <h2 class="font-semibold text-lg text-gray-700">Patient Demographics</h2>
-                                          </div>
-                                          <div class="p-4 chart-container">
-                                                        <canvas id="patientDemographicsChart"></canvas>
-                                          </div>
-                            </div>
-              </div>
-
-              <!-- Recent Patients & Calendar Section -->
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Recent Patients -->
-                            <div class="bg-white rounded-xl shadow">
-                                          <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                                                        <h2 class="font-semibold text-lg text-gray-700">Recent Patients</h2>
-                                                        <a href=" class="text-sm text-primary hover:underline">View All</a>
-                                          </div>
-                                          <div class="p-4 overflow-auto max-h-80">
-                                                        @if(isset($recentPatients) && count($recentPatients) > 0)
-                                                                      <div class="divide-y divide-gray-100">
-                                                                                    @foreach($recentPatients as $patient)
-                                                                                                  <div class="flex justify-between items-center py-3">
-                                                                                                                <div class="flex items-center">
-                                                                                                                              <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                                                                                                                            <span class="text-gray-600 font-medium">{{ substr($patient->user->name ?? 'P', 0, 1) }}</span>
-                                                                                                                              </div>
-                                                                                                                              <div>
-                                                                                                                                            <p class="font-medium">{{ $patient->user->name }}</p>
-                                                                                                                                            <p class="text-xs text-gray-500">Last visit: {{ \Carbon\Carbon::parse($patient->updated_at)->diffForHumans() }}</p>
-                                                                                                                              </div>
-                                                                                                                </div>
-                                                                                                                <a href="" class="text-primary hover:text-primary-dark">
-                                                                                                                              <i class="fas fa-chevron-right"></i>
+                                                                                                  <div class="flex-1">
+                                                                                                                <h4 class="font-medium text-gray-900">{{ $appointment->patient->user->first_name }} {{ $appointment->patient->user->last_name }}</h4>
+                                                                                                                <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }} • {{ $appointment->reason }}</p>
+                                                                                                  </div>
+                                                                                                  <div class="flex space-x-2">
+                                                                                                                <a href="{{ route('doctor.appointments.show', $appointment->id) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-full">
+                                                                                                                              <i class="fas fa-eye"></i>
                                                                                                                 </a>
                                                                                                   </div>
-                                                                                    @endforeach
+                                                                                    </div>
+                                                                      @empty
+                                                                                    <div class="text-center py-6 text-gray-500">
+                                                                                                  <i class="fas fa-calendar-times text-2xl mb-2"></i>
+                                                                                                  <p>No appointments scheduled for today</p>
+                                                                                                  <a href="{{ route('doctor.schedule') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Update your availability</a>
+                                                                                    </div>
+                                                                      @endforelse
+                                                        </div>
+                                          </div>
+                                          
+                                          <!-- Recent Patient Health Metrics Chart -->
+                                          <div class="bg-white rounded-xl shadow-md p-6">
+                                                        <div class="flex justify-between items-center mb-6">
+                                                                      <h3 class="text-lg font-bold text-gray-800">Recent Health Metrics</h3>
+                                                                      <div class="flex space-x-2">
+                                                                                    <button class="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded-md active-metric" id="bp-btn">Blood Pressure</button>
+                                                                                    <button class="text-sm px-3 py-1 hover:bg-gray-100 text-gray-600 rounded-md" id="bs-btn">Blood Sugar</button>
                                                                       </div>
-                                                        @else
-                                                                      <div class="text-center py-6">
-                                                                                    <div class="text-gray-400 mb-2"><i class="far fa-user-circle text-3xl"></i></div>
-                                                                                    <p class="text-gray-500">No recent patients</p>
-                                                                      </div>
-                                                        @endif
+                                                        </div>
+                                                        
+                                                        <div class="chart-container" id="bp-chart">
+                                                                      <canvas id="bloodPressureChart"></canvas>
+                                                        </div>
+                                                        
+                                                        <div class="chart-container hidden" id="bs-chart">
+                                                                      <canvas id="bloodSugarChart"></canvas>
+                                                        </div>
                                           </div>
                             </div>
 
-                            <!-- Calendar / Upcoming Appointments -->
-                            <div class="bg-white rounded-xl shadow">
-                                          <div class="p-4 border-b border-gray-100">
-                                                        <h2 class="font-semibold text-lg text-gray-700">Calendar</h2>
+                            <!-- Right Column -->
+                            <div class="space-y-6">
+                                          <!-- Doctor's Schedule Today -->
+                                          <div class="bg-white rounded-xl shadow-md p-6">
+                                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Your Schedule Today</h3>
+                                                        <div class="space-y-3">
+                                                                      @php
+                                                                                    $morningAppointments = \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('appointment_date', today())
+                                                                                                  ->whereTime('appointment_time', '<=', '12:00:00')
+                                                                                                  ->count();
+                                                                                    
+                                                                                    $afternoonAppointments = \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('appointment_date', today())
+                                                                                                  ->whereTime('appointment_time', '>', '12:00:00')
+                                                                                                  ->whereTime('appointment_time', '<=', '17:00:00')
+                                                                                                  ->count();
+                                                                                    
+                                                                                    $eveningAppointments = \App\Models\Appointment::where('doctor_id', $user->doctor->id ?? 0)
+                                                                                                  ->whereDate('appointment_date', today())
+                                                                                                  ->whereTime('appointment_time', '>', '17:00:00')
+                                                                                                  ->count();
+                                                                      @endphp
+                                                                      
+                                                                      <div class="flex items-center">
+                                                                                    <div class="w-24 text-sm text-gray-600">Morning</div>
+                                                                                    <div class="flex-1 relative h-4 bg-gray-100 rounded-full overflow-hidden">
+                                                                                                  <div class="absolute h-full bg-blue-500 rounded-full" style="width: {{ min($morningAppointments * 20, 100) }}%"></div>
+                                                                                    </div>
+                                                                                    <div class="ml-3 font-medium">{{ $morningAppointments }}</div>
+                                                                      </div>
+                                                                      
+                                                                      <div class="flex items-center">
+                                                                                    <div class="w-24 text-sm text-gray-600">Afternoon</div>
+                                                                                    <div class="flex-1 relative h-4 bg-gray-100 rounded-full overflow-hidden">
+                                                                                                  <div class="absolute h-full bg-amber-500 rounded-full" style="width: {{ min($afternoonAppointments * 20, 100) }}%"></div>
+                                                                                    </div>
+                                                                                    <div class="ml-3 font-medium">{{ $afternoonAppointments }}</div>
+                                                                      </div>
+                                                                      
+                                                                      <div class="flex items-center">
+                                                                                    <div class="w-24 text-sm text-gray-600">Evening</div>
+                                                                                    <div class="flex-1 relative h-4 bg-gray-100 rounded-full overflow-hidden">
+                                                                                                  <div class="absolute h-full bg-purple-500 rounded-full" style="width: {{ min($eveningAppointments * 20, 100) }}%"></div>
+                                                                                    </div>
+                                                                                    <div class="ml-3 font-medium">{{ $eveningAppointments }}</div>
+                                                                      </div>
+                                                        </div>
+                                                        
+                                                        <div class="mt-6 pt-4 border-t border-gray-100">
+                                                                      <a href="{{ route('doctor.schedule') }}" class="text-blue-600 text-sm hover:underline flex items-center justify-center">
+                                                                                    <i class="fas fa-calendar-alt mr-2"></i> Manage your schedule
+                                                                      </a>
+                                                        </div>
                                           </div>
-                                          <div class="p-4 calendar-container">
-                                                        <div id="calendar"></div>
+                                          
+                                          <!-- Recent Disease Cases -->
+                                          <div class="bg-white rounded-xl shadow-md p-6">
+                                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Common Diseases</h3>
+                                                        
+                                                        @php
+                                                                      $commonDiseases = \App\Models\Disease::withCount(['patients' => function($query) use ($user) {
+                                                                                    $query->whereHas('appointments', function($q) use ($user) {
+                                                                                                  $q->where('doctor_id', $user->doctor->id ?? 0);
+                                                                                    });
+                                                                      }])
+                                                                      ->orderBy('patients_count', 'desc')
+                                                                      ->take(5)
+                                                                      ->get();
+                                                        @endphp
+                                                        
+                                                        @forelse($commonDiseases as $disease)
+                                                                      <div class="flex items-center py-2">
+                                                                                    <div class="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                                                                                    <span class="flex-1 text-gray-700">{{ $disease->name }}</span>
+                                                                                    <span class="font-medium text-gray-900">{{ $disease->patients_count }}</span>
+                                                                      </div>
+                                                        @empty
+                                                                      <p class="text-gray-500 text-center py-4">No disease data available</p>
+                                                        @endforelse
+                                                        
+                                                        <div class="mt-4 pt-4 border-t border-gray-100">
+                                                                      <a href="{{ route('doctor.diseases') }}" class="text-blue-600 text-sm hover:underline flex items-center justify-center">
+                                                                                    <i class="fas fa-disease mr-2"></i> View disease library
+                                                                      </a>
+                                                        </div>
+                                          </div>
+                                          
+                                          <!-- Recent Medical Records -->
+                                          <div class="bg-white rounded-xl shadow-md p-6">
+                                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Medical Records</h3>
+                                                        
+                                                        @php
+                                                                      $recentMedicals = \App\Models\Medical::with('patient.user')
+                                                                                    ->where('doctor_id', $user->doctor->id ?? 0)
+                                                                                    ->latest()
+                                                                                    ->take(3)
+                                                                                    ->get();
+                                                        @endphp
+                                                        
+                                                        <div class="space-y-3">
+                                                                      @forelse($recentMedicals as $medical)
+                                                                                    <div class="flex items-center p-2 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+                                                                                                  <div class="ml-2">
+                                                                                                                <h4 class="font-medium text-gray-900">{{ $medical->name }}</h4>
+                                                                                                                <p class="text-xs text-gray-500">
+                                                                                                                              {{ $medical->patient->user->first_name }} {{ $medical->patient->user->last_name }} • 
+                                                                                                                              {{ $medical->created_at->diffForHumans() }}
+                                                                                                                </p>
+                                                                                                  </div>
+                                                                                    </div>
+                                                                      @empty
+                                                                                    <p class="text-gray-500 text-center py-4">No recent medical records</p>
+                                                                      @endforelse
+                                                        </div>
+                                                        
+                                                        <div class="mt-4 pt-4 border-t border-gray-100">
+                                                                      <a href="{{ route('doctor.medical-records') }}" class="text-blue-600 text-sm hover:underline flex items-center justify-center">
+                                                                                    <i class="fas fa-file-medical mr-2"></i> View all medical records
+                                                                      </a>
+                                                        </div>
                                           </div>
                             </div>
               </div>
@@ -183,80 +323,139 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css" rel="stylesheet">
-
 <script>
-              // Patient Demographics Chart
               document.addEventListener('DOMContentLoaded', function() {
-                            const ctx = document.getElementById('patientDemographicsChart').getContext('2d');
+                            // Toggle between BP and BS charts
+                            const bpBtn = document.getElementById('bp-btn');
+                            const bsBtn = document.getElementById('bs-btn');
+                            const bpChart = document.getElementById('bp-chart');
+                            const bsChart = document.getElementById('bs-chart');
                             
-                            const demographicsChart = new Chart(ctx, {
-                                          type: 'doughnut',
+                            bpBtn.addEventListener('click', function() {
+                                          bpChart.classList.remove('hidden');
+                                          bsChart.classList.add('hidden');
+                                          bpBtn.classList.add('bg-blue-100', 'text-blue-700');
+                                          bpBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
+                                          bsBtn.classList.remove('bg-blue-100', 'text-blue-700');
+                                          bsBtn.classList.add('hover:bg-gray-100', 'text-gray-600');
+                            });
+                            
+                            bsBtn.addEventListener('click', function() {
+                                          bpChart.classList.add('hidden');
+                                          bsChart.classList.remove('hidden');
+                                          bsBtn.classList.add('bg-blue-100', 'text-blue-700');
+                                          bsBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
+                                          bpBtn.classList.remove('bg-blue-100', 'text-blue-700');
+                                          bpBtn.classList.add('hover:bg-gray-100', 'text-gray-600');
+                            });
+                            
+                            // Sample blood pressure data for chart
+                            const bpCtx = document.getElementById('bloodPressureChart').getContext('2d');
+                            new Chart(bpCtx, {
+                                          type: 'line',
                                           data: {
-                                                        labels: ['Male', 'Female', 'Other'],
+                                                        labels: ['Last Week', '6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday'],
+                                                        datasets: [
+                                                                      {
+                                                                                    label: 'Systolic',
+                                                                                    data: [120, 118, 125, 117, 122, 119, 121],
+                                                                                    borderColor: 'rgb(239, 68, 68)',
+                                                                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                                                    tension: 0.3,
+                                                                                    fill: true
+                                                                      },
+                                                                      {
+                                                                                    label: 'Diastolic',
+                                                                                    data: [80, 78, 82, 79, 81, 80, 81],
+                                                                                    borderColor: 'rgb(59, 130, 246)',
+                                                                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                                                                    tension: 0.3,
+                                                                                    fill: true
+                                                                      }
+                                                        ]
+                                          },
+                                          options: {
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                                      title: {
+                                                                                    display: true,
+                                                                                    text: 'Patient Blood Pressure Trends'
+                                                                      },
+                                                                      tooltip: {
+                                                                                    mode: 'index',
+                                                                                    intersect: false
+                                                                      }
+                                                        },
+                                                        scales: {
+                                                                      y: {
+                                                                                    min: 60,
+                                                                                    max: 140,
+                                                                                    title: {
+                                                                                                  display: true,
+                                                                                                  text: 'mmHg'
+                                                                                    }
+                                                                      }
+                                                        }
+                                          }
+                            });
+                            
+                            // Sample blood sugar data for chart
+                            const bsCtx = document.getElementById('bloodSugarChart').getContext('2d');
+                            new Chart(bsCtx, {
+                                          type: 'line',
+                                          data: {
+                                                        labels: ['Last Week', '6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday'],
                                                         datasets: [{
-                                                                      label: 'Patient Gender Distribution',
-                                                                      data: [{{ $malePatients ?? 0 }}, {{ $femalePatients ?? 0 }}, {{ $otherPatients ?? 0 }}],
-                                                                      backgroundColor: [
-                                                                                    'rgba(54, 162, 235, 0.7)',
-                                                                                    'rgba(255, 99, 132, 0.7)',
-                                                                                    'rgba(255, 206, 86, 0.7)'
-                                                                      ],
-                                                                      borderColor: [
-                                                                                    'rgba(54, 162, 235, 1)',
-                                                                                    'rgba(255, 99, 132, 1)',
-                                                                                    'rgba(255, 206, 86, 1)'
-                                                                      ],
-                                                                      borderWidth: 1
+                                                                      label: 'Blood Sugar',
+                                                                      data: [95, 100, 92, 98, 105, 90, 97],
+                                                                      borderColor: 'rgb(16, 185, 129)',
+                                                                      backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                                      tension: 0.3,
+                                                                      fill: true
                                                         }]
                                           },
                                           options: {
                                                         responsive: true,
                                                         maintainAspectRatio: false,
                                                         plugins: {
-                                                                      legend: {
-                                                                                    position: 'bottom',
-                                                                      },
                                                                       title: {
                                                                                     display: true,
-                                                                                    text: 'Patient Gender Distribution'
+                                                                                    text: 'Patient Blood Sugar Trends'
+                                                                      }
+                                                        },
+                                                        scales: {
+                                                                      y: {
+                                                                                    min: 70,
+                                                                                    max: 130,
+                                                                                    title: {
+                                                                                                  display: true,
+                                                                                                  text: 'mg/dL'
+                                                                                    }
                                                                       }
                                                         }
                                           }
                             });
-
-                            // Initialize Calendar
-                            const calendarEl = document.getElementById('calendar');
-                            const calendar = new FullCalendar.Calendar(calendarEl, {
-                                          initialView: 'dayGridMonth',
-                                          headerToolbar: {
-                                                        left: 'prev,next today',
-                                                        center: 'title',
-                                                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                                          },
-                                          height: 'auto',
-                                          events: [
-                                                        // You can populate this with appointment data from backend
-                                                        // Example format:
-                                                        // { title: 'Patient Name', start: '2023-05-05T10:00:00', end: '2023-05-05T11:00:00' }
-                                                        @if(isset($calendarEvents))
-                                                                      @foreach($calendarEvents as $event)
-                                                                                    {
-                                                                                                  title: '{{ $event['title'] }}',
-                                                                                                  start: '{{ $event['start'] }}',
-                                                                                                  end: '{{ $event['end'] }}',
-                                                                                                  backgroundColor: '{{ $event['color'] ?? '#00928C' }}'
-                                                                                    },
-                                                                      @endforeach
-                                                        @endif
-                                          ],
-                                          eventClick: function(info) {
-                                                        // Handle event click (optional)
-                                                        // alert('Event: ' + info.event.title);
-                                          }
-                            });
-                            calendar.render();
+                            
+                            // Mobile menu functionality
+                            const menuBtn = document.getElementById('menu-btn');
+                            const sidebar = document.getElementById('sidebar');
+                            const overlay = document.getElementById('overlay');
+                            const content = document.getElementById('content');
+                            
+                            if (menuBtn) {
+                                          menuBtn.addEventListener('click', function() {
+                                                        sidebar.classList.toggle('-translate-x-full');
+                                                        overlay.classList.toggle('hidden');
+                                          });
+                            }
+                            
+                            if (overlay) {
+                                          overlay.addEventListener('click', function() {
+                                                        sidebar.classList.add('-translate-x-full');
+                                                        overlay.classList.add('hidden');
+                                          });
+                            }
               });
 </script>
 @endsection
