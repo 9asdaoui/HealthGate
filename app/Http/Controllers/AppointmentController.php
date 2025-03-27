@@ -23,7 +23,7 @@ class AppointmentController extends Controller
         // dd($patient);
         $appointments = $patient->appointments;
 
-        return view('patient.appointments',compact('appointments','user'));
+        return view('patient.appointments.index',compact('appointments','user'));
     }
 
     /**
@@ -34,7 +34,7 @@ class AppointmentController extends Controller
         $user = User::find(auth()->id());
         $doctors = Doctor::paginate(9);
         $departments = Department::all();
-        return view('patient.create-appointment',compact('doctors','departments','user'));
+        return view('patient.appointments.create',compact('doctors','departments','user'));
     }
 
     public function getAvailableTimeSlots(Request $request)
@@ -78,15 +78,37 @@ class AppointmentController extends Controller
      */
     public function store(StoreAppointmentRequest $request)
     {
-        //
+        $user = auth()->user();
+        $patient = $user->patient;
+        $appointment = new Appointment();
+        $appointment->patient_id = $patient->id;
+        $appointment->doctor_id = $request->doctor_id;
+        $appointment->appointment_date = $request->appointment_date;
+        $appointment->appointment_time = $request->time_slot;
+        $appointment->reason = $request->reason;
+        $appointment->status = 'pending';
+        $appointment->save();
+
+        return redirect()->route('patient.appointments')->with('success','Appointment created successfully');
     }
 
+    /** 
+     * Cancel the specified resource.
+     */
+    public function cancel(Appointment $appointment)
+    {
+        $appointment->status = 'cancelled';
+        $appointment->save();
+        return redirect()->route('patient.appointments')->with('success','Appointment cancelled successfully');
+    }   
     /**
      * Display the specified resource.
      */
     public function show(Appointment $appointment)
     {
-        //
+
+        $user = auth()->user();
+        return view('patient.appointments.details',compact('appointment','user'));
     }
 
     /**

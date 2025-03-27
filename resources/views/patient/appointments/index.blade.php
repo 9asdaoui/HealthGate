@@ -47,8 +47,8 @@
                                                                                                   </div>
                                                                                     </td>
                                                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                  <div class="text-sm text-gray-900">{{ date('M d, Y', strtotime($appointment->appointment_date)) }}</div>
-                                                                                                  <div class="text-sm text-gray-500">{{ date('h:i A', strtotime($appointment->appointment_date)) }}</div>
+                                                                                                                                <div class="text-sm text-gray-900">{{ date('M d, Y', strtotime($appointment->appointment_date)) }}</div>
+                                                                                                                                <div class="text-sm text-gray-500">{{ $appointment->appointment_time }}</div>
                                                                                     </td>
                                                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                                                                   @php
@@ -64,8 +64,7 @@
                                                                                                   </span>
                                                                                     </td>
                                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                                                                  {{-- {{ route('patient.appointments.show', $appointment->id) }} --}}
-                                                                                                  <a href="" class="text-accent hover:text-accentHover mr-3">
+                                                                                                  <a href="{{ route('patient.appointments.show', $appointment->id) }}" class="text-accent hover:text-accentHover mr-3">
                                                                                                                 <i class="fas fa-eye"></i>
                                                                                                   </a>
                                                                                                   @if($appointment->status == 'upcoming')
