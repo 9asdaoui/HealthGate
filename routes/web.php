@@ -39,5 +39,13 @@ Route::prefix('admin')->group(function(){
 Route::prefix('doctor')->group(function(){
     Route::get('/dashboard',[DoctorController::class,'dashboard'])->name('doctor.dashboard')->middleware('auth');
     Route::get('/profile',[DoctorController::class,'profile'])->name('doctor.profile')->middleware('auth');
+    Route::get('/appointments', [DoctorController::class, 'appointments'])->name('doctor.appointments')->middleware('auth');
+    Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients')->middleware('auth');
+    Route::get('/medical-records', [DoctorController::class, 'medicalRecords'])->name('doctor.medical-records')->middleware('auth');
+    Route::get('/prescriptions', [DoctorController::class, 'prescriptions'])->name('doctor.prescriptions')->middleware('auth');
+    Route::get('/diseases', [DoctorController::class, 'diseases'])->name('doctor.diseases')->middleware('auth');
+    Route::get('/health-metrics', [DoctorController::class, 'healthMetrics'])->name('doctor.health-metrics')->middleware('auth');
+    Route::get('/schedule', [DoctorController::class, 'schedule'])->name('doctor.schedule')->middleware('auth');
+    Route::get('/settings', [DoctorController::class, 'settings'])->name('doctor.settings')->middleware('auth');
 }
 );

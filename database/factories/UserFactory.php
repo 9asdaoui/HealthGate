@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
-            'image' => fake()->imageUrl(640, 480),
+            'image' => 'https://img.freepik.com/premium-vector/social-media-logo_1305298-29989.jpg',
             'role_id' => fake()->randomElement([1, 2, 3]), // Randomly assign admin, doctor, or patient role
             'gender' => fake()->randomElement(['male', 'female']),
         ];

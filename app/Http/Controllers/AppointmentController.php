@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
-use App\Http\Requests\UpdateAppointmentRequest;
 use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\User;
@@ -18,9 +17,7 @@ class AppointmentController extends Controller
     public function index()
     {
         $user = auth()->user();
-        // dd($user->id);
         $patient = $user->patient;
-        // dd($patient);
         $appointments = $patient->appointments;
 
         return view('patient.appointments.index',compact('appointments','user'));
@@ -36,6 +33,10 @@ class AppointmentController extends Controller
         $departments = Department::all();
         return view('patient.appointments.create',compact('doctors','departments','user'));
     }
+
+    /**
+     * Get available time slots for the specified doctor and date.
+     */
 
     public function getAvailableTimeSlots(Request $request)
     {
@@ -62,7 +63,6 @@ class AppointmentController extends Controller
             ->pluck('appointment_time')
             ->toArray();
         
-        // Filter out booked slots to get available time slots
         $availableTimeSlots = array_values(array_diff($allTimeSlots, $bookedAppointments));
         
         return response()->json([
@@ -101,6 +101,7 @@ class AppointmentController extends Controller
         $appointment->save();
         return redirect()->route('patient.appointments')->with('success','Appointment cancelled successfully');
     }   
+
     /**
      * Display the specified resource.
      */
@@ -111,27 +112,4 @@ class AppointmentController extends Controller
         return view('patient.appointments.details',compact('appointment','user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Appointment $appointment)
-    {
-        //
-    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -10,7 +11,9 @@ class DoctorController extends Controller
 
     public function dashboard()
     {
-        return view('doctor.dashboard');
+        $user = User::find(auth()->user()->id);
+        
+        return view('doctor.dashboard', compact('user'));
     }
 
     public function profile()

@@ -18,7 +18,7 @@ class DoctorFactory extends Factory
     {
         return [
             'user_id' => \App\Models\User::factory()->create([
-            'role_id' => 2, // Doctor role
+                'role_id' => 2, // Doctor role
             ])->id,
             'speciality' => $this->faker->randomElement(['Cardiology', 'Neurology', 'Pediatrics', 'Orthopedics', 'Dermatology']),
             'experience' => $this->faker->numberBetween(1, 20),
