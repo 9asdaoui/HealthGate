@@ -173,25 +173,6 @@
                                                                       @endforelse
                                                         </div>
                                           </div>
-                                          
-                                          <!-- Recent Patient Health Metrics Chart -->
-                                          <div class="bg-white rounded-xl shadow-md p-6">
-                                                        <div class="flex justify-between items-center mb-6">
-                                                                      <h3 class="text-lg font-bold text-gray-800">Recent Health Metrics</h3>
-                                                                      <div class="flex space-x-2">
-                                                                                    <button class="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded-md active-metric" id="bp-btn">Blood Pressure</button>
-                                                                                    <button class="text-sm px-3 py-1 hover:bg-gray-100 text-gray-600 rounded-md" id="bs-btn">Blood Sugar</button>
-                                                                      </div>
-                                                        </div>
-                                                        
-                                                        <div class="chart-container" id="bp-chart">
-                                                                      <canvas id="bloodPressureChart"></canvas>
-                                                        </div>
-                                                        
-                                                        <div class="chart-container hidden" id="bs-chart">
-                                                                      <canvas id="bloodSugarChart"></canvas>
-                                                        </div>
-                                          </div>
                             </div>
 
                             <!-- Right Column -->
@@ -250,72 +231,9 @@
                                                         </div>
                                           </div>
                                           
-                                          <!-- Recent Disease Cases -->
-                                          <div class="bg-white rounded-xl shadow-md p-6">
-                                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Common Diseases</h3>
-                                                        
-                                                        @php
-                                                                      $commonDiseases = \App\Models\Disease::withCount(['patients' => function($query) use ($user) {
-                                                                                    $query->whereHas('appointments', function($q) use ($user) {
-                                                                                                  $q->where('doctor_id', $user->doctor->id ?? 0);
-                                                                                    });
-                                                                      }])
-                                                                      ->orderBy('patients_count', 'desc')
-                                                                      ->take(5)
-                                                                      ->get();
-                                                        @endphp
-                                                        
-                                                        @forelse($commonDiseases as $disease)
-                                                                      <div class="flex items-center py-2">
-                                                                                    <div class="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
-                                                                                    <span class="flex-1 text-gray-700">{{ $disease->name }}</span>
-                                                                                    <span class="font-medium text-gray-900">{{ $disease->patients_count }}</span>
-                                                                      </div>
-                                                        @empty
-                                                                      <p class="text-gray-500 text-center py-4">No disease data available</p>
-                                                        @endforelse
-                                                        
-                                                        <div class="mt-4 pt-4 border-t border-gray-100">
-                                                                      <a href="{{ route('doctor.diseases') }}" class="text-blue-600 text-sm hover:underline flex items-center justify-center">
-                                                                                    <i class="fas fa-disease mr-2"></i> View disease library
-                                                                      </a>
-                                                        </div>
-                                          </div>
+                                  
                                           
-                                          <!-- Recent Medical Records -->
-                                          <div class="bg-white rounded-xl shadow-md p-6">
-                                                        <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Medical Records</h3>
-                                                        
-                                                        @php
-                                                                      $recentMedicals = \App\Models\Medical::with('patient.user')
-                                                                                    ->where('doctor_id', $user->doctor->id ?? 0)
-                                                                                    ->latest()
-                                                                                    ->take(3)
-                                                                                    ->get();
-                                                        @endphp
-                                                        
-                                                        <div class="space-y-3">
-                                                                      @forelse($recentMedicals as $medical)
-                                                                                    <div class="flex items-center p-2 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
-                                                                                                  <div class="ml-2">
-                                                                                                                <h4 class="font-medium text-gray-900">{{ $medical->name }}</h4>
-                                                                                                                <p class="text-xs text-gray-500">
-                                                                                                                              {{ $medical->patient->user->first_name }} {{ $medical->patient->user->last_name }} • 
-                                                                                                                              {{ $medical->created_at->diffForHumans() }}
-                                                                                                                </p>
-                                                                                                  </div>
-                                                                                    </div>
-                                                                      @empty
-                                                                                    <p class="text-gray-500 text-center py-4">No recent medical records</p>
-                                                                      @endforelse
-                                                        </div>
-                                                        
-                                                        <div class="mt-4 pt-4 border-t border-gray-100">
-                                                                      <a href="{{ route('doctor.medical-records') }}" class="text-blue-600 text-sm hover:underline flex items-center justify-center">
-                                                                                    <i class="fas fa-file-medical mr-2"></i> View all medical records
-                                                                      </a>
-                                                        </div>
-                                          </div>
+                                     
                             </div>
               </div>
 </div>
@@ -325,117 +243,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
               document.addEventListener('DOMContentLoaded', function() {
-                            // Toggle between BP and BS charts
-                            const bpBtn = document.getElementById('bp-btn');
-                            const bsBtn = document.getElementById('bs-btn');
-                            const bpChart = document.getElementById('bp-chart');
-                            const bsChart = document.getElementById('bs-chart');
-                            
-                            bpBtn.addEventListener('click', function() {
-                                          bpChart.classList.remove('hidden');
-                                          bsChart.classList.add('hidden');
-                                          bpBtn.classList.add('bg-blue-100', 'text-blue-700');
-                                          bpBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
-                                          bsBtn.classList.remove('bg-blue-100', 'text-blue-700');
-                                          bsBtn.classList.add('hover:bg-gray-100', 'text-gray-600');
-                            });
-                            
-                            bsBtn.addEventListener('click', function() {
-                                          bpChart.classList.add('hidden');
-                                          bsChart.classList.remove('hidden');
-                                          bsBtn.classList.add('bg-blue-100', 'text-blue-700');
-                                          bsBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
-                                          bpBtn.classList.remove('bg-blue-100', 'text-blue-700');
-                                          bpBtn.classList.add('hover:bg-gray-100', 'text-gray-600');
-                            });
-                            
-                            // Sample blood pressure data for chart
-                            const bpCtx = document.getElementById('bloodPressureChart').getContext('2d');
-                            new Chart(bpCtx, {
-                                          type: 'line',
-                                          data: {
-                                                        labels: ['Last Week', '6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday'],
-                                                        datasets: [
-                                                                      {
-                                                                                    label: 'Systolic',
-                                                                                    data: [120, 118, 125, 117, 122, 119, 121],
-                                                                                    borderColor: 'rgb(239, 68, 68)',
-                                                                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                                                                                    tension: 0.3,
-                                                                                    fill: true
-                                                                      },
-                                                                      {
-                                                                                    label: 'Diastolic',
-                                                                                    data: [80, 78, 82, 79, 81, 80, 81],
-                                                                                    borderColor: 'rgb(59, 130, 246)',
-                                                                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                                                                                    tension: 0.3,
-                                                                                    fill: true
-                                                                      }
-                                                        ]
-                                          },
-                                          options: {
-                                                        responsive: true,
-                                                        maintainAspectRatio: false,
-                                                        plugins: {
-                                                                      title: {
-                                                                                    display: true,
-                                                                                    text: 'Patient Blood Pressure Trends'
-                                                                      },
-                                                                      tooltip: {
-                                                                                    mode: 'index',
-                                                                                    intersect: false
-                                                                      }
-                                                        },
-                                                        scales: {
-                                                                      y: {
-                                                                                    min: 60,
-                                                                                    max: 140,
-                                                                                    title: {
-                                                                                                  display: true,
-                                                                                                  text: 'mmHg'
-                                                                                    }
-                                                                      }
-                                                        }
-                                          }
-                            });
-                            
-                            // Sample blood sugar data for chart
-                            const bsCtx = document.getElementById('bloodSugarChart').getContext('2d');
-                            new Chart(bsCtx, {
-                                          type: 'line',
-                                          data: {
-                                                        labels: ['Last Week', '6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday'],
-                                                        datasets: [{
-                                                                      label: 'Blood Sugar',
-                                                                      data: [95, 100, 92, 98, 105, 90, 97],
-                                                                      borderColor: 'rgb(16, 185, 129)',
-                                                                      backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                                                      tension: 0.3,
-                                                                      fill: true
-                                                        }]
-                                          },
-                                          options: {
-                                                        responsive: true,
-                                                        maintainAspectRatio: false,
-                                                        plugins: {
-                                                                      title: {
-                                                                                    display: true,
-                                                                                    text: 'Patient Blood Sugar Trends'
-                                                                      }
-                                                        },
-                                                        scales: {
-                                                                      y: {
-                                                                                    min: 70,
-                                                                                    max: 130,
-                                                                                    title: {
-                                                                                                  display: true,
-                                                                                                  text: 'mg/dL'
-                                                                                    }
-                                                                      }
-                                                        }
-                                          }
-                            });
                             
                             // Mobile menu functionality
                             const menuBtn = document.getElementById('menu-btn');

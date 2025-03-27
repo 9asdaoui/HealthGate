@@ -20,26 +20,32 @@ Route::prefix('auth')->group(function(){
 }
 );
 
+Route::prefix('admin')->group(function(){
+    Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('auth');
+}
+);
+
 Route::prefix('patient')->group(function(){
     Route::get('/dashboard',[PatientController::class,'dashboard'])->name('patient.dashboard')->middleware('auth');
     Route::get('/profile',[PatientController::class,'profile'])->name('patient.profile')->middleware('auth');
     Route::put('/profile',[PatientController::class,'updateProfile'])->name('patient.updateProfile')->middleware('auth');
-    Route::get('/appointments',[AppointmentController::class,'index'])->name('patient.appointments')->middleware('auth');
+    Route::get('/appointments',[AppointmentController::class,'patientAppointments'])->name('patient.appointments')->middleware('auth');
     Route::get('/appointments/create',[AppointmentController::class,'create'])->name('patient.appointments.create')->middleware('auth');
     Route::post('/appointments',[AppointmentController::class,'store'])->name('patient.appointments.store')->middleware('auth');
     Route::get('/appointments/show/{appointment}',[AppointmentController::class,'show'])->name('patient.appointments.show')->middleware('auth');
     Route::put('/appointments/cancel/{appointment}',[AppointmentController::class,'cancel'])->name('patient.appointments.cancel')->middleware('auth');
 });
 
-Route::prefix('admin')->group(function(){
-    Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('auth');
-}
-);
-
 Route::prefix('doctor')->group(function(){
     Route::get('/dashboard',[DoctorController::class,'dashboard'])->name('doctor.dashboard')->middleware('auth');
+    Route::get('/appointments', [AppointmentController::class, 'doctorAppointments'])->name('doctor.appointments')->middleware('auth');
+
+    Route::post('/appointments/confirm/{appointment}', [AppointmentController::class, 'markAsUpcoming'])->name('doctor.appointments.confirm')->middleware('auth');
+    Route::post('/appointments/complete/{appointment}', [AppointmentController::class, 'markAsCompleted'])->name('doctor.appointments.complete')->middleware('auth');
+    Route::post('/appointments/reject/{appointment}', [AppointmentController::class, 'cancel'])->name('doctor.appointments.reject')->middleware('auth');
+    Route::get('/appointments/view/{appointment}', [AppointmentController::class, 'viewAppointment'])->name('doctor.appointments.view')->middleware('auth');
+    
     Route::get('/profile',[DoctorController::class,'profile'])->name('doctor.profile')->middleware('auth');
-    Route::get('/appointments', [DoctorController::class, 'appointments'])->name('doctor.appointments')->middleware('auth');
     Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients')->middleware('auth');
     Route::get('/medical-records', [DoctorController::class, 'medicalRecords'])->name('doctor.medical-records')->middleware('auth');
     Route::get('/prescriptions', [DoctorController::class, 'prescriptions'])->name('doctor.prescriptions')->middleware('auth');

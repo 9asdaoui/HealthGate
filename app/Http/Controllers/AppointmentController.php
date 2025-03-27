@@ -12,9 +12,9 @@ use Illuminate\Http\Request;
 class AppointmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the patient appointments.
      */
-    public function index()
+    public function patientAppointments()
     {
         $user = auth()->user();
         $patient = $user->patient;
@@ -22,6 +22,19 @@ class AppointmentController extends Controller
 
         return view('patient.appointments.index',compact('appointments','user'));
     }
+
+    /**
+     * Display the doctor appointments.
+     */
+    public function doctorAppointments()
+    {
+        $user = auth()->user();
+        $doctor = $user->doctor;
+        $appointments = $doctor->appointments;
+
+        return view('doctor.appointments',compact('appointments','user'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -91,16 +104,7 @@ class AppointmentController extends Controller
 
         return redirect()->route('patient.appointments')->with('success','Appointment created successfully');
     }
-
-    /** 
-     * Cancel the specified resource.
-     */
-    public function cancel(Appointment $appointment)
-    {
-        $appointment->status = 'cancelled';
-        $appointment->save();
-        return redirect()->route('patient.appointments')->with('success','Appointment cancelled successfully');
-    }   
+    
 
     /**
      * Display the specified resource.
@@ -111,5 +115,42 @@ class AppointmentController extends Controller
         $user = auth()->user();
         return view('patient.appointments.details',compact('appointment','user'));
     }
+
+    /** 
+     *  Mark appointment as Canceled.
+     */
+    public function cancel(Appointment $appointment)
+    {
+        $appointment->status = 'cancelled';
+        $appointment->save();
+        return redirect()->route('patient.appointments')->with('success','Appointment cancelled successfully');
+    }  
+
+    /**
+     * Mark appointment as completed.
+     */
+    public function markAsCompleted(Appointment $appointment)
+    {
+        $appointment->status = 'completed';
+        $appointment->save();
+        return redirect()->route('doctor.appointments')->with('success','Appointment marked as completed successfully');
+    }
+
+    /**
+     * Mark appointment as upcoming.
+     */
+    public function markAsUpcoming(Appointment $appointment)
+    {
+        $appointment->status = 'upcoming';
+        $appointment->save();
+
+         // Get the patient's user record to send the email
+        $patientUser = $appointment->patient->user;
+        
+        // Send the notification
+        $patientUser->notify(new \App\Notifications\AppointmentConfirmed($appointment));
+    
+        return redirect()->route('doctor.appointments')->with('success','Appointment marked as upcoming successfully');
+    }  
 
 }

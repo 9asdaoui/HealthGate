@@ -62,12 +62,12 @@
                                                                       <div class="flex items-center space-x-4">
                                                                                     <div class="flex-shrink-0">
                                                                                                   <img class="h-16 w-16 rounded-full object-cover border-2 border-accent" 
-                                                                                                                 src="{{ $user->image ?? asset('images/default-doctor.png') }}" 
-                                                                                                                 alt="Dr. {{ $user->first_name }} {{ $user->last_name }}">
+                                                                                                                 src="{{ $doctor->user->image ?? asset('images/default-doctor.png') }}" 
+                                                                                                                 alt="Dr. {{ $doctor->user->first_name }} {{ $doctor->user->last_name }}">
                                                                                     </div>
                                                                                     <div class="flex-1 min-w-0">
                                                                                                   <p class="text-lg font-medium text-gray-900 truncate">
-                                                                                                                Dr. {{ $user->first_name }} {{ $user->last_name }}
+                                                                                                                Dr. {{ $doctor->user->first_name }} {{ $doctor->user->last_name }}
                                                                                                   </p>
                                                                                                   <p class="text-sm text-gray-500">
                                                                                                                 {{ $doctor->speciality ?? 'General Practitioner' }}

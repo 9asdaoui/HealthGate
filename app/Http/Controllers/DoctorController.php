@@ -12,18 +12,13 @@ class DoctorController extends Controller
     public function dashboard()
     {
         $user = User::find(auth()->user()->id);
-        
+
         return view('doctor.dashboard', compact('user'));
     }
 
     public function profile()
     {
         return view('doctor.profile');
-    }
-
-    public function index()
-    {
-        //
     }
 
     public function create()
