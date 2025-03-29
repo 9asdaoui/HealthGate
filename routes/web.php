@@ -22,6 +22,9 @@ Route::prefix('auth')->group(function(){
 
 Route::prefix('admin')->group(function(){
     Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('auth');
+    Route::get('/doctors',[AdminController::class,'doctors'])->name('admin.doctors')->middleware('auth');
+    Route::get('/patients',[AdminController::class,'patients'])->name('admin.patients')->middleware('auth');
+    Route::get('/appointments',[AdminController::class,'appointments'])->name('admin.appointments')->middleware('auth');
 }
 );
 
