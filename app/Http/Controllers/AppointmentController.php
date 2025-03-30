@@ -153,4 +153,14 @@ class AppointmentController extends Controller
         return redirect()->route('doctor.appointments')->with('success','Appointment marked as upcoming successfully');
     }  
 
+    /**
+     * Display the appointment details for the doctor.
+     */
+    public function viewAppointment(Appointment $appointment)
+    {
+        $user = auth()->user();
+        $doctor = $user->doctor;
+        return view('doctor.appointments_details',compact('appointment','user'));
+    }
+
 }

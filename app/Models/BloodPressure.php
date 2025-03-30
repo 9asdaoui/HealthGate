@@ -12,6 +12,7 @@ class BloodPressure extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
+        'measured_at',
         'systolic',
         'diastolic',
         'date',

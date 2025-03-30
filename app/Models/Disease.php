@@ -12,6 +12,7 @@ class Disease extends Model
     protected $fillable = [
         'name',
         'description',
+        'category',
         'symptoms',
         'prevention',
         'treatment',

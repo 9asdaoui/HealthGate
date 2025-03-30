@@ -173,9 +173,6 @@
                                                                                                   Date & Time
                                                                                     </th>
                                                                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                  Reason
-                                                                                    </th>
-                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                                                                   Status
                                                                                     </th>
                                                                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -217,51 +214,48 @@
                                                                                                                 {{ $appointment->appointment_time }}
                                                                                                   </div>
                                                                                     </td>
-                                                                                    <td class="px-6 py-4">
-                                                                                                  <div class="text-sm text-gray-900 max-w-xs truncate">
-                                                                                                                {{ $appointment->reason }}
-                                                                                                  </div>
-                                                                                    </td>
+                                                                               
                                                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                                                                   <span class="status-badge status-{{ $appointment->status }}">
                                                                                                                 {{ ucfirst($appointment->status) }}
                                                                                                   </span>
                                                                                     </td>
                                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                                                                  <div class="flex space-x-2">
-                                                                                                                <a href="{{ route('doctor.appointments.view', $appointment) }}" 
-                                                                                                                   class="text-blue-600 hover:text-blue-900 p-1">
-                                                                                                                              <i class="fas fa-eye"></i>
-                                                                                                                </a>
-                                                                                                                
-                                                                                                                @if($appointment->status == 'pending')
-                                                                                                                <form action="{{ route('doctor.appointments.confirm', $appointment) }}" method="POST" class="inline-block">
-                                                                                                                              @csrf
-                                                                                                                              <button type="submit" class="bg-green-100 hover:bg-green-200 text-green-700 rounded-md px-2 py-1 transition-colors" 
-                                                                                                                                                          title="Confirm Appointment">
-                                                                                                                                            <i class="fas fa-calendar-check mr-1"></i> 
-                                                                                                                              </button>
-                                                                                                                </form>
+                                                                                                  <div class="flex space-x-2 justify-end">
+                                                                                                     
+                                                                                                      @if($appointment->status == 'pending')
+                                                                                                         <form action="{{ route('doctor.appointments.confirm', $appointment) }}" method="POST" class="inline-block">
+                                                                                                            @csrf
+                                                                                                            <button type="submit" class="bg-green-100 hover:bg-green-200 text-green-700 rounded-md px-2 py-1 transition-colors" 
+                                                                                                                  title="Confirm Appointment">
+                                                                                                               <i class="fas fa-calendar-check mr-1"></i> confirm
+                                                                                                            </button>
+                                                                                                         </form>
 
-                                                                                                                <form action="{{ route('doctor.appointments.reject', $appointment) }}" method="POST" class="inline-block ml-1">
-                                                                                                                              @csrf
-                                                                                                                              <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 rounded-md px-2 py-1 transition-colors"
-                                                                                                                                                          title="Reject Appointment" onclick="return confirm('Are you sure you want to reject this appointment?')">
-                                                                                                                                            <i class="fas fa-calendar-times mr-1"></i> 
-                                                                                                                              </button>
-                                                                                                                </form>
-                                                                                                                @endif
+                                                                                                         <form action="{{ route('doctor.appointments.reject', $appointment) }}" method="POST" class="inline-block">
+                                                                                                            @csrf
+                                                                                                            <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 rounded-md px-2 py-1 transition-colors"
+                                                                                                                  title="Reject Appointment" onclick="return confirm('Are you sure you want to reject this appointment?')">
+                                                                                                               <i class="fas fa-calendar-times mr-1"></i> reject
+                                                                                                            </button>
+                                                                                                         </form>
+                                                                                                      @endif
 
-                                                                                                                @if($appointment->status == 'upcoming')
-                                                                                                                <form action="{{ route('doctor.appointments.complete', $appointment) }}" method="POST" class="inline-block">
-                                                                                                                              @csrf
-                                                                                                                              <button type="submit" class="bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-md px-2 py-1 transition-colors"
-                                                                                                                                                          title="Mark as Completed">
-                                                                                                                                            <i class="fas fa-clipboard-check mr-1"></i> Complete
-                                                                                                                              </button>
-                                                                                                                </form>
-                                                                                                                @endif
-                                                                                                  </div>
+                                                                                                      @if($appointment->status == 'upcoming')
+                                                                                                         <form action="{{ route('doctor.appointments.complete', $appointment) }}" method="POST" class="inline-block">
+                                                                                                            @csrf
+                                                                                                            <button type="submit" class="bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-md px-2 py-1 transition-colors"
+                                                                                                                  title="Mark as Completed">
+                                                                                                               <i class="fas fa-clipboard-check mr-1"></i> Complete
+                                                                                                            </button>
+                                                                                                         </form>
+                                                                                                      @endif
+                                                                                                      
+                                                                                                      <a href="{{ route('doctor.appointments.view', $appointment) }}" 
+                                                                                                         class="text-blue-600 hover:text-blue-900 p-1">
+                                                                                                         <i class="fas fa-eye"></i> view
+                                                                                                      </a>
+                                                                                                </div>
                                                                                     </td>
                                                                       </tr>
                                                                       @empty
@@ -278,47 +272,6 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-              // Status filter functionality
-              const statusFilter = document.getElementById('status-filter');
-              const tableRows = document.querySelectorAll('tbody tr');
-              
-              statusFilter.addEventListener('change', function() {
-                            const filterValue = this.value;
-                            
-                            tableRows.forEach(row => {
-                                          const statusCell = row.querySelector('td:nth-child(4)');
-                                          if (!statusCell) return;
-                                          
-                                          const statusText = statusCell.textContent.trim().toLowerCase();
-                                          
-                                          if (filterValue === 'all' || statusText.includes(filterValue)) {
-                                                        row.style.display = '';
-                                          } else {
-                                                        row.style.display = 'none';
-                                          }
-                            });
-              });
-              
-              // Search functionality
-              const searchInput = document.getElementById('search');
-              
-              searchInput.addEventListener('input', function() {
-                            const searchValue = this.value.toLowerCase();
-                            
-                            tableRows.forEach(row => {
-                                          const patientNameCell = row.querySelector('td:first-child');
-                                          if (!patientNameCell) return;
-                                          
-                                          const patientName = patientNameCell.textContent.toLowerCase();
-                                          
-                                          if (patientName.includes(searchValue)) {
-                                                        row.style.display = '';
-                                          } else {
-                                                        row.style.display = 'none';
-                                          }
-                            });
-              });
-});
+       
 </script>
 @endsection

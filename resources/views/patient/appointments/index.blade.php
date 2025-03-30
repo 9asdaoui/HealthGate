@@ -63,19 +63,28 @@
                                                                                                                 {{ ucfirst($appointment->status) }}
                                                                                                   </span>
                                                                                     </td>
-                                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                                                                  <a href="{{ route('patient.appointments.show', $appointment->id) }}" class="text-accent hover:text-accentHover mr-3">
-                                                                                                                <i class="fas fa-eye"></i>
-                                                                                                  </a>
-                                                                                                  @if($appointment->status == 'upcoming')
-                                                                                                  <form action="{{ route('patient.appointments.cancel', $appointment->id) }}" method="POST" class="inline">
-                                                                                                                @csrf
-                                                                                                                @method('PUT')
-                                                                                                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure you want to cancel this appointment?')">
-                                                                                                                              <i class="fas fa-times-circle"></i>
-                                                                                                                </button>
-                                                                                                  </form>
-                                                                                                  @endif
+                                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ">
+                                                                                                  <div class="flex justify-end space-x-3">
+                                                                                                                @if($appointment->status == 'upcoming')
+                                                                                                                              <!-- Cancel Button -->
+                                                                                                                              <form action="{{ route('patient.appointments.cancel', $appointment->id) }}" method="POST" class="inline">
+                                                                                                                                            @csrf
+                                                                                                                                            @method('PUT')
+                                                                                                                                            <button type="submit" 
+                                                                                                                                                          class="group flex items-center px-3 py-1.5 rounded-md text-sm text-red-600 hover:bg-red-50 transition-all duration-200" 
+                                                                                                                                                          onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                                                                                                                                          <i class="fas fa-times-circle mr-1.5 group-hover:animate-pulse"></i>
+                                                                                                                                                          <span class="font-medium">Cancel</span>
+                                                                                                                                            </button>
+                                                                                                                              </form>
+                                                                                                                @endif
+
+                                                                                                                <a href="{{ route('patient.appointments.show', $appointment->id) }}" 
+                                                                                                                              class="flex items-center px-3 py-1.5 rounded-md text-sm bg-accent/10 text-accent hover:bg-accent hover:text-white transition-all duration-300">
+                                                                                                                              <i class="fas fa-eye mr-1.5"></i>
+                                                                                                                              <span class="font-medium">View Details</span>
+                                                                                                                </a>
+                                                                                                  </div>
                                                                                     </td>
                                                                       </tr>
                                                                       @empty
