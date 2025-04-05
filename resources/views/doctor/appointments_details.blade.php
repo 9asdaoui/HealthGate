@@ -154,9 +154,7 @@
                                                                                     </button>
                                                                       </form>
                                                                       
-                                                                      <button type="button" onclick="openAddPrescriptionModal()" class="action-button bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 w-full sm:w-auto">
-                                                                                    <i class="fas fa-prescription"></i> Add Prescription
-                                                                      </button>
+                                                                   
                                                         </div>
                                                         @endif
                                           </div>
@@ -164,33 +162,33 @@
                                           <!-- Medical Records Section -->
                                           <div class="bg-white rounded-xl shadow-md p-6">
                                                         <div class="flex items-center justify-between mb-6">
-                                                                      <h2 class="text-xl font-bold text-gray-800">Medical Records</h2>
-                                                                      <button type="button" onclick="openAddMedicalRecordModal()" class="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg flex items-center">
+                                                                      <h2 class="text-xl font-bold text-gray-800">Prescription Records</h2>
+                                                                      <button type="button" onclick="openAddPrescriptionModal()" class="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg flex items-center">
                                                                                     <i class="fas fa-plus mr-1"></i> Add Prescription
                                                                       </button>
                                                         </div>
 
                                                         <div class="space-y-4">
                                                                       <!-- Sample Medical Records - Replace with actual data when available -->
-                                                                      @forelse($appointment->patient->medicals->where('doctor_id', $user->doctor->id)->take(3) as $medical)
+                                                                      @forelse($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->take(3) as $Prescription)
                                                                       <div class="border border-gray-100 rounded-lg p-4 bg-gray-50">
                                                                                     <div class="flex justify-between">
-                                                                                                  <h4 class="font-medium text-gray-800">{{ $medical->name }}</h4>
-                                                                                                  <span class="text-xs text-gray-500">{{ $medical->created_at->format('M d, Y') }}</span>
+                                                                                                  <h4 class="font-medium text-gray-800">{{ $Prescription->name }}</h4>
+                                                                                                  <span class="text-xs text-gray-500">{{ $Prescription->created_at->format('M d, Y') }}</span>
                                                                                     </div>
-                                                                                    <p class="text-sm text-gray-600 mt-2">{{ Str::limit($medical->description, 100) }}</p>
+                                                                                    <p class="text-sm text-gray-600 mt-2">{{ Str::limit($Prescription->description, 100) }}</p>
                                                                       </div>
                                                                       @empty
                                                                       <div class="text-center py-6">
                                                                                     <i class="fas fa-notes-medical text-gray-300 text-4xl mb-3"></i>
-                                                                                    <p class="text-gray-500">No medical records found for this patient</p>
+                                                                                    <p class="text-gray-500">No Prescription records found for this patient</p>
                                                                       </div>
                                                                       @endforelse
                                                                       
-                                                                      @if($appointment->patient->medicals->where('doctor_id', $user->doctor->id)->count() > 3)
+                                                                      @if($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->count() > 3)
                                                                       <div class="mt-4 text-center">
-                                                                                    <a href="{{ route('doctor.medical-records') }}" class="text-blue-600 hover:text-blue-800 text-sm">
-                                                                                                  View All Medical Records
+                                                                                    <a href="" class="text-blue-600 hover:text-blue-800 text-sm">
+                                                                                                  View All Prescription Records
                                                                                     </a>
                                                                       </div>
                                                                       @endif
@@ -312,6 +310,7 @@
                                           <input type="hidden" name="patient_id" value="{{ $appointment->patient_id }}">
                                           <input type="hidden" name="doctor_id" value="{{ $user->doctor->id }}">
                                           
+                                          <div></div>
                                           <div class="mb-4">
                                                         <label class="block text-gray-700 text-sm font-medium mb-2" for="medication_name">
                                                                       Medication Name
@@ -373,107 +372,46 @@
               </div>
 </div>
 
-<!-- Add Medical Record Modal -->
-<div id="medicalRecordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-              <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-                            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-                                          <h3 class="text-lg font-bold text-gray-800">Add Medical Record</h3>
-                                          <button type="button" onclick="closeMedicalRecordModal()" class="text-gray-400 hover:text-gray-600">
-                                                        <i class="fas fa-times"></i>
-                                          </button>
-                            </div>
-                            
-                            <form action="#" method="POST" class="px-6 py-4">
-                                          @csrf
-                                          <input type="hidden" name="patient_id" value="{{ $appointment->patient_id }}">
-                                          <input type="hidden" name="doctor_id" value="{{ $user->doctor->id }}">
-                                          
-                                          <div class="mb-4">
-                                                        <label class="block text-gray-700 text-sm font-medium mb-2" for="record_name">
-                                                                      Record Title
-                                                        </label>
-                                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                                                      type="text" id="record_name" name="name" required>
-                                          </div>
-                                          <div class="mb-4">
-                                                        <label class="block text-gray-700 text-sm font-medium mb-2" for="record_type">
-                                                                      Record Type
-                                                        </label>
-                                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                                                                    id="record_type" name="record_type" required>
-                                                                      <option value="">Select record type</option>
-                                                                      <option value="diagnosis">Diagnosis</option>
-                                                                      <option value="test">Test Result</option>
-                                                                      <option value="procedure">Procedure</option>
-                                                                      <option value="allergy">Allergy</option>
-                                                                      <option value="other">Other</option>
-                                                        </select>
-                                          </div>
+@endsection
 
-                                          <div class="mb-4">
-                                                        <label class="block text-gray-700 text-sm font-medium mb-2" for="record_description">
-                                                                      Description
-                                                        </label>
-                                                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                                                                    id="record_description" name="description" rows="4" required></textarea>
-                                          </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set default dates for prescription form
+        const today = new Date();
+        const nextMonth = new Date();
+        nextMonth.setMonth(today.getMonth() + 1);
+        
+        if (document.getElementById('start_date')) {
+            document.getElementById('start_date').valueAsDate = today;
+        }
+        
+        if (document.getElementById('end_date')) {
+            document.getElementById('end_date').valueAsDate = nextMonth;
+        }
+    });
 
-                                          <div class="mb-4">
-                                                        <label class="block text-gray-700 text-sm font-medium mb-2" for="record_date">
-                                                                      Record Date
-                                                        </label>
-                                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                                                                    type="date" id="record_date" name="record_date" value="{{ date('Y-m-d') }}" required>
-                                          </div>
+    function openAddPrescriptionModal() {
+        console.log('Opening modal...');
+        const modal = document.getElementById('prescriptionModal');
+        console.log('Modal element:', modal);
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
 
-                                          <div class="flex justify-end pt-4 border-t border-gray-200">
-                                                        <button type="button" onclick="closeMedicalRecordModal()" class="mr-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                                                                      Cancel
-                                                        </button>
-                                                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                                                      Save Record
-                                                        </button>
-                                          </div>
-                                          </form>
-                                          </div>
-                                          </div>
+    function closePrescriptionModal() {
+        document.getElementById('prescriptionModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 
-                                          @push('scripts')
-                                          <script>
-                                          function openAddPrescriptionModal() {
-                                                        document.getElementById('prescriptionModal').classList.remove('hidden');
-                                                        document.body.style.overflow = 'hidden';
-                                          }
+    function openAddMedicalRecordModal() {
+        document.getElementById('medicalRecordModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
 
-                                          function closePrescriptionModal() {
-                                                        document.getElementById('prescriptionModal').classList.add('hidden');
-                                                        document.body.style.overflow = 'auto';
-                                          }
-
-                                          function openAddMedicalRecordModal() {
-                                                        document.getElementById('medicalRecordModal').classList.remove('hidden');
-                                                        document.body.style.overflow = 'hidden';
-                                          }
-
-                                          function closeMedicalRecordModal() {
-                                                        document.getElementById('medicalRecordModal').classList.add('hidden');
-                                                        document.body.style.overflow = 'auto';
-                                          }
-
-                                          // Set default dates for prescription form
-                                          document.addEventListener('DOMContentLoaded', function() {
-                                                        const today = new Date();
-                                                        const nextMonth = new Date();
-                                                        nextMonth.setMonth(today.getMonth() + 1);
-                                                        
-                                                        if (document.getElementById('start_date')) {
-                                                                      document.getElementById('start_date').valueAsDate = today;
-                                                        }
-                                                        
-                                                        if (document.getElementById('end_date')) {
-                                                                      document.getElementById('end_date').valueAsDate = nextMonth;
-                                                        }
-                                          });
-                                          </script>
-                                          @endpush
-                                          @endsection
+    function closeMedicalRecordModal() {
+        document.getElementById('medicalRecordModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+</script>
+@endpush

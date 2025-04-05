@@ -524,6 +524,6 @@ alert.style.display = 'none';
 }
 });
 </script>
-@yield('scripts')
+@stack('scripts')
 </body>
 </html>
