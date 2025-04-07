@@ -29,10 +29,5 @@ class Disease extends Model
         return $this->belongsToMany(Patient::class, 'patient_doctor_disease')->withPivot('duration');
     }
 
-    public function medicals()
-    {
-        return $this->hasMany(Medical::class);
-    }
-
     
 }

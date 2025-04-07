@@ -11,7 +11,7 @@ class StoreMedicalRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class StoreMedicalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'dosage' => 'required|string|max:255',
+            'frequency' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'appointment_id' => 'required|exists:appointments,id',
         ];
     }
 }

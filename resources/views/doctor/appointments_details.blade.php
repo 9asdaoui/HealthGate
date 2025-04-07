@@ -162,33 +162,33 @@
                                           <!-- Medical Records Section -->
                                           <div class="bg-white rounded-xl shadow-md p-6">
                                                         <div class="flex items-center justify-between mb-6">
-                                                                      <h2 class="text-xl font-bold text-gray-800">Prescription Records</h2>
+                                                                      <h2 class="text-xl font-bold text-gray-800">Medical Records</h2>
                                                                       <button type="button" onclick="openAddPrescriptionModal()" class="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg flex items-center">
-                                                                                    <i class="fas fa-plus mr-1"></i> Add Prescription
+                                                                                    <i class="fas fa-plus mr-1"></i> Add Medical
                                                                       </button>
                                                         </div>
 
                                                         <div class="space-y-4">
                                                                       <!-- Sample Medical Records - Replace with actual data when available -->
-                                                                      @forelse($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->take(3) as $Prescription)
+                                                                      @forelse($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->take(3) as $Medical)
                                                                       <div class="border border-gray-100 rounded-lg p-4 bg-gray-50">
                                                                                     <div class="flex justify-between">
-                                                                                                  <h4 class="font-medium text-gray-800">{{ $Prescription->name }}</h4>
-                                                                                                  <span class="text-xs text-gray-500">{{ $Prescription->created_at->format('M d, Y') }}</span>
+                                                                                                  <h4 class="font-medium text-gray-800">{{ $Medical->name }}</h4>
+                                                                                                  <span class="text-xs text-gray-500">{{ $Medical->created_at->format('M d, Y') }}</span>
                                                                                     </div>
-                                                                                    <p class="text-sm text-gray-600 mt-2">{{ Str::limit($Prescription->description, 100) }}</p>
+                                                                                    <p class="text-sm text-gray-600 mt-2">{{ Str::limit($Medical->description, 100) }}</p>
                                                                       </div>
                                                                       @empty
                                                                       <div class="text-center py-6">
                                                                                     <i class="fas fa-notes-medical text-gray-300 text-4xl mb-3"></i>
-                                                                                    <p class="text-gray-500">No Prescription records found for this patient</p>
+                                                                                    <p class="text-gray-500">No Medical records found for this patient</p>
                                                                       </div>
                                                                       @endforelse
                                                                       
                                                                       @if($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->count() > 3)
                                                                       <div class="mt-4 text-center">
                                                                                     <a href="" class="text-blue-600 hover:text-blue-800 text-sm">
-                                                                                                  View All Prescription Records
+                                                                                                  View All Medical Records
                                                                                     </a>
                                                                       </div>
                                                                       @endif
@@ -305,12 +305,12 @@
                                           </button>
                             </div>
                             
-                            <form action="#" method="POST" class="px-6 py-4">
+                            <form action="{{ route('doctor.medical.store')}}" method="POST" class="px-6 py-4">
                                           @csrf
                                           <input type="hidden" name="patient_id" value="{{ $appointment->patient_id }}">
                                           <input type="hidden" name="doctor_id" value="{{ $user->doctor->id }}">
+                                          <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">
                                           
-                                          <div></div>
                                           <div class="mb-4">
                                                         <label class="block text-gray-700 text-sm font-medium mb-2" for="medication_name">
                                                                       Medication Name

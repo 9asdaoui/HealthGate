@@ -259,14 +259,9 @@
 <span>My Patients</span>
 </a>
 
-<a href="{{ route('doctor.medical-records') }}" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('doctor.medical-records*') ? 'active' : '' }}">
+<a href="" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('doctor.medical-records*') ? 'active' : '' }}">
 <i class="fas fa-file-medical w-5 text-center"></i>
 <span>Medical Records</span>
-</a>
-
-<a href="{{ route('doctor.prescriptions') }}" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('doctor.prescriptions*') ? 'active' : '' }}">
-<i class="fas fa-prescription w-5 text-center"></i>
-<span>Prescriptions</span>
 </a>
 
 <p class="text-xs text-gray-500 px-3 uppercase tracking-wider mb-2 mt-6">Medical Resources</p>

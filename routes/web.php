@@ -4,7 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\PatientController;
+use App\Models\Medical;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('visitor.index');});
@@ -47,12 +49,15 @@ Route::prefix('doctor')->group(function(){
     Route::post('/appointments/complete/{appointment}', [AppointmentController::class, 'markAsCompleted'])->name('doctor.appointments.complete')->middleware('auth');
     Route::post('/appointments/reject/{appointment}', [AppointmentController::class, 'cancel'])->name('doctor.appointments.reject')->middleware('auth');
     Route::get('/appointments/view/{appointment}', [AppointmentController::class, 'viewAppointment'])->name('doctor.appointments.view')->middleware('auth');
+    Route::post('/medical/store', [MedicalController::class, 'store'])->name('doctor.medical.store')->middleware('auth');
+    Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients')->middleware('auth');
+    Route::get('/patients/medical-records/{patient}', [DoctorController::class, 'viewPatientMedicalRecords'])->name('doctor.patients.medical-records')->middleware('auth');
     
     Route::get('/profile',[DoctorController::class,'profile'])->name('doctor.profile')->middleware('auth');
-    Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients')->middleware('auth');
-    Route::get('/medical-records', [DoctorController::class, 'medicalRecords'])->name('doctor.medical-records')->middleware('auth');
     Route::get('/prescriptions', [DoctorController::class, 'prescriptions'])->name('doctor.prescriptions')->middleware('auth');
     Route::get('/diseases', [DoctorController::class, 'diseases'])->name('doctor.diseases')->middleware('auth');
+    Route::post('/diseases', [DoctorController::class, 'diseases'])->name('doctor.diseases.assign')->middleware('auth');
+
     Route::get('/health-metrics', [DoctorController::class, 'healthMetrics'])->name('doctor.health-metrics')->middleware('auth');
     Route::get('/schedule', [DoctorController::class, 'schedule'])->name('doctor.schedule')->middleware('auth');
     Route::get('/settings', [DoctorController::class, 'settings'])->name('doctor.settings')->middleware('auth');

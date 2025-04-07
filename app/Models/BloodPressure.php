@@ -27,4 +27,6 @@ class BloodPressure extends Model
     {
         return $this->belongsTo(Doctor::class);
     }
+
+  
 }

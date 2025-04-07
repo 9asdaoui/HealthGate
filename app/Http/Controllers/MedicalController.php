@@ -29,7 +29,29 @@ class MedicalController extends Controller
      */
     public function store(StoreMedicalRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $medical = new Medical();
+        $medical->patient_id = $validatedData['patient_id'];
+        $medical->doctor_id = $validatedData['doctor_id'];
+        $medical->name = $validatedData['name'];
+        $medical->description = $validatedData['description'];
+        $medical->dosage = $validatedData['dosage'];
+        $medical->frequency = $validatedData['frequency'];
+        $medical->start_date = $validatedData['start_date'];
+        $medical->end_date = $validatedData['end_date'];
+        $medical->save();
+
+        if (isset($validatedData['appointment_id'])) {
+            $appointment = \App\Models\Appointment::find($validatedData['appointment_id']);
+            if ($appointment && $appointment->status === 'upcoming') {
+                $appointment->status = 'completed';
+                $appointment->save();
+            }
+        }
+
+        
+        return redirect()->route('doctor.patients.medical-records', ['patient' => $validatedData['patient_id']])
+            ->with('success', 'Medical record created successfully, and appointment status updated.');
     }
 
     /**
