@@ -30,7 +30,9 @@ class StoreMedicalRequest extends FormRequest
             'frequency' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'appointment_id' => 'required|exists:appointments,id',
         ];
     }
 }
+
+// fach tjii khdem lpolicy bash gher mol medical howa li yqder udar lmedical records
+// wla doctor li yqder udar lmedical records

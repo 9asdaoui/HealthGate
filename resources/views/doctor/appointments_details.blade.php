@@ -175,7 +175,6 @@
                     </div>
 
                     <div class="space-y-4">
-                        <!-- Sample Medical Records - Replace with actual data when available -->
                         @forelse($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->take(3) as $Medical)
                             <div class="border border-gray-100 rounded-lg p-4 bg-gray-50">
                                 <div class="flex justify-between">
@@ -193,7 +192,7 @@
 
                         @if ($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->count() > 3)
                             <div class="mt-4 text-center">
-                                <a href="" class="text-blue-600 hover:text-blue-800 text-sm">
+                                <a href="{{ route('doctor.patients.medical-records', $appointment->patient) }}" class="text-blue-600 hover:text-blue-800 text-sm">
                                     View All Medical Records
                                 </a>
                             </div>
@@ -240,7 +239,7 @@
                     </div>
 
                     <div class="flex justify-center">
-                        <a href="{{ route('doctor.patients') }}"
+                        <a href="{{ route('doctor.patients.medical-records', $appointment->patient) }}"
                             class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
                             <i class="fas fa-user-circle mr-1"></i> View Full Profile
                         </a>
@@ -303,7 +302,7 @@
                     </div>
 
                     <div class="mt-4 text-center">
-                        <a href="{{ route('doctor.health-metrics') }}"
+                        <a href="{{ route('doctor.patients.medical-records', $appointment->patient) }}"
                             class="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-center">
                             <i class="fas fa-chart-line mr-1"></i> View All Metrics
                         </a>

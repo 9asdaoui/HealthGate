@@ -29,7 +29,17 @@ class BloodSugarController extends Controller
      */
     public function store(StoreBloodSugarRequest $request)
     {
-        //
+        $validated = $request->validated();
+        // Create a new BloodSugar record
+        BloodSugar::create([
+            'patient_id' => $validated['patient_id'],
+            'doctor_id' => $validated['doctor_id'],
+            'measured_at' => $validated['measured_at'],
+            'value' => $validated['value'],
+            'unit' => $validated['unit'],
+        ]);
+
+        return redirect()->back()->with('success', 'Blood sugar record created successfully.');
     }
 
     /**

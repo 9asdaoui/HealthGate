@@ -29,7 +29,19 @@ class BloodPressureController extends Controller
      */
     public function store(StoreBloodPressureRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // Create a new BloodPressure record
+        BloodPressure::create([
+            'systolic' => $validated['systolic'],
+            'diastolic' => $validated['diastolic'],
+            'pulse' => $validated['pulse'],
+            'patient_id' => $validated['patient_id'],
+            'doctor_id' => $validated['doctor_id'],
+            'measured_at' => $validated['measured_at'],
+        ]);
+
+        return redirect()->back()->with('success', 'Blood pressure record created successfully.');
     }
 
     /**

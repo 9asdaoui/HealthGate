@@ -97,22 +97,10 @@
                                 <td class="px-6 py-4">
                                     <div class="flex space-x-2">
                                         <a href="{{ route('doctor.patients.medical-records', $patient->id) }}"
-                                            class="tooltip text-accent hover:text-accentHover transition duration-150 ease-in-out flex items-center justify-center h-8 w-8 rounded-full hover:bg-gray-100">
-                                            <i class="fas fa-file-medical"></i>
-                                            <span
-                                                class="tooltip-text bg-gray-800 text-white text-xs rounded py-1 px-2 absolute -mt-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Medical
-                                                Records</span>
+                                            class="px-3 py-1 text-xs text-white bg-accent hover:bg-accentHover rounded-md transition duration-150 ease-in-out">
+                                            <i class="fas fa-file-medical mr-1"></i>
+                                            Medical History
                                         </a>
-
-                                        <a href="{{ route('doctor.appointments', $patient->id) }}"
-                                            class="tooltip text-accent hover:text-accentHover transition duration-150 ease-in-out flex items-center justify-center h-8 w-8 rounded-full hover:bg-gray-100">
-                                            <i class="fas fa-calendar-plus"></i>
-                                            <span
-                                                class="tooltip-text bg-gray-800 text-white text-xs rounded py-1 px-2 absolute -mt-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Schedule
-                                                Appointment</span>
-                                        </a>
-
-
                                     </div>
                                 </td>
                             </tr>

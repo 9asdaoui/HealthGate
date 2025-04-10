@@ -203,12 +203,7 @@
                                             <button type="button" class="text-blue-600 hover:text-blue-900 mr-3"
                                                 data-record-id="{{ $record->id }}"
                                                 onclick="editMedicalRecord({{ $record->id }})">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="text-red-600 hover:text-red-900"
-                                                data-record-id="{{ $record->id }}"
-                                                onclick="deleteMedicalRecord({{ $record->id }})">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="fas fa-edit">update</i>
                                             </button>
                                         </td>
                                     </tr>
@@ -234,6 +229,152 @@
                 </div>
             @endif
         </div>
+
+        {{-- Modal for updating Medical Record --}}
+        <div id="updateMedicalRecordModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <form id="updateMedicalForm" action="" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                        <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
+                        <div class="bg-gray-50 px-4 py-3 border-b">
+                            <h3 class="text-lg font-medium text-gray-900">Update Medical Record</h3>
+                        </div>
+
+                        <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6" id="loadingMedicalRecord">
+                            <div class="flex justify-center items-center p-6">
+                                <div class="loading-animation">
+                                    <div class="animate-pulse flex space-x-4">
+                                        <div class="rounded-full bg-indigo-400 h-12 w-12 animate-bounce"></div>
+                                        <div class="flex-1 space-y-4 py-1">
+                                            <div class="h-4 bg-indigo-400 rounded w-3/4 animate-pulse"></div>
+                                            <div class="space-y-2">
+                                                <div class="h-4 bg-indigo-300 rounded animate-pulse"></div>
+                                                <div class="h-4 bg-indigo-300 rounded w-5/6 animate-pulse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-center text-indigo-600 font-medium">
+                                        <span class="inline-block animate-pulse">Loading medical record...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="px-4 py-3 hidden" id="medicalRecordFormContent">
+                            <div class="mb-4">
+                                <label for="update_name" class="block text-sm font-medium text-gray-700">Record
+                                    Title</label>
+                                <input type="text" name="name" id="update_name"
+                                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="update_description"
+                                    class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea name="description" id="update_description" rows="3"
+                                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="update_dosage" class="block text-sm font-medium text-gray-700">Medication
+                                        Dosage</label>
+                                    <input type="text" name="dosage" id="update_dosage"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+
+                                <div>
+                                    <label for="update_frequency"
+                                        class="block text-sm font-medium text-gray-700">Frequency</label>
+                                    <input type="text" name="frequency" id="update_frequency"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="update_start_date" class="block text-sm font-medium text-gray-700">Start
+                                        Date</label>
+                                    <input type="date" name="start_date" id="update_start_date"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+
+                                <div>
+                                    <label for="update_end_date" class="block text-sm font-medium text-gray-700">End
+                                        Date</label>
+                                    <input type="date" name="end_date" id="update_end_date"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button type="submit"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Update Record
+                            </button>
+                            <button type="button"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm modal-close">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function editMedicalRecord(id) {
+                document.getElementById('loadingMedicalRecord').classList.remove('hidden');
+                document.getElementById('medicalRecordFormContent').classList.add('hidden');
+                // Show the modal
+                const modal = document.getElementById('updateMedicalRecordModal');
+                modal.classList.remove('hidden');
+
+                // Set the form action URL
+                const form = document.getElementById('updateMedicalForm');
+                form.action = "{{ route('doctor.medical.update', '') }}/" + id;
+
+                // Fetch the record data and populate the form
+                fetch(`/doctor/patients/medical-records/{{ $patient->id }}/edit/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        document.getElementById('update_name').value = data.name;
+                        document.getElementById('update_description').value = data.description;
+                        document.getElementById('update_dosage').value = data.dosage;
+                        document.getElementById('update_frequency').value = data.frequency;
+
+                        // Format dates for input date fields (YYYY-MM-DD)
+                        if (data.start_date) {
+                            const startDate = new Date(data.start_date);
+                            document.getElementById('update_start_date').value = startDate.toISOString().split('T')[0];
+                        }
+
+                        if (data.end_date) {
+                            const endDate = new Date(data.end_date);
+                            document.getElementById('update_end_date').value = endDate.toISOString().split('T')[0];
+                        }
+
+                        // Show the form content and hide the loading animation
+                        document.getElementById('loadingMedicalRecord').classList.add('hidden');
+                        document.getElementById('medicalRecordFormContent').classList.remove('hidden');
+
+                    })
+                    .catch(error => {
+                        console.error('Error fetching medical record:', error);
+                        alert('Failed to load medical record data');
+                    });
+            }
+        </script>
 
         <!-- Health Metrics Tab -->
         <div id="health-metrics" class="tab-content">
@@ -280,19 +421,6 @@
                     </div>
                 </div>
 
-                <!-- Weight History Chart -->
-                <div class="bg-white rounded-xl shadow-sm p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Weight History</h3>
-                        <button type="button" data-modal-target="addWeightModal"
-                            class="px-3 py-1 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700">
-                            <i class="fas fa-plus mr-1"></i> Add Reading
-                        </button>
-                    </div>
-                    <div class="h-64">
-                        <canvas id="weightChart"></canvas>
-                    </div>
-                </div>
             </div>
 
             <!-- Health Metrics Data Tables -->
@@ -321,8 +449,6 @@
                                     Value</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Recorded By</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -335,10 +461,10 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                                                                                              {{ $metric['type'] === 'Blood Pressure' ? 'bg-red-100 text-red-800' : '' }}
-                                                                                                                              {{ $metric['type'] === 'Blood Sugar' ? 'bg-purple-100 text-purple-800' : '' }}
-                                                                                                                              {{ $metric['type'] === 'Heart Rate' ? 'bg-blue-100 text-blue-800' : '' }}">
-                                            {{ $metric['type'] }}
+                                                {{ $metric['type'] === 'Blood Pressure' ? 'bg-red-100 text-red-800' : '' }}
+                                                {{ $metric['type'] === 'Blood Sugar' ? 'bg-purple-100 text-purple-800' : '' }}
+                                                {{ $metric['type'] === 'Heart Rate' ? 'bg-blue-100 text-blue-800' : '' }}">
+                                                {{ $metric['type'] }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -347,18 +473,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $metric['recorded_by'] }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button type="button" class="text-blue-600 hover:text-blue-900 mr-3"
-                                            data-metric-id="{{ $metric['id'] }}"
-                                            onclick="editMetric('{{ $metric['type'] }}', {{ $metric['id'] }})">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="text-red-600 hover:text-red-900"
-                                            data-metric-id="{{ $metric['id'] }}"
-                                            onclick="deleteMetric('{{ $metric['type'] }}', {{ $metric['id'] }})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>
@@ -514,9 +629,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                                                                                                            {{ $appointment->status === 'completed' ? 'bg-green-100 text-green-800' : '' }}
-                                                                                                                                            {{ $appointment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                                                                                                            {{ $appointment->status === 'canceled' ? 'bg-red-100 text-red-800' : '' }}">
+                                                            {{ $appointment->status === 'completed' ? 'bg-green-100 text-green-800' : '' }}
+                                                            {{ $appointment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                            {{ $appointment->status === 'canceled' ? 'bg-red-100 text-red-800' : '' }}">
                                                 {{ ucfirst($appointment->status) }}
                                             </span>
                                         </td>
@@ -563,6 +678,7 @@
                 <form action="{{ route('doctor.medical.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                    <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
 
                     <div class="bg-gray-50 px-4 py-3 border-b">
                         <h3 class="text-lg font-medium text-gray-900">Add Medical Record</h3>
@@ -687,17 +803,235 @@
 
     <!-- Add Blood Pressure Modal -->
     <div id="addBloodPressureModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <!-- Modal content -->
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form action="{{ route('doctor.blood-pressure.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                    <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
+                    
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-4 border-b">
+                        <h3 class="text-lg font-medium text-white">Add Blood Pressure Reading</h3>
+                    </div>
+
+                    <div class="px-6 py-5 bg-gray-50">
+                        <div class="grid grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="systolic" class="block text-sm font-semibold text-gray-700 mb-1">Systolic (mmHg)</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-heartbeat text-gray-400"></i>
+                                    </div>
+                                    <input type="number" name="systolic" id="systolic" required
+                                        class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3"
+                                        placeholder="120">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="diastolic" class="block text-sm font-semibold text-gray-700 mb-1">Diastolic (mmHg)</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-heartbeat text-gray-400"></i>
+                                    </div>
+                                    <input type="number" name="diastolic" id="diastolic" required
+                                        class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3"
+                                        placeholder="80">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="pulse" class="block text-sm font-semibold text-gray-700 mb-1">Pulse (bpm)</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-heart text-gray-400"></i>
+                                </div>
+                                <input type="number" name="pulse" id="pulse"
+                                    class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3"
+                                    placeholder="75">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="bp_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Date & Time</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="datetime-local" name="measured_at" id="bp_measured_at" required
+                                    class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 px-6 py-4 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-base font-medium text-white hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 ease-in-out">
+                            <i class="fas fa-save mr-2"></i> Save Reading
+                        </button>
+                        <button type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-5 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm modal-close transition-all duration-300 ease-in-out">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Add Blood Sugar Modal -->
     <div id="addBloodSugarModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <!-- Modal content -->
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form action="{{ route('doctor.blood-sugar.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                    <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
+                    
+                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-4 border-b">
+                        <h3 class="text-lg font-medium text-white">Add Blood Sugar Reading</h3>
+                    </div>
+
+                    <div class="px-6 py-5 bg-gray-50">
+                        <div class="mb-6">
+                            <label for="bs_value" class="block text-sm font-semibold text-gray-700 mb-1">Blood Sugar Level</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-tint text-gray-400"></i>
+                                </div>
+                                <input type="number" name="value" id="bs_value" required step="0.01"
+                                    class="pl-10 focus:ring-purple-500 focus:border-purple-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3"
+                                    placeholder="120.0">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="bs_unit" class="block text-sm font-semibold text-gray-700 mb-1">Unit</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-flask text-gray-400"></i>
+                                </div>
+                                <select name="unit" id="bs_unit" required
+                                    class="pl-10 focus:ring-purple-500 focus:border-purple-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3 appearance-none">
+                                    <option value="mg/dL">mg/dL</option>
+                                    <option value="mmol/L">mmol/L</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="bs_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Time</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                </div>
+                                <input type="datetime-local" name="measured_at" id="bs_measured_at" required
+                                    class="pl-10 focus:ring-purple-500 focus:border-purple-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 px-6 py-4 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-5 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-base font-medium text-white hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 ease-in-out">
+                            <i class="fas fa-save mr-2"></i> Save Reading
+                        </button>
+                        <button type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-5 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm modal-close transition-all duration-300 ease-in-out">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Add Heart Rate Modal -->
     <div id="addHeartRateModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <!-- Modal content -->
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form action="{{ route('doctor.hearth-rate.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                    <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
+                    
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-4 border-b">
+                        <h3 class="text-lg font-medium text-white">Add Heart Rate Reading</h3>
+                    </div>
+
+                    <div class="px-6 py-5 bg-gray-50">
+                        <div class="mb-6">
+                            <label for="hr_value" class="block text-sm font-semibold text-gray-700 mb-1">Heart Rate</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-heartbeat text-gray-400"></i>
+                                </div>
+                                <input type="number" name="value" id="hr_value" required
+                                    class="pl-10 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3"
+                                    placeholder="72">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500 sm:text-sm">bpm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="hr_unit" class="block text-sm font-semibold text-gray-700 mb-1">Unit</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-ruler text-gray-400"></i>
+                                </div>
+                                <select name="unit" id="hr_unit" required
+                                    class="pl-10 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3 appearance-none">
+                                    <option value="bpm">beats per minute (bpm)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="hr_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Date & Time</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="datetime-local" name="measured_at" id="hr_measured_at" required
+                                    class="pl-10 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-lg py-3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 px-6 py-4 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-medium text-white hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 ease-in-out">
+                            <i class="fas fa-save mr-2"></i> Save Reading
+                        </button>
+                        <button type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-5 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm modal-close transition-all duration-300 ease-in-out">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -790,10 +1124,10 @@
             const bsChart = new Chart(bsCtx, {
                 type: 'line',
                 data: {
-                    labels: [], // You'll need to add bloodSugarChartData in the controller
+                    labels: {!! json_encode($bloodSugarChartData->pluck('date')) !!}, 
                     datasets: [{
                         label: 'Blood Sugar',
-                        data: [], // You'll need to add bloodSugarChartData in the controller
+                        data: {!! json_encode($bloodSugarChartData->pluck('value')) !!},
                         borderColor: 'rgba(139, 92, 246, 1)',
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
                         tension: 0.4,
@@ -827,10 +1161,10 @@
             const hrChart = new Chart(hrCtx, {
                 type: 'line',
                 data: {
-                    labels: [], // You'll need to add heartRateChartData in the controller
+                    labels: {!! json_encode($heartRateChartData->pluck('date')) !!},
                     datasets: [{
                         label: 'Heart Rate',
-                        data: [], // You'll need to add heartRateChartData in the controller
+                        data: {!! json_encode($heartRateChartData->pluck('value')) !!},
                         borderColor: 'rgba(37, 99, 235, 1)',
                         backgroundColor: 'rgba(37, 99, 235, 0.1)',
                         tension: 0.4,
@@ -861,10 +1195,7 @@
         });
 
         // Functions to handle CRUD operations
-        function editMedicalRecord(id) {
-            // Implementation for editing medical record
-            console.log('Edit medical record', id);
-        }
+
 
         function deleteMedicalRecord(id) {
             if (confirm('Are you sure you want to delete this medical record?')) {
