@@ -13,7 +13,7 @@ class DiseaseController extends Controller
      */
     public function index()
     {
-        //
+        return view('doctor.disease.index');
     }
 
     /**

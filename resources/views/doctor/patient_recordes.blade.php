@@ -1076,10 +1076,10 @@
             const bpChart = new Chart(bpCtx, {
                 type: 'line',
                 data: {
-                    labels: {!! json_encode($bloodPressureChartData->pluck('date')) !!},
+                    labels: {!! json_encode($bloodPressureChartData['labels']) !!},
                     datasets: [{
                             label: 'Systolic',
-                            data: {!! json_encode($bloodPressureChartData->pluck('systolic')) !!},
+                            data: {!! json_encode($bloodPressureChartData['systolic']) !!},
                             borderColor: 'rgba(239, 68, 68, 1)',
                             backgroundColor: 'rgba(239, 68, 68, 0.1)',
                             tension: 0.4,
@@ -1088,7 +1088,7 @@
                         },
                         {
                             label: 'Diastolic',
-                            data: {!! json_encode($bloodPressureChartData->pluck('diastolic')) !!},
+                            data: {!! json_encode($bloodPressureChartData['diastolic']) !!},
                             borderColor: 'rgba(59, 130, 246, 1)',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             tension: 0.4,
@@ -1124,10 +1124,10 @@
             const bsChart = new Chart(bsCtx, {
                 type: 'line',
                 data: {
-                    labels: {!! json_encode($bloodSugarChartData->pluck('date')) !!}, 
+                    labels: {!! json_encode($bloodSugarChartData['labels']) !!},
                     datasets: [{
                         label: 'Blood Sugar',
-                        data: {!! json_encode($bloodSugarChartData->pluck('value')) !!},
+                        data: {!! json_encode($bloodSugarChartData['values']) !!},
                         borderColor: 'rgba(139, 92, 246, 1)',
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
                         tension: 0.4,
@@ -1161,10 +1161,10 @@
             const hrChart = new Chart(hrCtx, {
                 type: 'line',
                 data: {
-                    labels: {!! json_encode($heartRateChartData->pluck('date')) !!},
+                    labels: {!! json_encode($heartRateChartData['labels']) !!},
                     datasets: [{
                         label: 'Heart Rate',
-                        data: {!! json_encode($heartRateChartData->pluck('value')) !!},
+                        data: {!! json_encode($heartRateChartData['values']) !!},
                         borderColor: 'rgba(37, 99, 235, 1)',
                         backgroundColor: 'rgba(37, 99, 235, 0.1)',
                         tension: 0.4,
