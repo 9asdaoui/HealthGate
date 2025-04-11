@@ -199,12 +199,13 @@
                                                 {{ $record->frequency }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-
+                                            @if (Gate::allows('medical_record_update', $record))
                                             <button type="button" class="text-blue-600 hover:text-blue-900 mr-3"
                                                 data-record-id="{{ $record->id }}"
                                                 onclick="editMedicalRecord({{ $record->id }})">
                                                 <i class="fas fa-edit">update</i>
                                             </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -516,8 +517,8 @@
                                     <div>
                                         <h5 class="text-xs font-medium text-gray-500 mb-1">Diagnosed By</h5>
                                         <p class="text-sm font-medium">Dr.
-                                            {{ $disease->pivot->doctor->user->first_name ?? 'Unknown' }}
-                                            {{ $disease->pivot->doctor->user->last_name ?? '' }}</p>
+                                            {{ $disease->load('patients')->doctors->load('user')->first()->user->first_name ?? 'Unknown' }}
+                                            {{ $disease->load('patients')->doctors->load('user')->first()->user->first_name ?? '' }}</p>
                                     </div>
                                 </div>
 
@@ -539,19 +540,6 @@
                                         <p class="text-sm text-gray-700">{{ $disease->treatment }}</p>
                                     </div>
                                 @endif
-                            </div>
-
-                            <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-2">
-                                <button type="button"
-                                    class="px-3 py-1 bg-blue-100 text-blue-600 text-xs rounded hover:bg-blue-200"
-                                    onclick="editDisease({{ $disease->id }})">
-                                    <i class="fas fa-edit mr-1"></i> Edit
-                                </button>
-                                <button type="button"
-                                    class="px-3 py-1 bg-red-100 text-red-600 text-xs rounded hover:bg-red-200"
-                                    onclick="deleteDisease({{ $disease->id }})">
-                                    <i class="fas fa-trash mr-1"></i> Remove
-                                </button>
                             </div>
                         </div>
                     @endforeach
@@ -744,56 +732,46 @@
 
     <!-- Add Disease Modal -->
     <div id="addDiseaseModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            
+            <div class="inline-block align-bottom bg-white rounded-xl shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full overflow-hidden">
                 <form action="{{ route('doctor.diseases.assign') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
 
-                    <div class="bg-gray-50 px-4 py-3 border-b">
-                        <h3 class="text-lg font-medium text-gray-900">Add Disease</h3>
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white">Add Disease</h3>
                     </div>
 
-                    <div class="px-4 py-3">
-                        <div class="mb-4">
-                            <label for="disease_id" class="block text-sm font-medium text-gray-700">Disease</label>
-                            <select name="disease_id" id="disease_id"
-                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div class="px-6 py-5">
+                        <div class="mb-5">
+                            <label for="disease_id" class="block text-sm font-medium text-gray-700 mb-2">Disease</label>
+                            <select name="disease_id" id="disease_id" required
+                                class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-3 text-base">
                                 <option value="">Select a disease</option>
-                                @foreach ($diseases as $disease)
+                                @foreach ($allDiseases as $disease)
                                     <option value="{{ $disease->id }}">{{ $disease->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="notes" class="block text-sm font-medium text-gray-700">Additional Notes</label>
-                            <textarea name="notes" id="notes" rows="3"
-                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="duration" class="block text-sm font-medium text-gray-700">Duration (if
-                                applicable)</label>
+                        <div>
+                            <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
                             <input type="text" name="duration" id="duration"
-                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                placeholder="e.g. 2 weeks, 3 months, chronic">
+                                class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-3 text-base"
+                                placeholder="e.g. 2 weeks, chronic">
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Add Disease
-                        </button>
-                        <button type="button"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm modal-close">
+                    <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                        <button type="button" class="px-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 modal-close">
                             Cancel
+                        </button>
+                        <button type="submit" class="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Add Disease
                         </button>
                     </div>
                 </form>
@@ -1156,7 +1134,6 @@
                 }
             });
 
-            // Initialize Heart Rate Chart
             const hrCtx = document.getElementById('heartRateChart').getContext('2d');
             const hrChart = new Chart(hrCtx, {
                 type: 'line',
@@ -1194,18 +1171,12 @@
             });
         });
 
-        // Functions to handle CRUD operations
 
 
         function deleteMedicalRecord(id) {
             if (confirm('Are you sure you want to delete this medical record?')) {
                 // Implementation for deleting medical record
             }
-        }
-
-        function editDisease(id) {
-            // Implementation for editing disease
-            console.log('Edit disease', id);
         }
 
         function deleteDisease(id) {

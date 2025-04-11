@@ -42,20 +42,9 @@ class Doctor extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function patients()
-    {
-        return $this->belongsToMany(Patient::class);
-    }
-
     public function hearthRates()
     {
         return $this->hasMany(HearthRate::class);
-    }
-
-    public function diseases()
-    {
-        return $this->belongsToMany(Disease::class, 'patient_doctor_disease')
-            ->withPivot('duration');
     }
 
     public function medicals()
@@ -63,4 +52,24 @@ class Doctor extends Model
         return $this->hasMany(Medical::class);
     }
 
+    public function getPatients()
+    {
+        $patientIds = $this->appointments()
+            ->pluck('patient_id')
+            ->unique();
+        
+        $patients = Patient::whereIn('id', $patientIds)->get();
+        
+        return $patients;
+    }
+    
+    public function patients()
+    {
+        return $this->belongsToMany(Patient::class, 'patient_doctor_disease')->withPivot('duration');
+    }
+
+    public function diseases()
+    {
+        return $this->belongsToMany(Disease::class, 'patient_doctor_disease')->withPivot('duration');
+    }
 }

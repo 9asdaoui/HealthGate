@@ -5,6 +5,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BloodPressureController;
 use App\Http\Controllers\BloodSugarController;
+use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HearthRateController;
 use App\Http\Controllers\MedicalController;
@@ -63,17 +64,10 @@ Route::prefix('doctor')->group(function(){
     Route::post('/blood-sugar', [BloodSugarController::class, 'store'])->name('doctor.blood-sugar.store')->middleware('auth');
     Route::post('/blood-pressure', [BloodPressureController::class, 'store'])->name('doctor.blood-pressure.store')->middleware('auth');
     Route::post('/hearth-rate', [HearthRateController::class, 'store'])->name('doctor.hearth-rate.store')->middleware('auth');
-
-  
-
-
-
-
-
     
     Route::get('/profile',[DoctorController::class,'profile'])->name('doctor.profile')->middleware('auth');
-    Route::get('/diseases', [DoctorController::class, 'diseases'])->name('doctor.diseases')->middleware('auth');
-    Route::post('/diseases', [DoctorController::class, 'diseases'])->name('doctor.diseases.assign')->middleware('auth');
+    Route::get('/diseases', [DiseaseController::class, 'index'])->name('doctor.diseases')->middleware('auth');
+    Route::post('/diseases', [DiseaseController::class, 'diseasesAssign'])->name('doctor.diseases.assign')->middleware('auth');
 
 
     Route::get('/settings', [DoctorController::class, 'settings'])->name('doctor.settings')->middleware('auth');

@@ -41,6 +41,7 @@ class DoctorController extends Controller
 
         $patients = User::whereIn('id', $patientIds)
             ->get();
+        
         return view('doctor.patients', compact('patients', 'user'));
     }
 
@@ -50,7 +51,16 @@ class DoctorController extends Controller
         $doctor = $user->doctor;
         $patient = Patient::with('user')->findOrFail($patient->id);
         $medicalRecords = $patient->medicals()->latest()->paginate(10);
+        $allDiseases = \App\Models\Disease::all();
         $diseases = $patient->diseases;
+
+        // if ($diseases->count() > 0) {
+            
+        //     $firstDisease = $diseases->load('doctors')->first();
+        //     $firstDisease = $firstDisease->doctors->load('user')->first();
+        //     $firstDisease = $firstDisease->user;
+        //     dd($firstDisease);
+        // }
         $appointments = \App\Models\Appointment::where('patient_id', $patient->id)
             ->with('doctor.user')
             ->latest()
@@ -67,6 +77,7 @@ class DoctorController extends Controller
 
         return view('doctor.patient_recordes', compact(
             'patient',
+            'allDiseases',
             'medicalRecords',
             'diseases',
             'appointments',

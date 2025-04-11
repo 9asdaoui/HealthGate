@@ -304,12 +304,11 @@
                 </a>
 
                 <div class="pt-6 border-t border-gray-200 mt-6">
-                    <form method="POST" action="{{ route('logout') }}"
+                    <a href="{{ route('logout') }}"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg sidebar-link hover:bg-red-100 group">
-                        @csrf
                         <i class="fas fa-sign-out-alt w-5 text-center text-red-500"></i>
-                        <button type="submit" class="w-full text-left focus:outline-none text-red-500">Logout</button>
-                    </form>
+                        <span class="text-red-500">Logout</span>
+                    </a>
                 </div>
             </nav>
 
@@ -403,13 +402,11 @@
                                     <i class="fas fa-cog mr-2"></i> Settings
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                    </button>
-                                </form>
+                                
+                                <a href="{{ route('logout') }}"
+                                   class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a>
                             </div>
                         </div>
                     </div>

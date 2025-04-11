@@ -6,6 +6,7 @@ use App\Models\Medical;
 use App\Http\Requests\StoreMedicalRequest;
 use App\Http\Requests\UpdateMedicalRequest;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Gate;
 
 class MedicalController extends Controller
 {
@@ -92,14 +93,13 @@ class MedicalController extends Controller
      */
     public function update(UpdateMedicalRequest $request, Medical $medical)
     {
-        // Check if the authenticated user is allowed to edit this record
-        if (auth()->user()->doctor->id !== $medical->doctor_id) {
+
+        if (!Gate::allows('medical_record_update', $medical)) {
             return redirect()->back()->with('error', 'You are not authorized to update this medical record.');
         }
 
         $validatedData = $request->validated();
 
-        // Update the medical record with validated data
         $medical->name = $validatedData['name'];
         $medical->description = $validatedData['description'];
         $medical->dosage = $validatedData['dosage'];
@@ -107,7 +107,7 @@ class MedicalController extends Controller
         $medical->start_date = $validatedData['start_date'];
         $medical->end_date = $validatedData['end_date'];
         $medical->save();
-        // Return to the medical records page with a success message
+
         return redirect()->route('doctor.patients.medical-records', ['patient' => $medical->patient_id])
             ->with('success', 'Medical record updated successfully.');
     }

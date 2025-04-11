@@ -163,9 +163,7 @@
                             <div class="text-center py-6 text-gray-500">
                                 <i class="fas fa-calendar-times text-2xl mb-2"></i>
                                 <p>No appointments scheduled for today</p>
-                                <a href="{{ route('doctor.schedule') }}"
-                                    class="text-blue-600 text-sm hover:underline mt-1 inline-block">Update your
-                                    availability</a>
+                              
                             </div>
                         @endforelse
                     </div>
