@@ -297,12 +297,6 @@
                     <span>My Profile</span>
                 </a>
 
-                <a href="{{ route('doctor.settings') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('doctor.settings*') ? 'active' : '' }}">
-                    <i class="fas fa-cog w-5 text-center"></i>
-                    <span>Settings</span>
-                </a>
-
                 <div class="pt-6 border-t border-gray-200 mt-6">
                     <a href="{{ route('logout') }}"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg sidebar-link hover:bg-red-100 group">
@@ -396,10 +390,6 @@
                                 <a href="{{ route('doctor.profile') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-user-md mr-2"></i> My Profile
-                                </a>
-                                <a href="{{ route('doctor.settings') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-cog mr-2"></i> Settings
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
                                 

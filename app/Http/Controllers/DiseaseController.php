@@ -37,6 +37,12 @@ class DiseaseController extends Controller
 
         return view('doctor.disease.index', compact('diseases', 'allDiseases', 'patients', 'user'));
     }
+    public function getDisease(Disease $disease)
+    {
+        return response()->json([
+                    'disease' => $disease,
+                ]);
+    }
 
     public function diseasesAssign(DiseasesAssignRequest $request)
     {

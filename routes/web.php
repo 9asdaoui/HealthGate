@@ -45,31 +45,38 @@ Route::prefix('patient')->group(function(){
     Route::put('/appointments/cancel/{appointment}',[AppointmentController::class,'cancel'])->name('patient.appointments.cancel')->middleware('auth');
 });
 
-Route::prefix('doctor')->group(function(){
-    Route::get('/dashboard',[DoctorController::class,'dashboard'])->name('doctor.dashboard')->middleware('auth');
-
-    Route::get('/appointments', [AppointmentController::class, 'doctorAppointments'])->name('doctor.appointments')->middleware('auth');
-    Route::post('/appointments/confirm/{appointment}', [AppointmentController::class, 'markAsUpcoming'])->name('doctor.appointments.confirm')->middleware('auth');
-    Route::post('/appointments/complete/{appointment}', [AppointmentController::class, 'markAsCompleted'])->name('doctor.appointments.complete')->middleware('auth');
-    Route::post('/appointments/reject/{appointment}', [AppointmentController::class, 'cancel'])->name('doctor.appointments.reject')->middleware('auth');
-    Route::get('/appointments/view/{appointment}', [AppointmentController::class, 'viewAppointment'])->name('doctor.appointments.view')->middleware('auth');
-
-    Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients')->middleware('auth');
-    Route::get('/patients/medical-records/{patient}', [DoctorController::class, 'viewPatientMedicalRecords'])->name('doctor.patients.medical-records')->middleware('auth');
-    Route::post('/medical/store', [MedicalController::class, 'store'])->name('doctor.medical.store')->middleware('auth');
-    Route::get('/patients/medical-records/{patient}/edit/{medical}', [MedicalController::class, 'edit'])->name('doctor.patients.medical-records.edit')->middleware('auth');
-    Route::put('/medical/{medical}', [MedicalController::class, 'update'])->name('doctor.medical.update')->middleware('auth');  
-    Route::get('/patients/medical-records',[DoctorController::class,'editProfile'])->name('doctor.health-metrics')->middleware('auth');
-
-    Route::post('/blood-sugar', [BloodSugarController::class, 'store'])->name('doctor.blood-sugar.store')->middleware('auth');
-    Route::post('/blood-pressure', [BloodPressureController::class, 'store'])->name('doctor.blood-pressure.store')->middleware('auth');
-    Route::post('/hearth-rate', [HearthRateController::class, 'store'])->name('doctor.hearth-rate.store')->middleware('auth');
+Route::prefix('doctor')->middleware('auth')->group(function(){
+    // Dashboard
+    Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
     
-    Route::get('/profile',[DoctorController::class,'profile'])->name('doctor.profile')->middleware('auth');
-    Route::get('/diseases', [DiseaseController::class, 'index'])->name('doctor.diseases')->middleware('auth');
-    Route::post('/diseases', [DiseaseController::class, 'diseasesAssign'])->name('doctor.diseases.assign')->middleware('auth');
-
-
-    Route::get('/settings', [DoctorController::class, 'settings'])->name('doctor.settings')->middleware('auth');
-}
-);
+    // Profile Management
+    Route::get('/profile', [DoctorController::class, 'profile'])->name('doctor.profile');
+    Route::put('/profile', [DoctorController::class, 'updateProfile'])->name('doctor.updateProfile');
+    
+    // Appointments Management
+    Route::get('/appointments', [AppointmentController::class, 'doctorAppointments'])->name('doctor.appointments');
+    Route::get('/appointments/view/{appointment}', [AppointmentController::class, 'viewAppointment'])->name('doctor.appointments.view');
+    Route::post('/appointments/confirm/{appointment}', [AppointmentController::class, 'markAsUpcoming'])->name('doctor.appointments.confirm');
+    Route::post('/appointments/complete/{appointment}', [AppointmentController::class, 'markAsCompleted'])->name('doctor.appointments.complete');
+    Route::post('/appointments/reject/{appointment}', [AppointmentController::class, 'cancel'])->name('doctor.appointments.reject');
+    
+    // Patients Management
+    Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients');
+    Route::get('/patients/medical-records/{patient}', [DoctorController::class, 'viewPatientMedicalRecords'])->name('doctor.patients.medical-records');
+    Route::get('/patients/medical-records/{patient}/edit/{medical}', [MedicalController::class, 'edit'])->name('doctor.patients.medical-records.edit');
+    Route::get('/patients/medical-records', [DoctorController::class, 'editProfile'])->name('doctor.health-metrics');
+    
+    // Medical Records
+    Route::post('/medical/store', [MedicalController::class, 'store'])->name('doctor.medical.store');
+    Route::put('/medical/{medical}', [MedicalController::class, 'update'])->name('doctor.medical.update');
+    
+    // Health Metrics
+    Route::post('/blood-sugar', [BloodSugarController::class, 'store'])->name('doctor.blood-sugar.store');
+    Route::post('/blood-pressure', [BloodPressureController::class, 'store'])->name('doctor.blood-pressure.store');
+    Route::post('/hearth-rate', [HearthRateController::class, 'store'])->name('doctor.hearth-rate.store');
+    
+    // Diseases Library
+    Route::get('/diseases', [DiseaseController::class, 'index'])->name('doctor.diseases');
+    Route::get('/diseases/{disease}', [DiseaseController::class, 'getDisease'])->name('doctor.disease.show');
+    Route::post('/diseases', [DiseaseController::class, 'diseasesAssign'])->name('doctor.diseases.assign');
+});

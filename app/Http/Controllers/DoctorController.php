@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\Interfaces\PatientRepositoryInterface;
+use GuzzleHttp\Psr7\Request;
 
 class DoctorController extends Controller
 {
@@ -26,7 +27,8 @@ class DoctorController extends Controller
 
     public function profile()
     {
-        return view('doctor.profile');
+        $user = User::with('doctor')->find(auth()->user()->id);
+        return view('doctor.profile', compact('user'));
     }
 
     public function patients()
@@ -54,13 +56,6 @@ class DoctorController extends Controller
         $allDiseases = \App\Models\Disease::all();
         $diseases = $patient->diseases;
 
-        // if ($diseases->count() > 0) {
-            
-        //     $firstDisease = $diseases->load('doctors')->first();
-        //     $firstDisease = $firstDisease->doctors->load('user')->first();
-        //     $firstDisease = $firstDisease->user;
-        //     dd($firstDisease);
-        // }
         $appointments = \App\Models\Appointment::where('patient_id', $patient->id)
             ->with('doctor.user')
             ->latest()
@@ -91,4 +86,40 @@ class DoctorController extends Controller
             'user'
         ));
     }
+    public function updateProfile(\Illuminate\Http\Request $request)
+    {
+        $user = auth()->user();
+        
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'gender' => 'required|in:male,female,other',
+            'speciality' => 'required|string|max:255',
+            'experience' => 'required|numeric|min:0',
+            'image' => 'nullable',
+        ]);
+        
+        if ($request->hasFile('image')) {
+                
+            $imagePath = $request->file('image')->store('profiles', 'public');
+            $user->image = '/storage/' . $imagePath;
+        }
+        /**
+         * @var App\Models\User $user
+         */
+        $user->first_name = $validated['first_name'];
+        $user->last_name = $validated['last_name'];
+        $user->email = $validated['email'];
+        $user->gender = $validated['gender'];
+        $user->save();
+        
+        // Update doctor information
+        $user->doctor->speciality = $validated['speciality'];
+        $user->doctor->experience = $validated['experience'];
+        $user->doctor->save();
+        
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+   
 }
