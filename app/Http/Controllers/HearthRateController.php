@@ -29,7 +29,17 @@ class HearthRateController extends Controller
      */
     public function store(StoreHearthRateRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        // Create a new heart rate record
+        HearthRate::create([
+            'patient_id' => $validatedData['patient_id'],
+            'doctor_id' => $validatedData['doctor_id'],
+            'value' => $validatedData['value'],
+            'measured_at' => $validatedData['measured_at'],
+            'unit' => $validatedData['unit'],
+        ]);
+        return redirect()->back()->with('success', 'Heart rate recorded successfully.');
     }
 
     /**

@@ -11,7 +11,7 @@ class StoreHearthRateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreHearthRateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'patient_id' => ['required', 'exists:patients,id'],
+            'doctor_id' => ['required', 'exists:doctors,id'],
+            'value' => ['required', 'numeric'],
+            'measured_at' => ['required', 'date'],
+            'unit' => ['required', 'string'],
         ];
     }
 }

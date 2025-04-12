@@ -11,7 +11,7 @@ class StoreBloodSugarRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class StoreBloodSugarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'value' => 'required|numeric|min:0',
+            'unit' => 'required|string',
+            'measured_at' => 'required',
+
         ];
+
     }
 }

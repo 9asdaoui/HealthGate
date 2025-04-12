@@ -42,12 +42,6 @@ class Patient extends Model
         return $this->hasMany(BloodSugar::class);
     }
 
-    public function diseases()
-    {
-        return $this->belongsToMany(Disease::class, 'patient_doctor_disease')
-            ->withPivot('duration');
-    }
-
     public function hearthRates()
     {
         return $this->hasMany(HearthRate::class);
@@ -56,6 +50,21 @@ class Patient extends Model
     public function medicals()
     {
         return $this->hasMany(Medical::class);
+    }
+    
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'patient_doctor_disease')->withPivot('duration');
+    }
+
+    public function diseases()
+    {
+        return $this->belongsToMany(Disease::class, 'patient_doctor_disease')->withPivot('duration');
     }
 
 }

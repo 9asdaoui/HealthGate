@@ -33,6 +33,6 @@ class Medical extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
-    }
+    } 
 
 }

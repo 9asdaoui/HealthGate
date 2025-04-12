@@ -11,7 +11,7 @@ class StoreBloodPressureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class StoreBloodPressureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'doctor_id' => 'required|exists:doctors,id',
+            'patient_id' => 'required|exists:patients,id',
+            'systolic' => 'required|integer',
+            'diastolic' => 'required|integer',
+            'pulse' => 'nullable|integer',
+            'measured_at' => 'required|date',
+            'notes' => 'nullable|string|max:500',
         ];
     }
 }

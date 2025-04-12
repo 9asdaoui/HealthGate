@@ -12,8 +12,8 @@ class BloodSugar extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
-        'measurde_at',
-        'vlalue',
+        'measured_at',
+        'value',
         'unit',
         'date',
     ];
