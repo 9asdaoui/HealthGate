@@ -34,15 +34,26 @@ Route::prefix('admin')->group(function(){
 }
 );
 
-Route::prefix('patient')->group(function(){
-    Route::get('/dashboard',[PatientController::class,'dashboard'])->name('patient.dashboard')->middleware('auth');
-    Route::get('/profile',[PatientController::class,'profile'])->name('patient.profile')->middleware('auth');
-    Route::put('/profile',[PatientController::class,'updateProfile'])->name('patient.updateProfile')->middleware('auth');
-    Route::get('/appointments',[AppointmentController::class,'patientAppointments'])->name('patient.appointments')->middleware('auth');
-    Route::get('/appointments/create',[AppointmentController::class,'create'])->name('patient.appointments.create')->middleware('auth');
-    Route::post('/appointments',[AppointmentController::class,'store'])->name('patient.appointments.store')->middleware('auth');
-    Route::get('/appointments/show/{appointment}',[AppointmentController::class,'show'])->name('patient.appointments.show')->middleware('auth');
-    Route::put('/appointments/cancel/{appointment}',[AppointmentController::class,'cancel'])->name('patient.appointments.cancel')->middleware('auth');
+Route::prefix('patient')->middleware('auth')->group(function(){
+    // Dashboard
+    Route::get('/dashboard', [PatientController::class, 'dashboard'])->name('patient.dashboard');
+    
+    // Profile Management
+    Route::get('/profile', [PatientController::class, 'profile'])->name('patient.profile');
+    Route::put('/profile', [PatientController::class, 'updateProfile'])->name('patient.updateProfile');
+    
+    // Appointments Management
+    Route::get('/appointments', [AppointmentController::class, 'patientAppointments'])->name('patient.appointments');
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('patient.appointments.create');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('patient.appointments.store');
+    Route::get('/appointments/show/{appointment}', [AppointmentController::class, 'show'])->name('patient.appointments.show');
+    Route::put('/appointments/cancel/{appointment}', [AppointmentController::class, 'cancel'])->name('patient.appointments.cancel');
+    
+    // Add route for viewing prescriptions based on what I saw in the blade file
+    Route::get('/prescription', [MedicalController::class, 'showPrescription'])->name('patient.prescription');
+
+    Route::get('/medication/{medical}', [PatientController::class, 'getmedications'])->name('patient.medications');
+    Route::get('/disease/{disease}', [PatientController::class, 'gitDisease'])->name('patient.disease');
 });
 
 Route::prefix('doctor')->middleware('auth')->group(function(){

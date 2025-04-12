@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Disease;
+use App\Models\Medical;
 use App\Models\Patient;
 use App\Models\User;
 use Exception;
@@ -57,5 +59,21 @@ class PatientController extends Controller
         
         return redirect()->route('patient.profile')->with('success', 'Profile updated successfully');
     }
+
+    public function getmedications(Medical $medical)
+    {
+     
+        return response()->json([
+            'medical' => $medical,
+        ]);
+    }
+
+    public function gitDisease(Disease $disease)
+    {
+        return response()->json([
+            'disease' => $disease,
+        ]);
+    }
+
 
 }

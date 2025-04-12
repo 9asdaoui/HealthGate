@@ -10,23 +10,7 @@ use Illuminate\Support\Facades\Gate;
 
 class MedicalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
+   /**
      * Store a newly created resource in storage.
      */
     public function store(StoreMedicalRequest $request)
@@ -65,30 +49,6 @@ class MedicalController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-
-    public function edit(Patient $patient, Medical $medical)
-    {
-        // Check if the authenticated user is allowed to edit this record
-        if (auth()->user()->doctor->id !== $medical->doctor_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        // Return the medical record as JSON for the modal to populate
-        return response()->json([
-            'id' => $medical->id,
-            'name' => $medical->name,
-            'description' => $medical->description,
-            'dosage' => $medical->dosage,
-            'frequency' => $medical->frequency,
-            'start_date' => $medical->start_date,
-            'end_date' => $medical->end_date
-        ]);
-    }
-
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateMedicalRequest $request, Medical $medical)
@@ -112,11 +72,22 @@ class MedicalController extends Controller
             ->with('success', 'Medical record updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Medical $medical)
+    public function showPrescription()
     {
-        //
+        $user = auth()->user();
+        $patient = Patient::where('user_id', $user->id)->firstOrFail();
+        
+        // Get medical prescriptions
+        $medicals = Medical::where('patient_id', $patient->id)
+            ->with('doctor.user')
+            ->latest()
+            ->get();
+            // dd($medicals);
+        // Get diagnosed diseases
+        $diseases = $patient->diseases()
+            ->with('doctors.user')
+            ->get();
+            
+        return view('patient.appointments.prescription', compact('user', 'medicals', 'diseases'));
     }
 }
