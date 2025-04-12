@@ -77,17 +77,15 @@ class MedicalController extends Controller
         $user = auth()->user();
         $patient = Patient::where('user_id', $user->id)->firstOrFail();
         
-        // Get medical prescriptions
         $medicals = Medical::where('patient_id', $patient->id)
             ->with('doctor.user')
             ->latest()
             ->get();
             // dd($medicals);
-        // Get diagnosed diseases
         $diseases = $patient->diseases()
             ->with('doctors.user')
             ->get();
             
-        return view('patient.appointments.prescription', compact('user', 'medicals', 'diseases'));
+        return view('patient.prescription', compact('user', 'medicals', 'diseases'));
     }
 }
