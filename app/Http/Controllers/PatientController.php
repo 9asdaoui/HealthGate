@@ -23,7 +23,32 @@ class PatientController extends Controller
     public function dashboard()
     { 
         $user = User::find(auth()->id());
-        return view('patient.dashboard', compact('user'));
+        $patient = $user->patient;
+        $appointments = Appointment::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestBloodPressure = $this->patientRepository->getlatestBloodPressure($patient);
+        $latestBloodSugar = $this->patientRepository->getlatestBloodSugar($patient);
+        $latestHeartRate = $this->patientRepository->getlatestHeartRate($patient);
+        $healthMetrics = $this->patientRepository->getHealthMetrics($patient);
+        $latestAppointments = Appointment::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestPrescriptions = Medical::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestDiseases = $patient->diseases()
+            ->with(['doctors.user'])
+            ->orderBy('patient_doctor_disease.created_at', 'desc')
+            ->take(5)
+            ->get();
+        return view('patient.dashboard', compact('user', 'patient', 'appointments', 'latestBloodPressure', 'latestBloodSugar', 'latestHeartRate', 'healthMetrics', 'latestAppointments', 'latestPrescriptions', 'latestDiseases'));
     }
 
     public function profile()
