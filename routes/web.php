@@ -54,6 +54,9 @@ Route::prefix('patient')->middleware('auth')->group(function(){
 
     Route::get('/medication/{medical}', [PatientController::class, 'getmedications'])->name('patient.medications');
     Route::get('/disease/{disease}', [PatientController::class, 'gitDisease'])->name('patient.disease');
+
+    // Health Metrics
+    Route::get('/patient/healthMetrics', [PatientController::class, 'healthMetrics'])->name('patient.healthMetrics');
 });
 
 Route::prefix('doctor')->middleware('auth')->group(function(){

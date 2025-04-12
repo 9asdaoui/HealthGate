@@ -7,11 +7,18 @@ use App\Models\Disease;
 use App\Models\Medical;
 use App\Models\Patient;
 use App\Models\User;
+use App\Repositories\Interfaces\PatientRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
+    protected $patientRepository;
+
+    public function __construct(PatientRepositoryInterface $patientRepository)
+    {
+        $this->patientRepository = $patientRepository;
+    }
 
     public function dashboard()
     { 
@@ -73,6 +80,33 @@ class PatientController extends Controller
         return response()->json([
             'disease' => $disease,
         ]);
+    }
+
+    public function  healthMetrics()
+    {
+        $patient = auth()->user()->patient;
+        $user = auth()->user(); 
+
+        $healthMetrics = $this->patientRepository->getHealthMetrics($patient);
+        $latestBloodPressure = $this->patientRepository->getlatestBloodPressure($patient);
+        $latestBloodSugar = $this->patientRepository->getlatestBloodSugar($patient);
+        $latestHeartRate = $this->patientRepository->getlatestHeartRate($patient);
+        $bloodPressureChartData = $this->patientRepository->getbloodPressureChartData($patient);
+        $bloodSugarChartData = $this->patientRepository->getbloodSugarChartData($patient);
+        $heartRateChartData = $this->patientRepository->getheartRateChartData($patient);
+
+
+        return view('patient.health-metrics', compact(
+            'user',
+            'patient',
+            'healthMetrics',
+            'latestBloodPressure',
+            'latestBloodSugar',
+            'latestHeartRate',
+            'bloodPressureChartData',
+            'bloodSugarChartData',
+            'heartRateChartData'
+        ));
     }
 
 

@@ -15,13 +15,13 @@ public function getHealthMetrics(Patient $patient): array
     $hearthRates = $patient->hearthRates()->orderBy('created_at', 'desc')->take(10)->get();
     
     $metrics = [];
-    
+    // dd($bloodPressures);
     foreach ($bloodPressures as $bp) {
         $metrics[] = [
             'type' => 'Blood Pressure',
             'value' => $bp->systolic . '/' . $bp->diastolic . ' mmHg',
             'created_at' => $bp->created_at,
-            'recorded_by' => 'Doctor',
+            'recorded_by' => $bp->doctor->user->first_name . ' ' . $bp->doctor->user->last_name,
             'date' => $bp->created_at->format('M d')
         ];
     }
@@ -31,7 +31,7 @@ public function getHealthMetrics(Patient $patient): array
             'type' => 'Blood Sugar',
             'value' => $bs->value . ' mg/dL',
             'created_at' => $bs->created_at,
-            'recorded_by' => 'Doctor',
+            'recorded_by' => $bp->doctor->user->first_name . ' ' . $bp->doctor->user->last_name,
             'date' => $bs->created_at->format('M d')
         ];
     }
@@ -41,7 +41,7 @@ public function getHealthMetrics(Patient $patient): array
             'type' => 'Heart Rate',
             'value' => $hr->value . ' bpm',
             'created_at' => $hr->created_at,
-            'recorded_by' => 'Doctor',
+            'recorded_by' => $bp->doctor->user->first_name . ' ' . $bp->doctor->user->last_name,
             'date' => $hr->created_at->format('M d')
         ];
     }

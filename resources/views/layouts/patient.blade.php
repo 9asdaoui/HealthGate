@@ -220,10 +220,10 @@
 
                 <p class="text-xs text-gray-500 px-3 uppercase tracking-wider mb-2 mt-6">Medical</p>
 
-                <a href=""
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.medical-records*') ? 'active' : '' }}">
+                <a href="{{ route('patient.healthMetrics') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.Health Metrics*') ? 'active' : '' }}">
                     <i class="fas fa-file-medical w-5 text-center"></i>
-                    <span>Medical Records</span>
+                    <span>Health Metrics</span>
                 </a>
 
                 <a href="{{ route('patient.prescription') }}"
