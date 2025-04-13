@@ -469,12 +469,9 @@
                     Printed from HealthGate on ${new Date().toLocaleDateString()}
                 </div>
             `;
-            const printWindow = window.open('', '', 'width=800,height=600');
-            printWindow.document.write('<html><head><title>Print</title></head><body>');
-            printWindow.document.write(printContent);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
+            document.body.innerHTML = printContent;
+            window.print();
+            location.reload();
         }
         function printMedication(){
             const medicationName = document.getElementById('medicationName').innerText;
@@ -520,13 +517,11 @@
                     Printed from HealthGate on ${new Date().toLocaleDateString()}
                 </div>
             `;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            location.reload();
             
-            const printWindow = window.open('', '', 'width=800,height=600');
-            printWindow.document.write('<html><head><title>Medication Details</title></head><body>');
-            printWindow.document.write(printContent);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
         }
     </script>
 @endsection
