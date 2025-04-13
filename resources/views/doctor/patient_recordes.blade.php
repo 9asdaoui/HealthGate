@@ -74,13 +74,9 @@
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold text-gray-800">Patient Information</h3>
                         <div class="flex space-x-2">
-                            <a href="#" class="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
+                            <button onclick="printRaport()" class="flex items-center px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200">
                                 <i class="fas fa-print mr-1"></i> Print Report
-                            </a>
-                            <a href="#"
-                                class="px-3 py-1 text-xs bg-green-100 text-green-600 rounded hover:bg-green-200">
-                                <i class="fas fa-file-export mr-1"></i> Export Data
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -1013,25 +1009,20 @@
     </div>
 
     <script>
-        // Initialize charts with patient data
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Remove active class from all tabs
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
 
-                    // Add active class to clicked tab
                     button.classList.add('active');
                     document.getElementById(button.dataset.tab).classList.add('active');
                 });
             });
 
-            // Modal handling
             const modalButtons = document.querySelectorAll('[data-modal-target]');
             const modalCloseButtons = document.querySelectorAll('.modal-close');
 
@@ -1049,7 +1040,6 @@
                 });
             });
 
-            // Initialize Blood Pressure Chart
             const bpCtx = document.getElementById('bloodPressureChart').getContext('2d');
             const bpChart = new Chart(bpCtx, {
                 type: 'line',
@@ -1097,7 +1087,6 @@
                 }
             });
 
-            // Initialize Blood Sugar Chart
             const bsCtx = document.getElementById('bloodSugarChart').getContext('2d');
             const bsChart = new Chart(bsCtx, {
                 type: 'line',
@@ -1171,29 +1160,11 @@
             });
         });
 
-
-
-        function deleteMedicalRecord(id) {
-            if (confirm('Are you sure you want to delete this medical record?')) {
-                // Implementation for deleting medical record
-            }
-        }
-
-        function deleteDisease(id) {
-            if (confirm('Are you sure you want to remove this disease from the patient?')) {
-                // Implementation for deleting disease
-            }
-        }
-
-        function editMetric(type, id) {
-            // Implementation for editing health metric
-            console.log('Edit metric', type, id);
-        }
-
-        function deleteMetric(type, id) {
-            if (confirm(`Are you sure you want to delete this ${type} reading?`)) {
-                // Implementation for deleting health metric
-            }
+        function printRaport(){
+            var printContents ='<h1 class="text-2xl font-bold text-center mb-4">Patient Report</h1>';
+            document.body.innerHTML = printContents;
+            window.print();
+            location.reload();
         }
     </script>
 @endsection
