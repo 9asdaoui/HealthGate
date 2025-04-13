@@ -7,16 +7,48 @@ use App\Models\Disease;
 use App\Models\Medical;
 use App\Models\Patient;
 use App\Models\User;
+use App\Repositories\Interfaces\PatientRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
+    protected $patientRepository;
+
+    public function __construct(PatientRepositoryInterface $patientRepository)
+    {
+        $this->patientRepository = $patientRepository;
+    }
 
     public function dashboard()
     { 
         $user = User::find(auth()->id());
-        return view('patient.dashboard', compact('user'));
+        $patient = $user->patient;
+        $appointments = Appointment::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestBloodPressure = $this->patientRepository->getlatestBloodPressure($patient);
+        $latestBloodSugar = $this->patientRepository->getlatestBloodSugar($patient);
+        $latestHeartRate = $this->patientRepository->getlatestHeartRate($patient);
+        $healthMetrics = $this->patientRepository->getHealthMetrics($patient);
+        $latestAppointments = Appointment::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestPrescriptions = Medical::where('patient_id', $patient->id)
+            ->with(['doctor.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        $latestDiseases = $patient->diseases()
+            ->with(['doctors.user'])
+            ->orderBy('patient_doctor_disease.created_at', 'desc')
+            ->take(5)
+            ->get();
+        return view('patient.dashboard', compact('user', 'patient', 'appointments', 'latestBloodPressure', 'latestBloodSugar', 'latestHeartRate', 'healthMetrics', 'latestAppointments', 'latestPrescriptions', 'latestDiseases'));
     }
 
     public function profile()
@@ -73,6 +105,33 @@ class PatientController extends Controller
         return response()->json([
             'disease' => $disease,
         ]);
+    }
+
+    public function  healthMetrics()
+    {
+        $patient = auth()->user()->patient;
+        $user = auth()->user(); 
+
+        $healthMetrics = $this->patientRepository->getHealthMetrics($patient);
+        $latestBloodPressure = $this->patientRepository->getlatestBloodPressure($patient);
+        $latestBloodSugar = $this->patientRepository->getlatestBloodSugar($patient);
+        $latestHeartRate = $this->patientRepository->getlatestHeartRate($patient);
+        $bloodPressureChartData = $this->patientRepository->getbloodPressureChartData($patient);
+        $bloodSugarChartData = $this->patientRepository->getbloodSugarChartData($patient);
+        $heartRateChartData = $this->patientRepository->getheartRateChartData($patient);
+
+
+        return view('patient.health-metrics', compact(
+            'user',
+            'patient',
+            'healthMetrics',
+            'latestBloodPressure',
+            'latestBloodSugar',
+            'latestHeartRate',
+            'bloodPressureChartData',
+            'bloodSugarChartData',
+            'heartRateChartData'
+        ));
     }
 
 

@@ -280,79 +280,67 @@
 
     <!-- Disease Details Modal -->
     <div id="diseaseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
+        <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white p-4 border-b border-gray-200 z-10">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center">
-                        <div class="h-10 w-10 rounded-full bg-accent bg-opacity-20 flex items-center justify-center mr-3">
-                            <i class="fas fa-virus text-accent"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800" id="diseaseName">Disease Details</h3>
+                        <i class="fas fa-virus text-accent mr-3"></i>
+                        <h3 class="text-lg font-bold text-gray-800" id="diseaseName">Disease Details</h3>
                     </div>
-                    <button onclick="closeDisModal()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <button onclick="closeDisModal()" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">Category</h4>
+            
+            <div class="p-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="text-xs text-gray-500 mb-1">Category</div>
+                        <span id="diseaseCategory" class="text-sm bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full"></span>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="text-xs text-gray-500 mb-1">Diagnosed by</div>
                         <div class="flex items-center">
-                            <span id="diseaseCategory" class="text-sm font-medium text-blue-700 px-3 py-1 bg-blue-50 rounded-full"></span>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">Diagnosed by</h4>
-                        <div class="flex items-center">
-                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-user-md text-blue-500"></i>
-                            </div>
-                            <div>
-                                <span id="diseaseDoctor" class="text-gray-800 font-medium"></span>
-                            </div>
+                            <i class="fas fa-user-md text-blue-500 mr-2"></i>
+                            <span id="diseaseDoctor" class="text-sm"></span>
                         </div>
                     </div>
                 </div>
-
-                <div class="mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">Description</h4>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p id="diseaseDescription" class="text-gray-700"></p>
+                
+                <div class="space-y-3">
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="text-xs font-medium text-gray-500 mb-1">Description</div>
+                        <p id="diseaseDescription" class="text-sm"></p>
                     </div>
-                </div>
-
-                <div class="mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">Symptoms</h4>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p id="diseaseSymptoms" class="text-gray-700"></p>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="text-xs font-medium text-gray-500 mb-1">Symptoms</div>
+                        <p id="diseaseSymptoms" class="text-sm"></p>
                     </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">Prevention</h4>
-                        <div class="bg-gray-50 rounded-lg p-4 h-full">
-                            <p id="diseasePrevention" class="text-gray-700"></p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-xs font-medium text-gray-500 mb-1">Prevention</div>
+                            <p id="diseasePrevention" class="text-sm"></p>
                         </div>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">Treatment</h4>
-                        <div class="bg-gray-50 rounded-lg p-4 h-full">
-                            <p id="diseaseTreatment" class="text-gray-700"></p>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-xs font-medium text-gray-500 mb-1">Treatment</div>
+                            <p id="diseaseTreatment" class="text-sm"></p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="p-6 border-t border-gray-200 bg-gray-50">
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="printDisease()" class="flex-1 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
-                        <i class="fas fa-print mr-2"></i> Print Details
-                    </button>
-                    <button onclick="closeDisModal()" class="flex-1 py-2 px-4 bg-accent text-white rounded-lg hover:bg-accentHover transition-colors flex items-center justify-center">
-                        <i class="fas fa-times mr-2"></i> Close
-                    </button>
-                </div>
+            
+            <div class="sticky bottom-0 bg-gray-50 p-4 border-t border-gray-200 flex gap-2">
+                <button onclick="printDisease()" class="flex-1 py-2 px-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 flex items-center justify-center">
+                    <i class="fas fa-print mr-1"></i> Print
+                </button>
+                <button onclick="closeDisModal()" class="flex-1 py-2 px-3 bg-accent text-white text-sm rounded hover:bg-accentHover flex items-center justify-center">
+                    <i class="fas fa-times mr-1"></i> Close
+                </button>
             </div>
         </div>
     </div>
@@ -435,6 +423,105 @@
         }
         function closeModal() {
             document.getElementById('medicationModal').classList.add('hidden');
+        }
+        function closeDisModal() {
+            document.getElementById('diseaseModal').classList.add('hidden');
+        }
+        function printDisease(){
+            const diseaseName = document.getElementById('diseaseName').innerText;
+            const diseaseDescription = document.getElementById('diseaseDescription').innerText;
+            const diseaseSymptoms = document.getElementById('diseaseSymptoms').innerText;
+            const diseasePrevention = document.getElementById('diseasePrevention').innerText;
+            const diseaseTreatment = document.getElementById('diseaseTreatment').innerText;
+
+            const printContent = `
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+                    h1 { color: #2563eb; font-size: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 20px; }
+                    .section { margin-bottom: 15px; background: #f9fafb; padding: 15px; border-radius: 8px; }
+                    .section-title { font-weight: bold; color: #4b5563; margin-bottom: 5px; font-size: 14px; text-transform: uppercase; }
+                    .section-content { margin: 0; font-size: 15px; }
+                    .footer { margin-top: 30px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 15px; }
+                </style>
+                <h1>${diseaseName}</h1>
+                
+                <div class="section">
+                    <div class="section-title">Description</div>
+                    <p class="section-content">${diseaseDescription}</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Symptoms</div>
+                    <p class="section-content">${diseaseSymptoms}</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Prevention</div>
+                    <p class="section-content">${diseasePrevention}</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Treatment</div>
+                    <p class="section-content">${diseaseTreatment}</p>
+                </div>
+                
+                <div class="footer">
+                    Printed from HealthGate on ${new Date().toLocaleDateString()}
+                </div>
+            `;
+            document.body.innerHTML = printContent;
+            window.print();
+            location.reload();
+        }
+        function printMedication(){
+            const medicationName = document.getElementById('medicationName').innerText;
+            const medicationDescription = document.getElementById('medicationDescription').innerText;
+            const medicationDosage = document.getElementById('medicationDosage').innerText;
+            const medicationFrequency = document.getElementById('medicationFrequency').innerText;
+            const medicationStartDate = document.getElementById('medicationStartDate').innerText;
+            const medicationEndDate = document.getElementById('medicationEndDate').innerText;
+
+            const printContent = `
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+                    h1 { color: #2563eb; font-size: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 20px; }
+                    .section { margin-bottom: 15px; background: #f9fafb; padding: 15px; border-radius: 8px; }
+                    .section-title { font-weight: bold; color: #4b5563; margin-bottom: 5px; font-size: 14px; text-transform: uppercase; }
+                    .section-content { margin: 0; font-size: 15px; }
+                    .footer { margin-top: 30px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 15px; }
+                </style>
+                <h1>${medicationName}</h1>
+                
+                <div class="section">
+                    <div class="section-title">Description</div>
+                    <p class="section-content">${medicationDescription}</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Dosage</div>
+                    <p class="section-content">${medicationDosage}</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Frequency</div>
+                    <p class="section-content">${medicationFrequency}</p>
+                </div>
+
+                <div class="section">
+                    <div class
+                        "section-title">Treatment Period</div>
+                    <p class="section-content">Start Date: ${medicationStartDate}</p>
+                    <p class="section-content">End Date: ${medicationEndDate}</p>
+                </div>
+                <div class="footer">
+                    Printed from HealthGate on ${new Date().toLocaleDateString()}
+                </div>
+            `;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            location.reload();
+            
         }
     </script>
 @endsection

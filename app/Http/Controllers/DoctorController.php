@@ -121,5 +121,23 @@ class DoctorController extends Controller
         
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
-   
+
+    public function generatePatientReport(Patient $patient)
+    {
+        $user = auth()->user();
+        $doctor = $user->doctor;
+        $patient = Patient::with('user')->findOrFail($patient->id);
+        $medicalRecords = $patient->medicals()->latest()->paginate(10);
+        $allDiseases = \App\Models\Disease::all();
+        $diseases = $patient->diseases;
+
+        return view('doctor.patient_report', compact(
+            'patient',
+            'medicalRecords',
+            'diseases',
+            'user',
+            'doctor'
+        ));
+    }
+ 
 }

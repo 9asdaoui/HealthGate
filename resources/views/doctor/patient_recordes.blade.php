@@ -74,13 +74,10 @@
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold text-gray-800">Patient Information</h3>
                         <div class="flex space-x-2">
-                            <a href="#" class="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
+                            <button onclick="printRaport()"
+                                class="flex items-center px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200">
                                 <i class="fas fa-print mr-1"></i> Print Report
-                            </a>
-                            <a href="#"
-                                class="px-3 py-1 text-xs bg-green-100 text-green-600 rounded hover:bg-green-200">
-                                <i class="fas fa-file-export mr-1"></i> Export Data
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -200,11 +197,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if (Gate::allows('medical_record_update', $record))
-                                            <button type="button" class="text-blue-600 hover:text-blue-900 mr-3"
-                                                data-record-id="{{ $record->id }}"
-                                                onclick="editMedicalRecord({{ $record->id }})">
-                                                <i class="fas fa-edit">update</i>
-                                            </button>
+                                                <button type="button" class="text-blue-600 hover:text-blue-900 mr-3"
+                                                    data-record-id="{{ $record->id }}"
+                                                    onclick="editMedicalRecord({{ $record->id }})">
+                                                    <i class="fas fa-edit">update</i>
+                                                </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -465,7 +462,7 @@
                                                 {{ $metric['type'] === 'Blood Pressure' ? 'bg-red-100 text-red-800' : '' }}
                                                 {{ $metric['type'] === 'Blood Sugar' ? 'bg-purple-100 text-purple-800' : '' }}
                                                 {{ $metric['type'] === 'Heart Rate' ? 'bg-blue-100 text-blue-800' : '' }}">
-                                                {{ $metric['type'] }}
+                                            {{ $metric['type'] }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -474,7 +471,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $metric['recorded_by'] }}</div>
                                     </td>
-                                    
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -518,7 +515,8 @@
                                         <h5 class="text-xs font-medium text-gray-500 mb-1">Diagnosed By</h5>
                                         <p class="text-sm font-medium">Dr.
                                             {{ $disease->load('patients')->doctors->load('user')->first()->user->first_name ?? 'Unknown' }}
-                                            {{ $disease->load('patients')->doctors->load('user')->first()->user->first_name ?? '' }}</p>
+                                            {{ $disease->load('patients')->doctors->load('user')->first()->user->first_name ?? '' }}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -736,8 +734,9 @@
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            
-            <div class="inline-block align-bottom bg-white rounded-xl shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full overflow-hidden">
+
+            <div
+                class="inline-block align-bottom bg-white rounded-xl shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full overflow-hidden">
                 <form action="{{ route('doctor.diseases.assign') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
@@ -767,10 +766,12 @@
                     </div>
 
                     <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-                        <button type="button" class="px-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 modal-close">
+                        <button type="button"
+                            class="px-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 modal-close">
                             Cancel
                         </button>
-                        <button type="submit" class="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="submit"
+                            class="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Add Disease
                         </button>
                     </div>
@@ -786,12 +787,13 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form action="{{ route('doctor.blood-pressure.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                     <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
-                    
+
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-4 border-b">
                         <h3 class="text-lg font-medium text-white">Add Blood Pressure Reading</h3>
                     </div>
@@ -799,7 +801,8 @@
                     <div class="px-6 py-5 bg-gray-50">
                         <div class="grid grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label for="systolic" class="block text-sm font-semibold text-gray-700 mb-1">Systolic (mmHg)</label>
+                                <label for="systolic" class="block text-sm font-semibold text-gray-700 mb-1">Systolic
+                                    (mmHg)</label>
                                 <div class="relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-heartbeat text-gray-400"></i>
@@ -811,7 +814,8 @@
                             </div>
 
                             <div>
-                                <label for="diastolic" class="block text-sm font-semibold text-gray-700 mb-1">Diastolic (mmHg)</label>
+                                <label for="diastolic" class="block text-sm font-semibold text-gray-700 mb-1">Diastolic
+                                    (mmHg)</label>
                                 <div class="relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-heartbeat text-gray-400"></i>
@@ -824,7 +828,8 @@
                         </div>
 
                         <div class="mb-6">
-                            <label for="pulse" class="block text-sm font-semibold text-gray-700 mb-1">Pulse (bpm)</label>
+                            <label for="pulse" class="block text-sm font-semibold text-gray-700 mb-1">Pulse
+                                (bpm)</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-heart text-gray-400"></i>
@@ -836,7 +841,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="bp_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Date & Time</label>
+                            <label for="bp_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement
+                                Date & Time</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-calendar-alt text-gray-400"></i>
@@ -869,19 +875,21 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form action="{{ route('doctor.blood-sugar.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                     <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
-                    
+
                     <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-4 border-b">
                         <h3 class="text-lg font-medium text-white">Add Blood Sugar Reading</h3>
                     </div>
 
                     <div class="px-6 py-5 bg-gray-50">
                         <div class="mb-6">
-                            <label for="bs_value" class="block text-sm font-semibold text-gray-700 mb-1">Blood Sugar Level</label>
+                            <label for="bs_value" class="block text-sm font-semibold text-gray-700 mb-1">Blood Sugar
+                                Level</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-tint text-gray-400"></i>
@@ -910,7 +918,8 @@
                         </div>
 
                         <div class="mb-6">
-                            <label for="bs_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Time</label>
+                            <label for="bs_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement
+                                Time</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-clock text-gray-400"></i>
@@ -943,19 +952,21 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form action="{{ route('doctor.hearth-rate.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                     <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id }}">
-                    
+
                     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-4 border-b">
                         <h3 class="text-lg font-medium text-white">Add Heart Rate Reading</h3>
                     </div>
 
                     <div class="px-6 py-5 bg-gray-50">
                         <div class="mb-6">
-                            <label for="hr_value" class="block text-sm font-semibold text-gray-700 mb-1">Heart Rate</label>
+                            <label for="hr_value" class="block text-sm font-semibold text-gray-700 mb-1">Heart
+                                Rate</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-heartbeat text-gray-400"></i>
@@ -986,7 +997,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="hr_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement Date & Time</label>
+                            <label for="hr_measured_at" class="block text-sm font-semibold text-gray-700 mb-1">Measurement
+                                Date & Time</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-calendar-alt text-gray-400"></i>
@@ -1013,25 +1025,20 @@
     </div>
 
     <script>
-        // Initialize charts with patient data
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Remove active class from all tabs
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
 
-                    // Add active class to clicked tab
                     button.classList.add('active');
                     document.getElementById(button.dataset.tab).classList.add('active');
                 });
             });
 
-            // Modal handling
             const modalButtons = document.querySelectorAll('[data-modal-target]');
             const modalCloseButtons = document.querySelectorAll('.modal-close');
 
@@ -1049,7 +1056,6 @@
                 });
             });
 
-            // Initialize Blood Pressure Chart
             const bpCtx = document.getElementById('bloodPressureChart').getContext('2d');
             const bpChart = new Chart(bpCtx, {
                 type: 'line',
@@ -1097,7 +1103,6 @@
                 }
             });
 
-            // Initialize Blood Sugar Chart
             const bsCtx = document.getElementById('bloodSugarChart').getContext('2d');
             const bsChart = new Chart(bsCtx, {
                 type: 'line',
@@ -1171,29 +1176,240 @@
             });
         });
 
+        function printRaport() {
+            const patientInfo = {
+                name: "{{ $patient->user->first_name }} {{ $patient->user->last_name }}",
+                id: "{{ $patient->id }}",
+                age: "{{ \Carbon\Carbon::parse($patient->birth_date)->age }}",
+                gender: "{{ ucfirst($patient->gender) }}",
+                height: "{{ $patient->height ?? '---' }}",
+                weight: "{{ $patient->weight ?? '---' }}",
+                email: "{{ $patient->user->email }}",
+                phone: "{{ $patient->phone ?? 'No phone number' }}",
+                address: "{{ $patient->address ?? 'No address provided' }}"
+            };
+
+            const currentDate = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let reportHTML = `
+                                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 850px; margin: 0 auto; padding: 30px; color: #333;">
+                                    <div style="text-align: center; margin-bottom: 30px;">
+                                        <h1 style="color: #2563EB; font-size: 28px; margin-bottom: 8px;">Patient Medical Report</h1>
+                                        <p style="color: #6B7280; font-size: 14px;">Generated on ${currentDate}</p>
+                                    </div>
+                                    
+                                    <!-- Patient Info Card -->
+                                    <div style="background-color: #F8FAFC; border-radius: 12px; padding: 24px; margin-bottom: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                                            <div style="flex: 2; min-width: 280px;">
+                                                <h2 style="color: #1E40AF; font-size: 22px; margin-top: 0; margin-bottom: 12px;">${patientInfo.name}</h2>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                                                    <div style="background-color: #EFF6FF; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
+                                                        <span style="color: #6B7280;">Patient ID:</span> 
+                                                        <span style="font-weight: 600; color: #2563EB;">#${patientInfo.id}</span>
+                                                    </div>
+                                                    <div style="background-color: #EFF6FF; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
+                                                        <span style="color: #6B7280;">Age:</span> 
+                                                        <span style="font-weight: 600;">${patientInfo.age} years</span>
+                                                    </div>
+                                                    <div style="background-color: #EFF6FF; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
+                                                        <span style="color: #6B7280;">Gender:</span> 
+                                                        <span style="font-weight: 600;">${patientInfo.gender}</span>
+                                                    </div>
+                                                </div>
+                                                <div style="margin-top: 15px;">
+                                                    <p style="margin: 5px 0; display: flex;">
+                                                        <span style="min-width: 120px; color: #6B7280;">Height:</span>
+                                                        <span style="font-weight: 500;">${patientInfo.height} cm</span>
+                                                    </p>
+                                                    <p style="margin: 5px 0; display: flex;">
+                                                        <span style="min-width: 120px; color: #6B7280;">Weight:</span>
+                                                        <span style="font-weight: 500;">${patientInfo.weight} kg</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div style="flex: 1; min-width: 280px; border-left: 1px solid #E5E7EB; padding-left: 20px;">
+                                                <h3 style="color: #6B7280; text-transform: uppercase; font-size: 12px; margin-top: 0; letter-spacing: 1px;">Contact Information</h3>
+                                                <p style="margin: 8px 0; display: flex; align-items: center;">
+                                                    <span style="margin-right: 10px; color: #6B7280;">📧</span>
+                                                    ${patientInfo.email}
+                                                </p>
+                                                <p style="margin: 8px 0; display: flex; align-items: center;">
+                                                    <span style="margin-right: 10px; color: #6B7280;">📱</span>
+                                                    ${patientInfo.phone}
+                                                </p>
+                                                <p style="margin: 8px 0; display: flex; align-items: center;">
+                                                    <span style="margin-right: 10px; color: #6B7280;">🏠</span>
+                                                    ${patientInfo.address}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Medical Conditions Section -->
+                                    <div style="margin-bottom: 36px;">
+                                        <h2 style="color: #1E40AF; font-size: 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                            <span style="display: inline-block; width: 24px; height: 24px; background-color: #DBEAFE; border-radius: 50%; text-align: center; line-height: 24px; color: #2563EB;">🩺</span>
+                                            Medical Conditions
+                                        </h2>
+                                        <div style="background-color: white; border-radius: 10px; padding: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                            <ul style="list-style-type: none; padding: 15px;">
+                                                @foreach ($patient->diseases as $disease)
+                                                    <li style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #F3F4F6;">
+                                                        <strong style="color: #1E40AF; display: block; margin-bottom: 4px;">{{ $disease->name }}</strong>
+                                                        <span style="color: #4B5563; font-size: 14px;">{{ $disease->description }}</span>
+                                                    </li>
+                                                @endforeach
+                                                @if (count($patient->diseases) == 0)
+                                                    <li style="color: #6B7280; font-style: italic; padding: 10px;">No medical conditions recorded</li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Medical Records Section -->
+                                    <div style="margin-bottom: 36px;">
+                                        <h2 style="color: #1E40AF; font-size: 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                            <span style="display: inline-block; width: 24px; height: 24px; background-color: #DBEAFE; border-radius: 50%; text-align: center; line-height: 24px; color: #2563EB;">📋</span>
+                                            Medical Records
+                                        </h2>
+                                        <div style="overflow-x: auto; background-color: white; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 0;">
+                                                <thead>
+                                                    <tr style="background-color: #F1F5F9; text-align: left;">
+                                                        <th style="padding: 12px 16px; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #1E40AF;">Date</th>
+                                                        <th style="padding: 12px 16px; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #1E40AF;">Record</th>
+                                                        <th style="padding: 12px 16px; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #1E40AF;">Doctor</th>
+                                                        <th style="padding: 12px 16px; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #1E40AF;">Medication</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($medicalRecords as $record)
+                                                        <tr>
+                                                            <td style="padding: 16px; border-bottom: 1px solid #F3F4F6; white-space: nowrap; color: #6B7280; font-size: 14px;">
+                                                                {{ \Carbon\Carbon::parse($record->start_date)->format('M d, Y') }}
+                                                            </td>
+                                                            <td style="padding: 16px; border-bottom: 1px solid #F3F4F6;">
+                                                                <div style="margin-bottom: 4px; font-weight: 600; color: #1E40AF;">{{ $record->name }}</div>
+                                                                <div style="color: #4B5563; font-size: 14px;">{{ $record->description }}</div>
+                                                            </td>
+                                                            <td style="padding: 16px; border-bottom: 1px solid #F3F4F6; color: #4B5563;">
+                                                                Dr. {{ $record->doctor->user->first_name ?? 'Unknown' }} 
+                                                                {{ $record->doctor->user->last_name ?? '' }}
+                                                            </td>
+                                                            <td style="padding: 16px; border-bottom: 1px solid #F3F4F6; color: #4B5563;">
+                                                                <span style="display: inline-block; background-color: #EFF6FF; padding: 4px 10px; border-radius: 4px; font-size: 14px;">
+                                                                    {{ $record->dosage }} {{ $record->frequency }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    @if (count($medicalRecords) == 0)
+                                                        <tr>
+                                                            <td colspan="4" style="padding: 16px; text-align: center; color: #6B7280; font-style: italic;">
+                                                                No medical records available
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Health Metrics Section -->
+                                    <div style="margin-bottom: 36px;">
+                                        <h2 style="color: #1E40AF; font-size: 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                            <span style="display: inline-block; width: 24px; height: 24px; background-color: #DBEAFE; border-radius: 50%; text-align: center; line-height: 24px; color: #2563EB;">📊</span>
+                                            Latest Health Metrics
+                                        </h2>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                                            <!-- Blood Pressure Card -->
+                                            <div style="flex: 1; min-width: 220px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                                                    <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #EFF6FF; display: flex; align-items: center; justify-content: center;">
+                                                        <span style="color: #2563EB; font-weight: bold; font-size: 16px;">BP</span>
+                                                    </div>
+                                                    <h3 style="margin: 0; color: #1E40AF; font-size: 16px;">Blood Pressure</h3>
+                                                </div>
+                                                @if (count($bloodPressureChartData['labels']) > 0)
+                                                    <div style="font-size: 24px; font-weight: 600; color: #1E3A8A; margin-bottom: 8px;">
+                                                        {{ end($bloodPressureChartData['systolic']) }}/{{ end($bloodPressureChartData['diastolic']) }} 
+                                                        <span style="font-size: 14px; font-weight: normal; color: #6B7280;">mmHg</span>
+                                                    </div>
+                                                    <div style="color: #6B7280; font-size: 14px;">
+                                                        Measured on {{ end($bloodPressureChartData['labels']) }}
+                                                    </div>
+                                                @else
+                                                    <div style="color: #6B7280; font-style: italic;">No readings available</div>
+                                                @endif
+                                            </div>
+                                            
+                                            <!-- Blood Sugar Card -->
+                                            <div style="flex: 1; min-width: 220px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                                                    <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #ECFDF5; display: flex; align-items: center; justify-content: center;">
+                                                        <span style="color: #059669; font-weight: bold; font-size: 16px;">BS</span>
+                                                    </div>
+                                                    <h3 style="margin: 0; color: #065F46; font-size: 16px;">Blood Sugar</h3>
+                                                </div>
+                                                @if (count($bloodSugarChartData['labels']) > 0)
+                                                    <div style="font-size: 24px; font-weight: 600; color: #065F46; margin-bottom: 8px;">
+                                                        {{ end($bloodSugarChartData['values']) }} 
+                                                        <span style="font-size: 14px; font-weight: normal; color: #6B7280;">mg/dL</span>
+                                                    </div>
+                                                    <div style="color: #6B7280; font-size: 14px;">
+                                                        Measured on {{ end($bloodSugarChartData['labels']) }}
+                                                    </div>
+                                                @else
+                                                    <div style="color: #6B7280; font-style: italic;">No readings available</div>
+                                                @endif
+                                            </div>
+                                            
+                                            <!-- Heart Rate Card -->
+                                            <div style="flex: 1; min-width: 220px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                                                    <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #FEF2F2; display: flex; align-items: center; justify-content: center;">
+                                                        <span style="color: #DC2626; font-weight: bold; font-size: 16px;">HR</span>
+                                                    </div>
+                                                    <h3 style="margin: 0; color: #991B1B; font-size: 16px;">Heart Rate</h3>
+                                                </div>
+                                                @if (count($heartRateChartData['labels']) > 0)
+                                                    <div style="font-size: 24px; font-weight: 600; color: #991B1B; margin-bottom: 8px;">
+                                                        {{ end($heartRateChartData['values']) }} 
+                                                        <span style="font-size: 14px; font-weight: normal; color: #6B7280;">bpm</span>
+                                                    </div>
+                                                    <div style="color: #6B7280; font-size: 14px;">
+                                                        Measured on {{ end($heartRateChartData['labels']) }}
+                                                    </div>
+                                                @else
+                                                    <div style="color: #6B7280; font-style: italic;">No readings available</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Footer -->
+                                    <div style="text-align: center; margin-top: 50px; padding: 20px 0; border-top: 1px solid #E5E7EB; color: #6B7280; font-size: 14px;">
+                                        <div style="margin-bottom: 10px;">
+                                            This report was generated by <span style="color: #2563EB; font-weight: 600;">HealthGate</span> - Patient Management System
+                                        </div>
+                                        <div style="background-color: #F1F5F9; display: inline-block; padding: 8px 16px; border-radius: 30px;">
+                                            Attending Physician: Dr. {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
+                                        </div>
+                                        <div style="margin-top: 15px; font-size: 12px;">
+                                            Confidential medical information - For authorized personnel only
+                                        </div>
+                                    </div>
+                                </div>`;
 
 
-        function deleteMedicalRecord(id) {
-            if (confirm('Are you sure you want to delete this medical record?')) {
-                // Implementation for deleting medical record
-            }
-        }
-
-        function deleteDisease(id) {
-            if (confirm('Are you sure you want to remove this disease from the patient?')) {
-                // Implementation for deleting disease
-            }
-        }
-
-        function editMetric(type, id) {
-            // Implementation for editing health metric
-            console.log('Edit metric', type, id);
-        }
-
-        function deleteMetric(type, id) {
-            if (confirm(`Are you sure you want to delete this ${type} reading?`)) {
-                // Implementation for deleting health metric
-            }
+            document.body.innerHTML = reportHTML;
+            window.print();
+            location.reload();
         }
     </script>
 @endsection
