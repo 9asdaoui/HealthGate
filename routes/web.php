@@ -93,4 +93,5 @@ Route::prefix('doctor')->middleware('auth')->group(function(){
     Route::get('/diseases', [DiseaseController::class, 'index'])->name('doctor.diseases');
     Route::get('/diseases/{disease}', [DiseaseController::class, 'getDisease'])->name('doctor.disease.show');
     Route::post('/diseases', [DiseaseController::class, 'diseasesAssign'])->name('doctor.diseases.assign');
+
 });
