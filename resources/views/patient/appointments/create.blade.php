@@ -173,10 +173,11 @@
         }
 
         document.getElementById('appointment_date').addEventListener('change', async function() {
+
             const date = this.value;
             const doctorId = document.getElementById('doctor_id').value;
             const timeSlotsContainer = document.getElementById('timeSlots');
-            // loading
+
             timeSlotsContainer.innerHTML =
                 '<p class="col-span-3 text-center py-4">Loading available slots...</p>';
             try {
@@ -202,11 +203,10 @@
                 if (timeSlots.length > 0) {
                     timeSlots.forEach(slot => {
                         html += `
-                                                                                    <label class="border rounded-md p-2 text-center cursor-pointer hover:bg-gray-50">
-                                                                                                  <input type="radio" name="" value="${slot}" class="sr-only" required>
-                                                                                                   <span class="text-sm">${slot}</span>
-                                                                                    </label>
-                                                                      `;
+                                <label class="border rounded-md p-2 text-center cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="" value="${slot}" class="sr-only" required>
+                                    <span class="text-sm">${slot}</span>
+                                </label>`;
                     });
                 } else {
                     html = '<p class="col-span-3 text-center py-4">No available slots for this date</p>';
@@ -214,39 +214,27 @@
 
                 timeSlotsContainer.innerHTML = html;
 
-                // Add click event to highlight selected time slot and update a hidden input
                 const slotLabels = timeSlotsContainer.querySelectorAll('label');
                 slotLabels.forEach(label => {
                     const radioInput = label.querySelector('input[type="radio"]');
 
                     label.addEventListener('click', function() {
-                        // Remove highlight from all slots and reset names
                         slotLabels.forEach(l => {
                             l.classList.remove('bg-accent', 'text-white');
                             l.querySelector('input[type="radio"]').name = "";
                         });
 
-                        // Highlight this slot
                         this.classList.add('bg-accent', 'text-white');
 
-                        // Set the name only on the clicked input
                         radioInput.name = "time_slot";
                         radioInput.checked = true;
                     });
                 });
-
-
             } catch (error) {
                 console.log(error);
             }
-
-
-
-
-
         });
 
-        // Close modal when clicking outside
         window.addEventListener('click', function(event) {
             const modal = document.getElementById('scheduleModal');
             if (event.target === modal) {
