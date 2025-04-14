@@ -41,11 +41,23 @@ class MedicalController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource for editing.
      */
-    public function show(Medical $medical)
+    public function edit(Patient $patient, Medical $medical)
     {
-        //
+        if (!Gate::allows('medical_record_update', $medical)) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        
+        return response()->json([
+            'id' => $medical->id,
+            'name' => $medical->name,
+            'description' => $medical->description,
+            'dosage' => $medical->dosage,
+            'frequency' => $medical->frequency,
+            'start_date' => $medical->start_date,
+            'end_date' => $medical->end_date
+        ]);
     }
 
     /**

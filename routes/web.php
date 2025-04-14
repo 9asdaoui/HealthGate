@@ -77,12 +77,13 @@ Route::prefix('doctor')->middleware('auth')->group(function(){
     // Patients Management
     Route::get('/patients', [DoctorController::class, 'patients'])->name('doctor.patients');
     Route::get('/patients/medical-records/{patient}', [DoctorController::class, 'viewPatientMedicalRecords'])->name('doctor.patients.medical-records');
-    Route::get('/patients/medical-records/{patient}/edit/{medical}', [MedicalController::class, 'edit'])->name('doctor.patients.medical-records.edit');
     Route::get('/patients/medical-records', [DoctorController::class, 'editProfile'])->name('doctor.health-metrics');
     
     // Medical Records
     Route::post('/medical/store', [MedicalController::class, 'store'])->name('doctor.medical.store');
     Route::put('/medical/{medical}', [MedicalController::class, 'update'])->name('doctor.medical.update');
+    Route::get('/patients/medical-records/{patient}/edit/{medical}', [MedicalController::class, 'edit'])->name('doctor.patients.medical-records.edit');
+
     
     // Health Metrics
     Route::post('/blood-sugar', [BloodSugarController::class, 'store'])->name('doctor.blood-sugar.store');
