@@ -35,8 +35,12 @@ Route::prefix('admin')->group(function(){
 
     Route::get('/users/create/doctor', [DoctorController::class, 'createDoctor'])->name('admin.users.create.doctor')->middleware('auth');
 
-    Route::get('/users/showDoctor/{user:id}', [DoctorController::class, 'showDoctor'])->name('admin.users.showDoctor')->middleware('auth');
+    Route::get('/users/showDoctor/{user}', [DoctorController::class, 'showDoctor'])->name('admin.users.showDoctor')->middleware('auth');
     
+    Route::put('/users/doctor/{doctor}', [DoctorController::class, 'updateDoctor'])->name('admin.doctors.update')->middleware('auth');
+    Route::put('/users/doctor/{doctor}/department', [DoctorController::class, 'updateDepartment'])->name('admin.doctors.update-department')->middleware('auth');
+    Route::delete('/users/doctor/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('auth');
+
     // User Management
     Route::get('/users', [UserController::class, 'users'])->name('admin.users')->middleware('auth');
 

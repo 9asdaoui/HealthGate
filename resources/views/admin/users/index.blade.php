@@ -2,6 +2,10 @@
 
 @section('title', 'User Management')
 
+@section('page-title', 'User Management')
+
+@section('breadcrumb', 'Users')
+
 @section('styles')
 <style>
     .user-card {
