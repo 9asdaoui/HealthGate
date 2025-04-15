@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\Interfaces\PatientRepositoryInterface;
@@ -45,6 +46,15 @@ class DoctorController extends Controller
             ->get();
         
         return view('doctor.patients', compact('patients', 'user'));
+    }
+    public function createDoctor()
+    {
+        $user = auth()->user();
+        return view('admin.users.create_doctor', compact('user'));
+    }
+    public function showDoctor(Doctor $doctor)
+    {
+        return view('admin.users.show_doctor');
     }
 
     public function viewPatientMedicalRecords(Patient $patient)
@@ -139,5 +149,5 @@ class DoctorController extends Controller
             'doctor'
         ));
     }
- 
+    
 }
