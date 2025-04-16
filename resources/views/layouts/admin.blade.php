@@ -409,6 +409,7 @@
 
                 <!-- Breadcrumbs -->
                 <div class="px-6 py-2 bg-primary text-xs text-lightText flex items-center space-x-2 border-t border-b border-borderColor">
+                    
                     <a href="{{ route('admin.dashboard') }}" class="hover:text-accent">Home</a>
                     <i class="fas fa-chevron-right text-xs"></i>
                     <span>@yield('breadcrumb', 'Dashboard')</span>
