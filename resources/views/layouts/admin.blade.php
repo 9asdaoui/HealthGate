@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - HealthGate Dashboard</title>
+    <title>@yield('title') - HealthGate Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,20 +16,21 @@
                 },
                 extend: {
                     colors: {
-                        primary: '#F8F8F8',
-                        secondary: '#FFFFFF',
-                        accent: '#00928C',
-                        accentHover: '#007A75',
-                        darkTeal: '#007A75',
-                        lightGray: '#F0F0F0',
-                        sidebarBg: '#FFFFFF',
-                        sidebarHover: '#F5F5F5',
-                        cardBg: 'rgba(255, 255, 255, 0.8)'
+                        primary: '#121212',
+                        secondary: '#1E1E1E',
+                        accent: '#00A99D',
+                        accentHover: '#008F84',
+                        darkText: '#E2E2E2',
+                        lightText: '#A0A0A0',
+                        sidebarBg: '#1A1A1A',
+                        sidebarHover: '#2C2C2C',
+                        cardBg: '#252525',
+                        borderColor: '#333333'
                     },
                     boxShadow: {
-                        'card': '0 4px 15px rgba(0, 0, 0, 0.05)',
-                        'sidebar': '0 0 20px rgba(0, 0, 0, 0.05)',
-                        'nav': '0 2px 10px rgba(0, 0, 0, 0.05)',
+                        'card': '0 4px 15px rgba(0, 0, 0, 0.2)',
+                        'sidebar': '0 0 20px rgba(0, 0, 0, 0.3)',
+                        'nav': '0 2px 10px rgba(0, 0, 0, 0.2)',
                     },
                 }
             }
@@ -38,6 +39,8 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #E2E2E2;
         }
 
         .sidebar-link {
@@ -68,7 +71,7 @@
 
         .sidebar-link.active {
             border-left: 4px solid theme('colors.accent');
-            background-color: rgba(0, 146, 140, 0.15);
+            background-color: rgba(0, 169, 157, 0.2);
             font-weight: 500;
         }
 
@@ -82,26 +85,26 @@
 
         .card-animate:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 1px;
+            width: 2px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #2a2a2a;
             border-radius: 8px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #bbb;
+            background: #444;
             border-radius: 8px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #888;
+            background: #555;
         }
 
         /* Notification badge animation */
@@ -142,7 +145,7 @@
 
             #sidebar.open {
                 transform: translateX(0);
-                box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+                box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
             }
 
             #content {
@@ -162,102 +165,149 @@
                 visibility: visible;
             }
         }
+
+        .stat-card {
+            background: linear-gradient(135deg, #252525 0%, #1E1E1E 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid theme('colors.accent');
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .chart-container {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            background-color: #444;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
     @yield('styles')
 </head>
 
-<body class="bg-gradient-to-br from-primary to-lightGray text-gray-800">
+<body class="bg-primary text-darkText">
     <div class="flex h-screen overflow-hidden relative">
-        <div id="overlay" class="overlay fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden"></div>
+        <div id="overlay" class="overlay fixed inset-0 bg-black bg-opacity-70 z-10 hidden md:hidden"></div>
 
+        <!-- Sidebar -->
         <div id="sidebar"
-            class="bg-sidebarBg text-gray-800 w-64 space-y-6 py-5 px-3 fixed inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 shadow-sidebar">
+            class="bg-sidebarBg text-darkText w-64 space-y-6 py-5 px-3 fixed inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 shadow-sidebar">
             <div class="flex items-center justify-center space-x-2 px-4 py-2">
                 <div class="h-10 w-10 rounded-full bg-accent flex items-center justify-center">
                     <i class="fas fa-heartbeat text-xl text-white"></i>
                 </div>
-                <span class="text-2xl font-bold">Health<span class="text-accent">Gate</span></span>
+                <span class="text-2xl font-bold text-darkText">Health<span class="text-accent">Gate</span></span>
             </div>
-
-            <div class="mx-4 p-4 mb-6 rounded-xl bg-gradient-to-r from-gray-100 to-white shadow-md">
+            <div class="mx-4 p-4 mb-6 rounded-xl bg-gradient-to-r from-cardBg to-secondary shadow-md border border-borderColor">
                 <div class="flex items-center space-x-3">
                     <div
                         class="h-12 w-12 rounded-full bg-accent bg-opacity-20 flex items-center justify-center p-1 ring-2 ring-accent overflow-hidden">
                         @if ($user->image)
-                            <img src="{{ $user->image }}" alt="{{ $user->first_name }}'s photo"
+                            <img src="{{ $user->image }}" alt="Admin's photo"
                                 class="h-full w-full object-cover rounded-full">
                         @else
-                            <i class="fas fa-user text-accent"></i>
+                            <i class="fas fa-user-shield text-accent"></i>
                         @endif
                     </div>
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-800">{{ $user->first_name }} {{ $user->last_name }}
-                        </h3>
-                        <p class="text-xs text-gray-500">ID: #{{ $user->id ?? '000' }}</p>
+                        <h3 class="text-sm font-semibold text-darkText">{{ $user->first_name }}
+                            {{ $user->last_name }}</h3>
+                        <p class="text-xs text-lightText">Administrator</p>
                     </div>
                 </div>
-                <div class="mt-3 pt-3 border-t border-gray-200 text-xs">
-                    <p class="text-gray-600 flex items-center">
-                        <i class="fas fa-circle text-green-400 mr-1 text-xs"></i> Active Account
+                <div class="mt-3 pt-3 border-t border-borderColor text-xs">
+                    <p class="text-lightText flex items-center">
+                        <i class="fas fa-circle text-green-400 mr-1 text-xs"></i> System Administrator
                     </p>
                 </div>
             </div>
 
+            <!-- Nav Links -->
             <nav class="px-3 space-y-1">
-                <p class="text-xs text-gray-500 px-3 uppercase tracking-wider mb-2">Main Menu</p>
-
-                <a href="{{ route('patient.dashboard') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-home w-5 text-center"></i>
+                <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2">Main Menu</p>
+                
+                <a href="{{ route('admin.dashboard') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{{ route('patient.appointments') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.appointments*') ? 'active' : '' }}">
-                    <i class="fas fa-calendar-check w-5 text-center"></i>
-                    <span>Appointments</span>
+                <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2 mt-6">User Management</p>
+
+                <a href="{{ route('admin.users') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                    <i class="fas fa-users w-5 text-center"></i>
+                    <span>Users</span>
                 </a>
 
-                <p class="text-xs text-gray-500 px-3 uppercase tracking-wider mb-2 mt-6">Medical</p>
+                <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2 mt-6">Medical Resources</p>
 
-                <a href="{{ route('patient.healthMetrics') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.Health Metrics*') ? 'active' : '' }}">
-                    <i class="fas fa-file-medical w-5 text-center"></i>
-                    <span>Health Metrics</span>
+                <a href="{{ route('admin.diseases') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.diseases*') ? 'active' : '' }}">
+                    <i class="fas fa-disease w-5 text-center"></i>
+                    <span>Diseases Library</span>
                 </a>
 
-                <a href="{{ route('patient.prescription') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.prescription*') ? 'active' : '' }}">
-                    <i class="fas fa-prescription w-5 text-center"></i>
-                    <span>Prescriptions</span>
+                <a href="{{ route('admin.departments') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.departments*') ? 'active' : '' }}">
+                    <i class="fas fa-hospital-alt w-5 text-center"></i>
+                    <span>Departments</span>
                 </a>
 
-                <p class="text-xs text-gray-500 px-3 uppercase tracking-wider mb-2 mt-6">Account</p>
+                <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2 mt-6">System</p>
 
-                <a href="{{ route('patient.profile') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('patient.profile*') ? 'active' : '' }}">
-                    <i class="fas fa-user-circle w-5 text-center"></i>
-                    <span>My Profile</span>
+                <a href="{{ route('admin.settings') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                    <i class="fas fa-cog w-5 text-center"></i>
+                    <span>Settings</span>
                 </a>
 
-                <div class="pt-6 border-t border-gray-200 mt-6">
-                    <form method="GET" action="{{ route('logout') }}"
-                        class="flex items-center space-x-3 px-4 py-3 rounded-lg sidebar-link hover:bg-red-100 group">
-                        @csrf
-                        <i class="fas fa-sign-out-alt w-5 text-center text-red-500"></i>
-                        <button type="submit" class="w-full text-left focus:outline-none text-red-500">Logout</button>
-                    </form>
+                <div class="pt-6 border-t border-borderColor mt-6">
+                    <a href="{{ route('logout') }}"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg sidebar-link hover:bg-red-900 hover:bg-opacity-30 group">
+                        <i class="fas fa-sign-out-alt w-5 text-center text-red-400"></i>
+                        <span class="text-red-400">Logout</span>
+                    </a>
                 </div>
             </nav>
 
             <!-- Help section -->
             <div class="px-4 mt-6">
-                <div class="bg-accent bg-opacity-10 p-4 rounded-lg">
-                    <h4 class="text-sm font-medium text-accent mb-2">Need Help?</h4>
-                    <p class="text-xs text-gray-600 mb-3">Contact our support team for assistance</p>
+                <div class="bg-accent bg-opacity-10 p-4 rounded-lg border border-accent border-opacity-30">
+                    <h4 class="text-sm font-medium text-accent mb-2">Admin Support</h4>
+                    <p class="text-xs text-lightText mb-3">Access system documentation and help</p>
                     <a href="#"
                         class="text-xs bg-accent hover:bg-accentHover text-white py-2 px-3 rounded-lg inline-block transition-colors duration-200">
-                        <i class="fas fa-headset mr-1"></i> Get Support
+                        <i class="fas fa-book mr-1"></i> View Docs
                     </a>
                 </div>
             </div>
@@ -266,29 +316,29 @@
         <!-- Content -->
         <div id="content" class="flex-1 overflow-y-auto">
             <!-- Top Navigation -->
-            <div class="bg-white shadow-nav sticky top-0 z-10">
+            <div class="bg-secondary shadow-nav sticky top-0 z-10 border-b border-borderColor">
                 <div class="flex items-center justify-between px-6 py-4">
                     <!-- Mobile menu button -->
                     <button id="menu-btn"
-                        class="md:hidden focus:outline-none flex items-center justify-center h-10 w-10 rounded-lg hover:bg-gray-100">
-                        <i class="fas fa-bars text-gray-700"></i>
+                        class="md:hidden focus:outline-none flex items-center justify-center h-10 w-10 rounded-lg hover:bg-sidebarHover">
+                        <i class="fas fa-bars text-darkText"></i>
                     </button>
 
                     <!-- Page title -->
-                    <h1 class="text-xl font-semibold text-gray-800 hidden md:block">@yield('page-title', 'Dashboard')</h1>
+                    <h1 class="text-xl font-semibold text-darkText hidden md:block">@yield('page-title', 'Admin Dashboard')</h1>
 
                     <!-- Search bar - visible on larger screens -->
-                    <div class="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2 flex-1 max-w-md mx-4">
-                        <i class="fas fa-search text-gray-500 mr-2"></i>
+                    <div class="hidden md:flex items-center bg-primary rounded-lg px-3 py-2 flex-1 max-w-md mx-4 border border-borderColor">
+                        <i class="fas fa-search text-lightText mr-2"></i>
                         <input type="text" placeholder="Search..."
-                            class="bg-transparent border-none focus:outline-none text-sm flex-1">
+                            class="bg-transparent border-none focus:outline-none text-sm flex-1 text-darkText placeholder-lightText">
                     </div>
 
                     <!-- Right side elements - Notifications, etc. -->
                     <div class="flex items-center space-x-4">
                         <div class="relative">
                             <button
-                                class="text-gray-600 hover:text-accent focus:outline-none h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-100">
+                                class="text-lightText hover:text-accent focus:outline-none h-10 w-10 rounded-full flex items-center justify-center hover:bg-sidebarHover">
                                 <i class="fas fa-bell"></i>
                                 <span
                                     class="notification-badge absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
@@ -297,60 +347,78 @@
 
                         <div class="relative">
                             <button
-                                class="text-gray-600 hover:text-accent focus:outline-none h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-100">
-                                <i class="fas fa-envelope"></i>
+                                class="text-lightText hover:text-accent focus:outline-none h-10 w-10 rounded-full flex items-center justify-center hover:bg-sidebarHover">
+                                <i class="fas fa-cog"></i>
                             </button>
                         </div>
 
-                        <div class="h-10 w-px bg-gray-200 mx-1"></div>
+                        <div class="h-10 w-px bg-borderColor mx-1"></div>
 
                         <!-- User dropdown -->
                         <div class="relative">
                             <button id="user-menu-btn" class="flex items-center space-x-2 focus:outline-none">
                                 <div
-                                    class="h-10 w-10 rounded-full bg-accent text-white flex items-center justify-center">
-                                    <span class="font-medium">{{ substr($user->first_name, 0, 1) }}</span>
+                                    class="h-10 w-10 rounded-full bg-accent bg-opacity-20 flex items-center justify-center overflow-hidden">
+                                    @if ($user->image)
+                                        <img src="{{ $user->image }}" class="h-full w-full object-cover"
+                                            alt="Admin Photo">
+                                    @else
+                                        <span
+                                            class="font-medium text-accent">{{ substr($user->first_name, 0, 1) }}</span>
+                                    @endif
                                 </div>
                                 <div class="hidden md:block text-left">
-                                    <span
-                                        class="block text-sm font-medium">{{ $user->first_name ?? 'Guest User' }}</span>
-                                    <span class="block text-xs text-gray-500">User</span>
+                                    <span class="block text-sm font-medium text-darkText">
+                                        {{ $user->first_name ?? 'Admin User' }}
+                                    </span>
+                                    <span class="block text-xs text-lightText">Administrator</span>
                                 </div>
-                                <i class="fas fa-chevron-down text-xs text-gray-500 hidden md:block"></i>
+                                <i class="fas fa-chevron-down text-xs text-lightText hidden md:block"></i>
                             </button>
 
                             <!-- Dropdown menu (hidden by default) -->
                             <div id="user-dropdown"
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-20 hidden">
-                                <a href=" {{ route('patient.profile') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
-                              
-                                <div class="border-t border-gray-100 my-1"></div>
-
+                                class="absolute right-0 mt-2 w-48 bg-secondary rounded-lg shadow-lg py-1 z-20 hidden border border-borderColor">
+                                <a href="{{ route('admin.profile') }}"
+                                    class="block px-4 py-2 text-sm text-darkText hover:bg-sidebarHover">
+                                    <i class="fas fa-user mr-2"></i> My Profile
+                                </a>
+                                <a href="{{ route('admin.settings') }}"
+                                    class="block px-4 py-2 text-sm text-darkText hover:bg-sidebarHover">
+                                    <i class="fas fa-cog mr-2"></i> Settings
+                                </a>
+                                <div class="border-t border-borderColor my-1"></div>
+                                
                                 <a href="{{ route('logout') }}"
-                                    class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                                   class="block px-4 py-2 text-sm text-red-400 hover:bg-sidebarHover">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Mobile search - visible only on mobile -->
                 <div class="px-4 pb-3 md:hidden">
-                    <div class="flex items-center bg-gray-100 rounded-lg px-3 py-2">
-                        <i class="fas fa-search text-gray-500 mr-2"></i>
+                    <div class="flex items-center bg-primary rounded-lg px-3 py-2 border border-borderColor">
+                        <i class="fas fa-search text-lightText mr-2"></i>
                         <input type="text" placeholder="Search..."
-                            class="bg-transparent border-none focus:outline-none text-sm flex-1">
+                            class="bg-transparent border-none focus:outline-none text-sm flex-1 text-darkText placeholder-lightText">
                     </div>
                 </div>
 
-                <div class="px-6 py-2 bg-gray-50 text-xs text-gray-500 flex items-center space-x-2">
-                    <a href="{{ route('patient.dashboard') }}" class="hover:text-accent">Home</a>
+                <!-- Breadcrumbs -->
+                <div class="px-6 py-2 bg-primary text-xs text-lightText flex items-center space-x-2 border-t border-b border-borderColor">
+                    
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-accent">Home</a>
                     <i class="fas fa-chevron-right text-xs"></i>
                     <span>@yield('breadcrumb', 'Dashboard')</span>
                 </div>
             </div>
 
+            {{-- Flash messages --}}
             @if (session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+                <div class="bg-green-900 bg-opacity-30 border border-green-600 text-green-200 px-4 py-3 rounded relative m-6"
                     role="alert">
                     <span class="block sm:inline">{{ session('success') }}</span>
                     <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -365,7 +433,7 @@
             @endif
 
             @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                <div class="bg-red-900 bg-opacity-30 border border-red-600 text-red-200 px-4 py-3 rounded relative m-6"
                     role="alert">
                     <ul>
                         @foreach ($errors->all() as $error)
@@ -389,23 +457,20 @@
             </div>
 
             <!-- Footer -->
-            <footer class="bg-white p-6 text-center text-sm text-gray-600 border-t">
+            <footer class="bg-secondary p-6 text-center text-sm text-lightText border-t border-borderColor">
                 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-4 md:mb-0">
                         <p>&copy; {{ date('Y') }} HealthGate. All rights reserved.</p>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="#" class="text-gray-500 hover:text-accent">Privacy Policy</a>
-                        <a href="#" class="text-gray-500 hover:text-accent">Terms of Service</a>
-                        <a href="#" class="text-gray-500 hover:text-accent">Contact</a>
+                        <a href="#" class="text-lightText hover:text-accent">Privacy Policy</a>
+                        <a href="#" class="text-lightText hover:text-accent">Terms of Service</a>
+                        <a href="#" class="text-lightText hover:text-accent">Contact</a>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
-
-    <!-- ChatBox Component -->
-    <x-chatbox></x-chatbox>
 
     <!-- Scripts -->
     <script>

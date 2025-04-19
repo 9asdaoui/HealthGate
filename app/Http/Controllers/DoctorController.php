@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\Interfaces\PatientRepositoryInterface;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Gate;
 
 class DoctorController extends Controller
 {
@@ -17,6 +18,23 @@ class DoctorController extends Controller
         $this->patientRepository = $patientRepository;
     }
 
+    public function createDoctor()
+    {
+        $user = auth()->user();
+        return view('admin.users.create_doctor', compact('user'));
+    }
+
+    public function showDoctor(User $user)
+    {
+        $doctor = Doctor::with('user')->findOrFail($user->id);
+        $doctor->load('user');
+        $doctor->load('appointments');
+        $doctor->load('patients');
+        $doctor->load('diseases');
+
+        $user = auth()->user();
+        return view('admin.users.show_doctor', compact('doctor', 'user'));
+    }
 
     public function dashboard()
     {
@@ -88,6 +106,10 @@ class DoctorController extends Controller
     }
     public function updateProfile(\Illuminate\Http\Request $request)
     {
+        if (! Gate::allows('update-profile', auth()->user())) {
+            abort(403, 'You are not authorized to update this profile.');
+        }
+
         $user = auth()->user();
         
         $validated = $request->validate([
@@ -139,5 +161,60 @@ class DoctorController extends Controller
             'doctor'
         ));
     }
- 
+
+    public function updateDoctor(Doctor $doctor, \Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$doctor->user->id,
+            'gender' => 'required|in:male,female,other',
+            'speciality' => 'required|string|max:255',
+            'experience' => 'required|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
+        ]);
+        
+        $user = $doctor->user;
+        
+        $user->first_name = $validated['first_name'];
+        $user->last_name = $validated['last_name'];
+        $user->email = $validated['email'];
+        $user->gender = $validated['gender'];
+        
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('profiles', 'public');
+            $user->image = '/storage/' . $imagePath;
+        }
+        
+        $user->save();
+        
+        $doctor->speciality = $validated['speciality'];
+        $doctor->experience = $validated['experience'];
+        $doctor->save();
+        
+        return redirect()->back()->with('success', 'Doctor profile updated successfully');
+    }
+    
+    public function updateDepartment(Doctor $doctor, \Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'department_id' => 'required|exists:departments,id',
+        ]);
+        
+        $doctor->department_id = $validated['department_id'];
+        $doctor->save();
+        
+        return redirect()->back()->with('success', 'Doctor department updated successfully');
+    }
+    
+    public function destroy(Doctor $doctor)
+    {
+        $user = $doctor->user;
+        
+        $doctor->delete();
+        
+        $user->delete();
+        
+        return redirect()->route('admin.users')->with('success', 'Doctor deleted successfully');
+    }
 }

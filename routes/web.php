@@ -10,6 +10,8 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HearthRateController;
 use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\UserController;
+use App\Models\Doctor;
 use App\Models\Medical;
 use Illuminate\Support\Facades\Route;
 
@@ -27,10 +29,40 @@ Route::prefix('auth')->group(function(){
 );
 
 Route::prefix('admin')->group(function(){
+
+    // Dashboard
     Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('auth');
-    Route::get('/doctors',[AdminController::class,'doctors'])->name('admin.doctors')->middleware('auth');
-    Route::get('/patients',[AdminController::class,'patients'])->name('admin.patients')->middleware('auth');
-    Route::get('/appointments',[AdminController::class,'appointments'])->name('admin.appointments')->middleware('auth');
+
+    // users Management
+    Route::get('/users', [UserController::class, 'users'])->name('admin.users')->middleware('auth');
+    Route::get('/users/create/doctor', [DoctorController::class, 'createDoctor'])->name('admin.users.create.doctor')->middleware('auth');
+    Route::get('/users/showDoctor/{user}', [DoctorController::class, 'showDoctor'])->name('admin.users.showDoctor')->middleware('auth');
+    Route::put('/users/doctor/{doctor}', [DoctorController::class, 'updateDoctor'])->name('admin.doctors.update')->middleware('auth');
+    Route::put('/users/doctor/{doctor}/department', [DoctorController::class, 'updateDepartment'])->name('admin.doctors.update-department')->middleware('auth');
+    Route::delete('/users/doctor/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('auth');
+
+
+    // Disease Library
+    Route::get('/diseases', [DiseaseController::class, 'adminIndex'])->name('admin.diseases')->middleware('auth');
+
+    
+    Route::get('/diseases/{disease}', [DiseaseController::class, 'show'])->name('admin.diseases.show')->middleware('auth');
+    Route::post('/diseases', [DiseaseController::class, 'store'])->name('admin.diseases.store')->middleware('auth');
+    Route::put('/diseases/{disease}', [DiseaseController::class, 'update'])->name('admin.diseases.update')->middleware('auth');
+    Route::delete('/diseases/{disease}', [DiseaseController::class, 'destroy'])->name('admin.diseases.destroy')->middleware('auth');
+
+    // Departments 
+    Route::get('/departments', [AdminController::class, 'departments'])->name('admin.departments')->middleware('auth');
+
+
+
+    
+    // Settings
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings')->middleware('auth');
+
+    // Profile
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile')->middleware('auth');
+
 }
 );
 

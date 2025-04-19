@@ -134,5 +134,22 @@ class PatientController extends Controller
         ));
     }
 
-
+    public function showPatient(Patient $patient)
+    {
+        $userData = $patient->user;
+        $patientData = [
+            'id' => $userData->id,
+            'height' => $patient->height,
+            'weight' => $patient->weight,
+            'date_of_birth' => $patient->date_of_birth,
+            'first_name' => $userData->first_name,
+            'last_name' => $userData->last_name,
+            'email' => $userData->email,
+            'gender' => $userData->gender,
+            'image' => $userData->image,
+            
+        ];
+        
+        return response()->json($patientData);
+    }
 }

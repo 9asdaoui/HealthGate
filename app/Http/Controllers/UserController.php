@@ -2,64 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function users(Request $request)
     {
-        //
-    }
+        $user = auth()->user();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $queryUsers = User::query();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $Conditions = [];
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
+        if (request()->has('search')) {
+            $Conditions[] = ['first_name', 'like', '%' . request('search') . '%'];
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
+        if (request()->has('speciality') && request('speciality') != 'all') {
+            $Conditions[] = ['doctors.speciality', request('speciality')];
+            $queryUsers->join('doctors', 'users.id', '=', 'doctors.user_id');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
+        if (request()->has('role') && request('role') != 'all') {
+            $Conditions[] = ['role_id', request('role')];
+        }
+        $queryUsers->where($Conditions);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        return view('admin.users.index', compact('user'))
+                    ->with('queryUsers', $queryUsers->paginate(10));
     }
+   
 }

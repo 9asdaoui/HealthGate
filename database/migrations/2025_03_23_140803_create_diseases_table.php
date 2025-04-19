@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('category', ['viral', 'bacterial', 'fungal', 'parasitic']);
+            $table->enum('category', ['viral', 'bacterial', 'fungal', 'parasitic',]);
             $table->string('symptoms')->nullable();
             $table->string('prevention')->nullable();
             $table->string('treatment')->nullable();

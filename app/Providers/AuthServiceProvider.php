@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -26,6 +28,13 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('medical_record_update', function ($user, $medical) {
             return $user->doctor->id === $medical->doctor_id;
+        });
+
+        Gate::define('update-profile', function (User $user, User $targetUser) {
+            if ($user->id === $targetUser->id) {
+                return true;
+            }
+            return false;
         });
     }
 }

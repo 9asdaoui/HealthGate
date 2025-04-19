@@ -11,7 +11,7 @@ class StoreDiseaseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class StoreDiseaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255|regex:/^[A-Za-z\s\-]+$/',
+            'category' => 'required|string|in:viral,bacterial,fungal,parasitic,chronic',
+            'description' => 'required|string',
+            'symptoms' => 'required|string',
+            'prevention' => 'nullable|string',
+            'treatment' => 'nullable|string',
+            'image' => 'nullable|string|url|max:2048',
         ];
     }
 }
