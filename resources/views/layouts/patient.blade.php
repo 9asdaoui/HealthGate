@@ -404,6 +404,9 @@
         </div>
     </div>
 
+    <!-- ChatBox Component -->
+    <x-chatbox></x-chatbox>
+
     <!-- Scripts -->
     <script>
         // Mobile sidebar toggle

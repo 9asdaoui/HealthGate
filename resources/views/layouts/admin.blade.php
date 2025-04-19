@@ -254,7 +254,7 @@
             <!-- Nav Links -->
             <nav class="px-3 space-y-1">
                 <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2">Main Menu</p>
-
+                
                 <a href="{{ route('admin.dashboard') }}"
                     class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-tachometer-alt w-5 text-center"></i>
