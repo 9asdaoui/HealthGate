@@ -5,14 +5,13 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BloodPressureController;
 use App\Http\Controllers\BloodSugarController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HearthRateController;
 use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UserController;
-use App\Models\Doctor;
-use App\Models\Medical;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('visitor.index');});
@@ -28,43 +27,44 @@ Route::prefix('auth')->group(function(){
 }
 );
 
-Route::prefix('admin')->group(function(){
-
+Route::prefix('admin')->middleware('auth')->group(function(){
     // Dashboard
-    Route::get('/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard')->middleware('auth');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    // users Management
-    Route::get('/users', [UserController::class, 'users'])->name('admin.users')->middleware('auth');
-    Route::get('/users/create/doctor', [DoctorController::class, 'createDoctor'])->name('admin.users.create.doctor')->middleware('auth');
-    Route::get('/users/showDoctor/{user}', [DoctorController::class, 'showDoctor'])->name('admin.users.showDoctor')->middleware('auth');
-    Route::put('/users/doctor/{doctor}', [DoctorController::class, 'updateDoctor'])->name('admin.doctors.update')->middleware('auth');
-    Route::put('/users/doctor/{doctor}/department', [DoctorController::class, 'updateDepartment'])->name('admin.doctors.update-department')->middleware('auth');
-    Route::delete('/users/doctor/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('auth');
-
+    // Users Management
+    Route::get('/users', [UserController::class, 'users'])->name('admin.users');
+    
+    // Doctor Management
+    Route::prefix('users')->group(function() {
+        Route::get('/create/doctor', [DoctorController::class, 'createDoctor'])->name('admin.users.create.doctor');
+        Route::post('/store/doctor', [DoctorController::class, 'storeDoctor'])->name('admin.users.store.doctor');
+        Route::get('/showDoctor/{user}', [DoctorController::class, 'showDoctor'])->name('admin.users.showDoctor');
+        Route::put('/doctor/{doctor}', [DoctorController::class, 'updateDoctor'])->name('admin.doctors.update');
+        Route::put('/doctor/{doctor}/department', [DoctorController::class, 'updateDepartment'])->name('admin.doctors.update-department');
+        Route::delete('/doctor/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy');
+    });
 
     // Disease Library
-    Route::get('/diseases', [DiseaseController::class, 'adminIndex'])->name('admin.diseases')->middleware('auth');
-
-    
-    Route::get('/diseases/{disease}', [DiseaseController::class, 'show'])->name('admin.diseases.show')->middleware('auth');
-    Route::post('/diseases', [DiseaseController::class, 'store'])->name('admin.diseases.store')->middleware('auth');
-    Route::put('/diseases/{disease}', [DiseaseController::class, 'update'])->name('admin.diseases.update')->middleware('auth');
-    Route::delete('/diseases/{disease}', [DiseaseController::class, 'destroy'])->name('admin.diseases.destroy')->middleware('auth');
+    Route::prefix('diseases')->group(function() {
+        Route::get('/', [DiseaseController::class, 'adminIndex'])->name('admin.diseases');
+        Route::get('/{disease}', [DiseaseController::class, 'show'])->name('admin.diseases.show');
+        Route::post('/', [DiseaseController::class, 'store'])->name('admin.diseases.store');
+        Route::put('/{disease}', [DiseaseController::class, 'update'])->name('admin.diseases.update');
+        Route::delete('/{disease}', [DiseaseController::class, 'destroy'])->name('admin.diseases.destroy');
+    });
 
     // Departments 
-    Route::get('/departments', [AdminController::class, 'departments'])->name('admin.departments')->middleware('auth');
-
-
-
-    
-    // Settings
-    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings')->middleware('auth');
+    Route::prefix('departments')->group(function() {
+        Route::get('/', [DepartmentController::class, 'index'])->name('admin.departments');
+        Route::post('/', [DepartmentController::class, 'store'])->name('admin.departments.store');
+        Route::put('/{department}', [DepartmentController::class, 'update'])->name('admin.departments.update');
+        Route::delete('/{department}', [DepartmentController::class, 'destroy'])->name('admin.departments.destroy');
+    });
 
     // Profile
-    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile')->middleware('auth');
-
-}
-);
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('admin.updateProfile');
+});
 
 Route::prefix('patient')->middleware('auth')->group(function(){
     // Dashboard

@@ -8,8 +8,9 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Notifications\AppointmentConfirmed;
+use App\Mail\AppointmentConfirmed;
 use Illuminate\Support\Facades\Log; // Add this line
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
@@ -149,13 +150,10 @@ class AppointmentController extends Controller
          // Get the patient's user record to send the email
         $patientUser = $appointment->patient->user;
         
-        Log::info('Attempting to send notification to: ' . $patientUser->email);
-        try {
-            $patientUser->notify(new \App\Notifications\AppointmentConfirmed($appointment));
-            Log::info('Notification sent successfully');
-        } catch (\Exception $e) {
-            Log::error('Notification failed: ' . $e->getMessage());
-        }
+
+            Mail::to($patientUser->email)->send(new AppointmentConfirmed());
+
+     
         
         return redirect()->route('doctor.appointments')->with('success','Appointment marked as upcoming successfully');
     }  

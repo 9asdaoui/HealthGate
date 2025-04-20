@@ -285,10 +285,10 @@
 
                 <p class="text-xs text-lightText px-3 uppercase tracking-wider mb-2 mt-6">System</p>
 
-                <a href="{{ route('admin.settings') }}"
-                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
-                    <i class="fas fa-cog w-5 text-center"></i>
-                    <span>Settings</span>
+                <a href="{{ route('admin.profile') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
+                    <i class="fas fa-user-cog w-5 text-center"></i>
+                    <span>My Profile</span>
                 </a>
 
                 <div class="pt-6 border-t border-borderColor mt-6">
@@ -382,10 +382,6 @@
                                 <a href="{{ route('admin.profile') }}"
                                     class="block px-4 py-2 text-sm text-darkText hover:bg-sidebarHover">
                                     <i class="fas fa-user mr-2"></i> My Profile
-                                </a>
-                                <a href="{{ route('admin.settings') }}"
-                                    class="block px-4 py-2 text-sm text-darkText hover:bg-sidebarHover">
-                                    <i class="fas fa-cog mr-2"></i> Settings
                                 </a>
                                 <div class="border-t border-borderColor my-1"></div>
                                 
