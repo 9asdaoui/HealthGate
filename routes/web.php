@@ -27,7 +27,7 @@ Route::prefix('auth')->group(function(){
 }
 );
 
-Route::prefix('admin')->middleware('auth')->group(function(){
+Route::prefix('admin')->middleware('role:admin')->group(function(){
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
@@ -66,7 +66,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('admin.updateProfile');
 });
 
-Route::prefix('patient')->middleware('auth')->group(function(){
+Route::prefix('patient')->middleware('role:patient')->group(function(){
     // Dashboard
     Route::get('/dashboard', [PatientController::class, 'dashboard'])->name('patient.dashboard');
     
@@ -91,7 +91,7 @@ Route::prefix('patient')->middleware('auth')->group(function(){
     Route::get('/patient/healthMetrics', [PatientController::class, 'healthMetrics'])->name('patient.healthMetrics');
 });
 
-Route::prefix('doctor')->middleware('auth')->group(function(){
+Route::prefix('doctor')->middleware('role:doctor')->group(function(){
     // Dashboard
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
     
