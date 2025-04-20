@@ -15,4 +15,11 @@ class AdminController extends Controller
         return view('admin.dashboard',compact('user'));
     }
 
+    public function profile()
+    {
+        $user = auth()->user();
+        return view('admin.profile',compact('user'));
+    }
+
+
 }
