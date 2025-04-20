@@ -312,7 +312,6 @@
 <body class="bg-gray-100 h-screen flex justify-center items-center font-sans">
     <div id="chat-bot-icon"
         class="fixed bottom-5 right-5 w-16 h-16 rounded-full bg-chatIndigo flex justify-center items-center cursor-pointer shadow-chatGlow z-50 transition-all duration-700 hover:scale-110 active:scale-90 animate-bounce glowing-effect">
-        <!-- AI Robot Face Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-9 h-9 fill-white floating-bot">
             <path
                 d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5A2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13m9 0a2.5 2.5 0 0 0-2.5 2.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5a2.5 2.5 0 0 0-2.5-2.5M9 3c-.55 0-1 .45-1 1s.45 1 1 1s1-.45 1-1s-.45-1-1-1m6 0c-.55 0-1 .45-1 1s.45 1 1 1s1-.45 1-1s-.45-1-1-1z" />
@@ -350,7 +349,7 @@
         <div id="chat-body" class="flex-1 p-4 overflow-y-auto bg-chatClouds">
             <div class="message-container flex flex-col">
                 <div
-                    class="chat-message chat-bubble bot-message bg-chatBubbleBot rounded-[18px] rounded-bl-[5px] max-w-[80%] p-3.5 mb-4 self-start mr-auto shadow-chatMessage pop-animation message-shine">
+                    class="chat-message chat-bubble bot-message bg-chatBubbleBot rounded-[18px] rounded-bl-[5px] max-w-[80%] p-3.5 mb-4 self-start mr-auto shadow-chatMessage pop-animation message-shine text-xs">
                     Hello! I'm your AI assistant. How can I help you today?
                 </div>
                 <div id="typing-indicator"
@@ -386,75 +385,57 @@
             const chatBody = document.getElementById('chat-body');
             const typingIndicator = document.getElementById('typing-indicator');
 
-            // Toggle chat container
             chatBotIcon.addEventListener('click', function() {
-                // Add rotation animation to the bot icon when clicked
                 chatBotIcon.classList.remove('animate-bounce');
                 chatBotIcon.classList.add('animate-rotate');
 
                 setTimeout(() => {
-                    // Show chat container with animation
                     chatContainer.classList.remove('scale-0');
                     chatContainer.classList.add('scale-100', 'transform');
-
-                    // Hide bot icon with animation
                     chatBotIcon.classList.add('scale-0', 'opacity-0');
                     chatInput.focus();
                 }, 300);
             });
 
             closeChat.addEventListener('click', function() {
-                // Hide chat container with animation
                 chatContainer.classList.remove('scale-100');
                 chatContainer.classList.add('scale-0');
 
-                // Show bot icon again
                 setTimeout(() => {
                     chatBotIcon.classList.remove('scale-0', 'opacity-0', 'animate-rotate');
                     chatBotIcon.classList.add('animate-bounce', 'scale-100', 'opacity-100');
                 }, 300);
             });
 
-            // Send message function
             function sendMessage() {
                 const message = chatInput.value.trim();
                 console.log(message)
 
                 if (message !== '') {
-                    // Add user message
                     addMessage(message, 'user');
                     chatInput.value = '';
 
-                    // Show typing indicator
                     typingIndicator.classList.remove('hidden');
                     typingIndicator.classList.add('flex');
                     chatBody.scrollTop = chatBody.scrollHeight;
 
                     getBotResponse(message).then(botResponse => {
-                        // Hide typing indicator
                         typingIndicator.classList.add('hidden');
                         typingIndicator.classList.remove('flex');
-
-                        // Add bot response
                         addMessage(botResponse, 'bot');
                     }).catch(error => {
                         console.error("Error getting response:", error);
-                        // Hide typing indicator
                         typingIndicator.classList.add('hidden');
                         typingIndicator.classList.remove('flex');
-
-                        // Show error message
                         addMessage("Sorry, I couldn't process your request at the moment.", 'bot');
                     });
-
                 }
             }
 
-            // Add message to chat
             function addMessage(message, sender) {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message', 'p-3.5', 'mb-4', 'max-w-[80%]', 'rounded-[18px]',
-                    'shadow-message', 'pop-animation');
+                    'shadow-message', 'pop-animation', 'text-xs');
 
                 if (sender === 'user') {
                     messageElement.classList.add('user-message', 'bg-messageUser', 'rounded-br-[5px]', 'self-end',
@@ -469,13 +450,10 @@
                 const messageContainer = document.querySelector('.message-container');
                 messageContainer.insertBefore(messageElement, typingIndicator);
 
-                // Scroll to bottom
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
             
-            // Get bot response (basic responses) this should return the response from the AI API
             async function getBotResponse(message) {
-
                 const prompt = `You are HealthGate's AI medical assistant designed to work within our patient portal. Be concise, professional, and medically accurate while maintaining a helpful tone.
 
                                     RESPONSE GUIDELINES:
@@ -516,14 +494,11 @@
                     })
                 });
 
-
                 let data = await reponse.json()
                 console.log(data.choices[0].message.content)
                 return data.choices[0].message.content;
-
             }
 
-            // Event listeners for sending messages
             sendButton.addEventListener('click', sendMessage);
 
             chatInput.addEventListener('keypress', function(e) {
