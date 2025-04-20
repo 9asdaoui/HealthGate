@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('speciality');
             $table->string('experience');
+            // you added the fk in another file
             // $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
