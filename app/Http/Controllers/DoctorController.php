@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDoctorRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
+use App\Http\Requests\UpdateDoctorRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\DoctorCredentials;
 use App\Models\Department;
 use App\Models\Doctor;
@@ -147,26 +150,16 @@ class DoctorController extends Controller
             'user'
         ));
     }
-    public function updateProfile(\Illuminate\Http\Request $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
         if (! Gate::allows('update-profile', auth()->user())) {
             abort(403, 'You are not authorized to update this profile.');
         }
 
         $user = auth()->user();
-
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'gender' => 'required|in:male,female,other',
-            'speciality' => 'required|string|max:255',
-            'experience' => 'required|numeric|min:0',
-            'image' => 'nullable',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-
             $imagePath = $request->file('image')->store('profiles', 'public');
             $user->image = '/storage/' . $imagePath;
         }
@@ -205,17 +198,9 @@ class DoctorController extends Controller
         ));
     }
 
-    public function updateDoctor(Doctor $doctor, \Illuminate\Http\Request $request)
+    public function updateDoctor(Doctor $doctor, UpdateDoctorRequest $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $doctor->user->id,
-            'gender' => 'required|in:male,female,other',
-            'speciality' => 'required|string|max:255',
-            'experience' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $user = $doctor->user;
 
@@ -238,11 +223,9 @@ class DoctorController extends Controller
         return redirect()->back()->with('success', 'Doctor profile updated successfully');
     }
 
-    public function updateDepartment(Doctor $doctor, \Illuminate\Http\Request $request)
+    public function updateDepartment(Doctor $doctor, UpdateDepartmentRequest $request)
     {
-        $validated = $request->validate([
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $validated = $request->validated();
 
         $doctor->department_id = $validated['department_id'];
         $doctor->save();
