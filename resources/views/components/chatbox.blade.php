@@ -477,16 +477,15 @@
                                     - Focus on actionable information that directs patients to the appropriate section of their dashboard
 
                                     Patient message: ${message}`;
-                alert(prompt);
 
                 let reponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
                     headers: {
-                        "Authorization": "Bearer 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",
+                        "Authorization": "Bearer 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",
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "model": "deepseek/deepseek-chat-v3-0324:free",
+                        "model": "anthropic/claude-3.5-haiku:beta",
                         "messages": [{
                             "role": "user",
                             "content": prompt
