@@ -46,16 +46,13 @@ jobs:
           # Copy .env file if it doesn't exist
           [ -f .env ] || cp .env.example .env
           
-          # Update Composer to version 2
+          # Install Composer 2 locally in project directory
           php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php --install-dir=/tmp --filename=composer
+          php composer-setup.php --install-dir=. --filename=composer.phar
           php -r "unlink('composer-setup.php');"
-          mv /tmp/composer ~/bin/composer
-          chmod +x ~/bin/composer
-          export PATH=$PATH:~/bin
           
-          # Install dependencies using Composer 2
-          ~/bin/composer install --no-dev --optimize-autoloader
+          # Install dependencies using local Composer
+          php composer.phar install --no-dev --optimize-autoloader
           
           # Run Laravel commands
           php artisan key:generate --force
@@ -66,3 +63,4 @@ jobs:
           
           # Cleanup
           rm -rf /tmp/healthgate_tmp
+          rm composer.phar
