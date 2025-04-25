@@ -49,4 +49,4 @@ jobs:
 
           php artisan db:seed --force
 
-          vite run build
+          npm run build
