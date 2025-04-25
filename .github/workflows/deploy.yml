@@ -18,7 +18,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           # Enter project directory
-          cd ~/domains/healthgate.azizbenmallouk.com/public_html/
+          cd ~/domains/healthgate.azizbenmallouk.com/public_html/healthgate/
           
           # Check if it's a git repository, if not initialize it
           if [ ! -d .git ]; then
@@ -46,6 +46,7 @@ jobs:
           
           # Run Laravel commands
           php artisan migrate --force
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
+
+          php artisan db:seed --force
+
+          vite run build
