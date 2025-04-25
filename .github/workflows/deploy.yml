@@ -46,8 +46,16 @@ jobs:
           # Copy .env file if it doesn't exist
           [ -f .env ] || cp .env.example .env
           
-          # Install dependencies using composer
-          composer install --no-dev --optimize-autoloader
+          # Update Composer to version 2
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --install-dir=/tmp --filename=composer
+          php -r "unlink('composer-setup.php');"
+          mv /tmp/composer ~/bin/composer
+          chmod +x ~/bin/composer
+          export PATH=$PATH:~/bin
+          
+          # Install dependencies using Composer 2
+          ~/bin/composer install --no-dev --optimize-autoloader
           
           # Run Laravel commands
           php artisan key:generate --force
