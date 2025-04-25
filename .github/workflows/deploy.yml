@@ -17,50 +17,35 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          # Clone to temporary directory first
-          mkdir -p /tmp/healthgate_tmp
-          cd /tmp/healthgate_tmp
-          
-          # Fresh clone of the repository
-          git clone https://github.com/9asdaoui/HealthGate.git .
-          
-          # Prepare target directory
-          mkdir -p ~/domains/healthgate.azizbenmallouk.com/public_html/
-          
-          # Sync files (rsync preserves permissions and is efficient)
-          rsync -av --delete \
-            --exclude='.git/' \
-            --exclude='storage/app/*' \
-            --exclude='storage/logs/*' \
-            --exclude='storage/framework/cache/*' \
-            --exclude='.env' \
-            ./ ~/domains/healthgate.azizbenmallouk.com/public_html/
-          
           # Enter project directory
           cd ~/domains/healthgate.azizbenmallouk.com/public_html/
+          
+          # Check if it's a git repository, if not initialize it
+          if [ ! -d .git ]; then
+            git init
+            git remote add origin https://github.com/9asdaoui/HealthGate.git
+          fi
+          
+          # Fetch and pull latest changes
+          git fetch origin main
+          git reset --hard origin/main
           
           # Set file permissions
           chmod -R 755 .
           chmod -R 777 storage bootstrap/cache
           
-          # Copy .env file if it doesn't exist
-          [ -f .env ] || cp .env.example .env
+          # Install Composer 2 locally if needed
+          if [ ! -f composer.phar ]; then
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php composer-setup.php --install-dir=. --filename=composer.phar
+            php -r "unlink('composer-setup.php');"
+          fi
           
-          # Install Composer 2 locally in project directory
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php --install-dir=. --filename=composer.phar
-          php -r "unlink('composer-setup.php');"
-          
-          # Install dependencies using local Composer
+          # Install dependencies
           php composer.phar install --no-dev --optimize-autoloader
           
           # Run Laravel commands
-          php artisan key:generate --force
           php artisan migrate --force
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-          
-          # Cleanup
-          rm -rf /tmp/healthgate_tmp
-          rm composer.phar
