@@ -1,4 +1,16 @@
-function showDiseaseDetails(diseaseId) {
+async function showDiseaseDetails(diseaseId) {
+
+    const modal = document.getElementById('diseaseDetailsModal');
+    const modalContent = document.getElementById('diseaseDetailsContent');
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('animate-fadeIn');
+    
+    modalContent.innerHTML = `
+        <div class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+        </div>
+    `;
 
     document.getElementById('diseaseDetailsModal').classList.remove('hidden');
 
@@ -11,6 +23,8 @@ function showDiseaseDetails(diseaseId) {
                 
                 const disease = data.disease;
                 document.getElementById('modalDiseaseTitle').textContent = disease.name;
+
+
 
                 let html = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

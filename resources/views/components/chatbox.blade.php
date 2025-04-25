@@ -441,8 +441,8 @@
                     messageElement.classList.add('user-message', 'bg-messageUser', 'rounded-br-[5px]', 'self-end',
                         'ml-auto');
                 } else {
-                    messageElement.classList.add('bot-message', 'bg-messageBot', 'rounded-bl-[5px]', 'self-start',
-                        'mr-auto', 'message-shine');
+                    messageElement.classList.add('chat-bubble', 'bot-message', 'bg-chatBubbleBot', 'rounded-bl-[5px]', 'self-start',
+                        'mr-auto', 'shadow-chatMessage', 'message-shine');
                 }
 
                 messageElement.textContent = message;
@@ -458,14 +458,13 @@
 
                                     RESPONSE GUIDELINES:
                                     1. Keep responses under 40 words for general inquiries
-                                    2. First-time greeting: "Hi! How can I help with your health today?"
+                                    2. First-time message dont greating
                                     3. Appointment requests: "Please schedule appointments through the Appointments section in your patient dashboard."
                                     4. Specialist inquiries: Only reference our available departments: Cardiology, Neurology, Dermatology, Pediatrics, Orthopedics, Gynecology, Ophthalmology
                                     5. Medical records: "Your medical history is available in the Health Metrics section of your dashboard."
                                     6. For prescription inquiries: "Your current medications and prescriptions can be viewed in the Prescriptions tab."
                                     7. For vital sign questions: Direct patients to check their latest measurements (heart rate, blood pressure, blood sugar) in the health metrics section
                                     8. For non-medical topics: "I'm designed to assist with health-related questions. How can I help with your medical needs today?"
-
                                     CONDITION-SPECIFIC GUIDELINES:
                                     1. For symptom questions: Provide brief, factual information with a concise disclaimer for potentially serious conditions
                                     2. For disease inquiries: Only provide general information about viral, bacterial, fungal, and parasitic conditions in our database

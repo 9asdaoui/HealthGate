@@ -142,10 +142,9 @@
                 </div>
 
                 <div id="diseaseDetailsContent" class="space-y-6">
-                    <!-- Content will be loaded here via JavaScript -->
-                    <div class="flex justify-center">
-                        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
-                    </div>
+
+
+                    
                 </div>
             </div>
         </div>

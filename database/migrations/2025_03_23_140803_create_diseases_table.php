@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('category', ['viral', 'bacterial', 'fungal', 'parasitic',]);
+            $table->enum('category', ['viral', 'bacterial', 'fungal', 'parasitic', 'genetic', 'autoimmune', 'other']);
             $table->string('symptoms')->nullable();
             $table->string('prevention')->nullable();
             $table->string('treatment')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image')->nullable(); // URL or path to the disease image
             $table->timestamps();
         });
     }
