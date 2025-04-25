@@ -16,14 +16,21 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_KEY }}
         script: |
-          cd domains/healthgate.azizbenmallouk.com/public_html/
-          git pull origin main
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          php artisan migrate --force
-          php artisan optimize:clear
-          php artisan optimize
+            # Check if directory exists
+            cd domains/healthgate.azizbenmallouk.com/public_html/ || exit 1
+            # Check if it's a git repository
+            git status || echo "Not a git repository, initializing" && git init
+            # Set remote if needed
+            git remote -v || git remote add origin https://github.com/9asdaoui/HealthGate.git
+            # Pull code
+            git pull origin main || git clone https://github.com/9asdaoui/HealthGate.git .
+            
+            # Rest of your commands
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan optimize:clear
+            php artisan optimize
 
 
            
