@@ -19,7 +19,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd domains/healthgate.azizbenmallouk.com/public_html/
-          git clone origin main
+          git clone main
           # composer install --no-interaction --prefer-dist --optimize-autoloader
           # php artisan migrate --force
           # php artisan optimize:clear
