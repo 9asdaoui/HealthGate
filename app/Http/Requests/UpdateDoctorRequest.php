@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateDepartmentRequest extends FormRequest
+class UpdateDoctorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,13 @@ class UpdateDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => 'required|exists:departments,id',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'unique:users,email'],
+            'gender' => 'required|in:male,female,other',
+            'speciality' => 'required|string|max:255',
+            'experience' => 'required|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
         ];
     }
 }

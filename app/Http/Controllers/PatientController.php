@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\updateProfilePatientRequest;
 use App\Models\Appointment;
 use App\Models\Disease;
 use App\Models\Medical;
@@ -22,8 +23,10 @@ class PatientController extends Controller
 
     public function dashboard()
     { 
+        
         $user = User::find(auth()->id());
         $patient = $user->patient;
+
         $appointments = Appointment::where('patient_id', $patient->id)
             ->with(['doctor.user'])
             ->orderBy('created_at', 'desc')
@@ -58,16 +61,9 @@ class PatientController extends Controller
         return view('patient.profile', compact('user', 'patient'));
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(updateProfilePatientRequest $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'gender' => 'required|string|in:male,female',
-            'date_of_birth' => 'required|date',
-            'image' => 'nullable|max:2048',
-        ]);
+        $validated = $request->validated();
         
         /**
          * @var App\Models\User $user

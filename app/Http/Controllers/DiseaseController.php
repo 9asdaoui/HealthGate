@@ -74,13 +74,11 @@ class DiseaseController extends Controller
 
     public function diseasesAssign(DiseasesAssignRequest $request)
     {
-        // dd($request->all());
         $validated = $request->validated();
         $patient = Patient::findOrFail($validated['patient_id']);
         $disease = Disease::findOrFail($validated['disease_id']);
         $doctor = auth()->user()->doctor;
 
-        // Attach the disease to the patient with doctor ID and optional duration
         $patient->diseases()->attach($disease->id, [
             'doctor_id' => $doctor->id,
             'duration' => $validated['duration'] ?? null,
