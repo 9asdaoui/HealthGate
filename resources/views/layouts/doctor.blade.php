@@ -392,9 +392,9 @@
                                     <i class="fas fa-user-md mr-2"></i> My Profile
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
-                                
+
                                 <a href="{{ route('logout') }}"
-                                   class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                                 </a>
                             </div>
@@ -476,7 +476,61 @@
     </div>
 
     <script>
-        @vite('resources/js/doctor/doctor.js')
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('hidden');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            document.getElementById('overlay').classList.add('hidden');
+        });
+
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userDropdown = document.getElementById('user-dropdown');
+
+        if (userMenuBtn && userDropdown) {
+            userMenuBtn.addEventListener('click', function() {
+                userDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                    userDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.add('card-animate');
+            });
+
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('[role="alert"]');
+                alerts.forEach(alert => {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 500);
+                });
+            }, 5000);
+        });
+
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('[role="alert"] svg')) {
+                const alert = event.target.closest('[role="alert"]');
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 500);
+            }
+        });
     </script>
     @stack('scripts')
 </body>

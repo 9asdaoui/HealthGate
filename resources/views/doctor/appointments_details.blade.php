@@ -192,7 +192,8 @@
 
                         @if ($appointment->patient->Medicals->where('doctor_id', $user->doctor->id)->count() > 3)
                             <div class="mt-4 text-center">
-                                <a href="{{ route('doctor.patients.medical-records', $appointment->patient) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                                <a href="{{ route('doctor.patients.medical-records', $appointment->patient) }}"
+                                    class="text-blue-600 hover:text-blue-800 text-sm">
                                     View All Medical Records
                                 </a>
                             </div>
@@ -400,6 +401,42 @@
 
 @push('scripts')
     <script>
-        @vite('resources/js/doctor/appointments_detailes.js')
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default dates for prescription form
+            const today = new Date();
+            const nextMonth = new Date();
+            nextMonth.setMonth(today.getMonth() + 1);
+
+            if (document.getElementById('start_date')) {
+                document.getElementById('start_date').valueAsDate = today;
+            }
+
+            if (document.getElementById('end_date')) {
+                document.getElementById('end_date').valueAsDate = nextMonth;
+            }
+        });
+
+        function openAddPrescriptionModal() {
+            console.log('Opening modal...');
+            const modal = document.getElementById('prescriptionModal');
+            console.log('Modal element:', modal);
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openAddMedicalRecordModal() {
+            document.getElementById('medicalRecordModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMedicalRecordModal() {
+            document.getElementById('medicalRecordModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
     </script>
 @endpush
