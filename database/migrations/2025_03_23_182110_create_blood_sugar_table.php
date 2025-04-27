@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('blood_sugar', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('cascade');
-            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('patient_id')->constrained()->onDelete('set null');
+            $table->foreignId('doctor_id')->constrained()->onDelete('set null');
             $table->float('value');
             $table->dateTime('measured_at');
             $table->string('unit')->default('mg/dL');

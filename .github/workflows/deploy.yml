@@ -48,5 +48,3 @@ jobs:
           php artisan migrate --force
 
           php artisan db:seed --force
-
-          npm run build
