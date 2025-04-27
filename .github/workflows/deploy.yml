@@ -43,6 +43,9 @@ jobs:
           
           # Install dependencies
           php composer.phar install --no-dev --optimize-autoloader
+
+          php -d memory_limit=-1 composer.phar require fakerphp/faker
+
           
           # Run Laravel commands
           php artisan migrate --force
