@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('medicals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('set null');
-            $table->foreignId('doctor_id')->constrained()->onDelete('set null');
+            $table->foreignId('patient_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('doctor_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('dosage')->nullable();

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('hearth_rates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('set null');
-            $table->foreignId('doctor_id')->constrained()->onDelete('set null');
+            $table->foreignId('patient_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('doctor_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('value');
             $table->dateTime('measured_at');
             $table->string('unit')->default('bpm');
